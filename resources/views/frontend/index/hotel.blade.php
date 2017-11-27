@@ -507,6 +507,29 @@
                     </div>
                 </div>
                 <div style="clear: both"></div>
+                <div style="width: 60%;margin-right: auto;margin-left: auto">
+                    <div style="float: left;width: 50%;padding: 30px">
+                        <div class="hotel_content_title">主要奖项</div>
+                        <p style="font-size: 14px;line-height: 24px" v-html="markdown(hotel.honor)">
+
+                        </p>
+                    </div>
+                    <div style="float: left;width: 50%;padding: 30px">
+                        <div class="hotel_content_title">礼宾服务</div>
+                        <div style="font-size: 14px;line-height: 24px">
+                            致游的顾问团队很乐意为您提供免费的礼宾服务
+                            <br/>
+                            <br/>
+                            如果您希望预约前往酒店的专车、预约餐厅、更改行程或向酒店要求特殊需求等等，欢迎与我们联系：
+                        </div>
+                        <div style="font-size: 20px">
+                            <br/>
+                            周一至周六 10:00 - 19:00<br/>
+                            <strong>4001-567-165</strong>
+                        </div>
+                    </div>
+                    <div style="clear: both"></div>
+                </div>
             </div>
             <div class="hotel_footer">
                 <div style="text-align: center;color: lightgrey;margin-left: auto;margin-right: auto;width: 60%;padding: 30px 0;">

@@ -543,7 +543,7 @@
                             一行获得奖项或者说明
                         </p>
                         <div class="width_big">
-                            <z-float-textarea placeholder="奖项" v-model="hotel.facilities" name="name"></z-float-textarea>
+                            <z-float-textarea placeholder="奖项" v-model="hotel.honor" name="name"></z-float-textarea>
                         </div>
 
 
@@ -829,6 +829,7 @@
                 tag:"",
                 description:"",
                 facilities:"",
+                honor:"",
                 location:{
                     continent:"",
                     country:"",
