@@ -17,7 +17,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
 <div>
     @yield("content")
 </div>
-<script src="{{asset('js/min.js')}}"></script>
+<script src="{{asset('js/min_jquery_axios.js')}}"></script>
 @yield("script")
 </body>
 </html>
