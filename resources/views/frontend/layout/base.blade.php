@@ -9,7 +9,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <title>ZHotel</title>
     <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
-    <link rel="stylesheet" href="{{asset("css/min.css")}}">
+    <link rel="stylesheet" href="{{asset("css/min_2.css")}}">
     @yield("style")
 
 </head>
@@ -17,7 +17,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
 <div>
     @yield("content")
 </div>
-<script src="{{asset('js/min_jquery_axios.js')}}"></script>
+<script src="{{asset('js/min_2.js')}}"></script>
 @yield("script")
 </body>
 </html>

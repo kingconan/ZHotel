@@ -59,7 +59,9 @@ elixir(function(mix) {
         '/libs/i-check.css',
         //'/libs/custom.css',
     ], './public/css/min.css', './public/css');
-
+    mix.styles([
+        '/libs/bootstrap.css',
+    ], './public/css/min_2.css', './public/css');
 
     // Merge all JS  files in one file.
     mix.scripts([
@@ -74,5 +76,6 @@ elixir(function(mix) {
     mix.scripts([
         '/libs/jquery.js',
         '/libs/axios.js',
-    ], './public/js/min_jquery_axios.js', './public/js');
+        '/libs/bootstrap.js',
+    ], './public/js/min_2.js', './public/js');
 });
