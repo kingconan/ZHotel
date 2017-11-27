@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <title>vue</title>
+  </head>
+  <body>
+    <div id="app"></div>
+    <div id="app1"><z-float-textarea></z-float-textarea></div>
+
+    <script src="/dist/build.js"></script>
+   <script>
+     Vue.component('z-float-textarea',{
+       delimiters: ["<%","%>"],
+       props:["placeholder","name", "value"],
+       template: '<label class="form-group has-float-label">' +
+       '<textarea class="form-control form_input" :name="name" :placeholder="placeholder" rows="6"' +
+       'v-bind:value="value"' +
+       'v-on:input="update($event.target.value)"/>' +
+       '</textarea>' +
+       '<span><% placeholder %></span>' +
+       '</label>',
+       methods: {
+         update:function(value){
+           this.$emit('input', value)
+         }
+       }
+     });
+     new Vue({
+       el:"#app1"
+     });
+   </script>
+  </body>
+</html>
