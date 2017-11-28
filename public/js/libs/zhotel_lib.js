@@ -12,7 +12,7 @@ function zhotel_markdown(str) {//simple markdown parser
         '</div>';
     for (var i = 0, len = arr.length; i < len; i++) {
         item = (arr[i]);
-        console.log(item);
+        //console.log(item);
         if(item.indexOf('//') == 0){
             //skip
         }

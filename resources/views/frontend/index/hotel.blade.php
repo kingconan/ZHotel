@@ -354,7 +354,7 @@
                                 </div>
                                 <div style="height: 10px;width: 10px;clear: both"></div>
                                 <div>
-                                    <input v-on:click="click_people" id="input_people" class="input_people" type="text" value="2成人，0儿童" placeholder="请选择入住人数" readonly/>
+                                    <input v-on:click="click_people" id="input_people" class="input_people" type="text" :value="book.adult+'成人, '+book.children+'儿童'" placeholder="请选择入住人数" readonly/>
                                 </div>
                                 <div style="height: 10px;width: 10px;clear: both"></div>
                             </form>
@@ -570,33 +570,58 @@
             </div>
 
         </div>
-    </div>
-</div>
-<div id="div_people" class="input_people_box" style="z-index: 99999;position: absolute;display: none;">
-    <div style="float:left;text-align: center;padding: 30px 15px">
-        <label>成人</label>
-        <div style="">
-            <span onclick="adult_add(this)" class="unselectable" style="float: left;font-size: 22px;cursor: pointer;">+</span>
-            <p style="float: left;width: 60px;text-align: center;color: #3c3c3c">2</p>
-            <span onclick="adult_minus(this)" class="unselectable" style="float: left;font-size: 22px;cursor: pointer;">-</span>
+        <div id="div_people" class="input_people_box" style="z-index: 99999;position: absolute;display: none;width: 250px">
+            <div style="padding:8px 0">
+                <div style="text-align: center;float: left;width: 100%;padding-left: 30px;padding-right: 30px">
+                    <span style="color: #c29c76;font-size: 16px"><%book.adult%></span> 名大人
+                </div>
+                <div v-on:click="minus_adult" class="unselectable"
+                     style="cursor: pointer; text-align: center;float: left;width: 30px;margin-left: -100%">-</div>
+                <div v-on:click="add_adult" class="unselectable"
+                     style="cursor: pointer; text-align: center;float: left;width: 30px;margin-left: -30px">+</div>
+                <div style="clear: both"></div>
+            </div>
+            <div style="padding:8px 0">
+                <div style="text-align: center;float: left;width: 100%;padding-left: 30px;padding-right: 30px">
+                    <span style="color: #c29c76;font-size: 16px"><%book.children%></span> 名儿童
+                </div>
+                <div v-on:click="minus_children" class="unselectable"
+                     style="cursor: pointer; text-align: center;float: left;width: 30px;margin-left: -100%">-</div>
+                <div v-on:click="add_children" class="unselectable"
+                     style="cursor: pointer; text-align: center;float: left;width: 30px;margin-left: -30px">+</div>
+                <div style="clear: both"></div>
+            </div>
+            <div style="text-align: center;font-size: 10px">儿童年龄</div>
+            <div style="padding: 10px">
+                <div v-for="(age,index) in book.children_age">
+                    <select class="form-control" style="float:left;width: 60px;margin: 4px" v-model="book.children_age[index]">
+                        <option value="0"><1 岁</option>
+                        <option value="1">1 岁</option>
+                        <option value="2">2 岁</option>
+                        <option value="3">3 岁</option>
+                        <option value="4">4 岁</option>
+                        <option value="5">5 岁</option>
+                        <option value="6">6 岁</option>
+                        <option value="7">7 岁</option>
+                        <option value="8">8 岁</option>
+                        <option value="9">9 岁</option>
+                        <option value="10">10 岁</option>
+                        <option value="11">11 岁</option>
+                        <option value="12">12 岁</option>
+                        <option value="13">13 岁</option>
+                        <option value="14">14 岁</option>
+                        <option value="15">15 岁</option>
+                        <option value="16">16 岁</option>
+                        <option value="17">17 岁</option>
+                    </select>
+                </div>
+            </div>
             <div style="clear: both"></div>
+            <button onclick="close_people(this)" type="button" class="btn" style="width: 100%;margin-top: 10px;margin-bottom: 10px;background-color: white;border: 1px solid #efefef">关闭</button>
         </div>
     </div>
-    <div style="float:left;width: 1px;height: 100px;background-color: #CCC">
+</div>
 
-    </div>
-    <div style="float:left;text-align: center;padding: 30px 15px">
-        <label>儿童</label>
-        <div style="">
-            <span onclick="children_add(this)" class="unselectable" style="float: left;font-size: 22px;cursor: pointer;">+</span>
-            <p style="float: left;width: 60px;text-align: center;color: #3c3c3c">0</p>
-            <span onclick="children_minus(this)" class="unselectable" style="float: left;font-size: 22px;cursor: pointer;">-</span>
-            <div style="clear: both"></div>
-        </div>
-    </div>
-    <div style="clear: both"></div>
-    <button onclick="close_people(this)" type="button" class="btn" style="width: 100%;margin-top: 10px;margin-bottom: 10px;background-color: white;border: 1px solid #efefef">关闭</button>
-</div>
 </div>
 @endsection
 @section('script')
@@ -789,7 +814,9 @@
                 checkin:"",
                 checkout:"",
                 adult:1,
-                children:0
+                children:0,
+                children_age : [
+                ]
             }
         },
         created:function () {
@@ -872,7 +899,7 @@
                 }
             },
             markdown : function(str){
-                console.log(str);
+//                console.log(str);
                 return zhotel_markdown(str);
             },
             str_2_arr : function(str){
@@ -936,6 +963,27 @@
                             return 1;
                         return 0;
                     }
+                }
+            },
+            add_adult : function(){
+                this.book.adult = this.book.adult + 1
+            },
+            minus_adult : function(){
+                if(this.book.adult > 1)
+                    this.book.adult = this.book.adult - 1
+            },
+            add_children : function(){
+                if(this.book.children < 9) {
+                    var age = "0";
+                    this.book.children_age.splice(this.book.children, 0, age);
+                    this.book.children = this.book.children + 1
+                }
+                console.log(this.book.children_age);
+            },
+            minus_children : function(){
+                if(this.book.children > 0){
+                    this.book.children_age.splice(this.book.children - 1,1);
+                    this.book.children = this.book.children - 1
                 }
             }
         },
