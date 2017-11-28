@@ -330,10 +330,8 @@
                             <div style="clear: both"></div>
                         </div>
                         <div style="padding: 15px 0">
-                            <select class="form-control" style="width: 200px" v-model="hotel.status">
-                                <option value="1">有效/已上线</option>
-                                <option value="0">无效/未上线</option>
-                            </select>
+                            <span v-if="hotel.status == 1" style="background-color: lightgreen;padding: 3px 6px;font-size: 10px">已上线</span>
+                            <span v-else style="background-color: indianred;padding: 3px 6px;font-size: 10px;color:white">未上线</span>
                         </div>
                         <div class="section_title" id="p1" onclick="hack_map(this)">基本信息</div>
                         <div class="width_normal" style="float: left">
