@@ -32,6 +32,7 @@ class IndexController extends Controller
         $hotel->zy = $json["zy"];
         $hotel->detail = $json["detail"];
         $hotel->facilities = $json["facilities"];
+        $hotel->honor = $json["honor"];
         $hotel->policy = $json["policy"];
         $hotel->rooms = $json["rooms"];
         $hotel->images = $json["images"];
