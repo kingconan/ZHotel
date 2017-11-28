@@ -34,6 +34,7 @@ Route::post('/api/test', 'Backend\IndexController@test');
 Route::post('/api/hotel/{id}', 'Backend\IndexController@getHotel');
 Route::post('/api/update/hotel', 'Backend\IndexController@updateHotel');
 Route::post('/api/delete/hotel', 'Backend\IndexController@deleteHotel');
+Route::post('/api/online/hotel', 'Backend\IndexController@onlineHotel');
 Route::post('/api/create/hotel', 'Backend\IndexController@createHotel');
 Route::post('/api/search/hotel', 'Backend\IndexController@searchHotel');
 Route::post('/api/magic/link', 'Backend\IndexController@magicLink');

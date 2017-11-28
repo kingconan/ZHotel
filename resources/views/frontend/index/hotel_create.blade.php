@@ -329,6 +329,12 @@
                                     type="button" class="btn btn-default btn-sm" data-loading-text="parsing...">TRY</button>
                             <div style="clear: both"></div>
                         </div>
+                        <div style="padding: 15px 0">
+                            <select class="form-control" style="width: 200px" v-model="hotel.status">
+                                <option value="1">有效/已上线</option>
+                                <option value="0">无效/未上线</option>
+                            </select>
+                        </div>
                         <div class="section_title" id="p1" onclick="hack_map(this)">基本信息</div>
                         <div class="width_normal" style="float: left">
                             <z-float-input placeholder="中文名" name="name" v-model="hotel.name"></z-float-input>

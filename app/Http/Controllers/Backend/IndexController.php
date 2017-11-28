@@ -24,6 +24,7 @@ class IndexController extends Controller
         $json = $request->json()->all();
         $hotel = new Hotel();
         $hotel->name = $json["name"];
+        $hotel->status = $json["status"];
         $hotel->name_en = $json["name_en"];
         $hotel->tag = $json["tag"];
         $hotel->description = $json["description"];
@@ -94,6 +95,35 @@ class IndexController extends Controller
         }
 
     }
+    public function onlineHotel(Request $request){
+        $hotel_id = $request->input("hotel_id");
+        $hotel = Hotel::find($hotel_id);
+        if($hotel){
+            if($hotel->status == 1){
+                $hotel->status = 0;
+            }
+            else{
+                $hotel->status = 1;
+            }
+            $hotel->save();
+            return response()->json(
+                [
+                    "ok"=>0,
+                    "msg"=>"ok",
+                    "obj"=>$hotel
+                ]
+            );
+        }
+        else{
+            return response()->json(
+                [
+                    "ok"=>1,
+                    "msg"=>"hotel not found",
+                    "obj"=>$hotel
+                ]
+            );
+        }
+    }
     public function getHotel($id,Request $request){
         $res = Hotel::find($id);
 
@@ -145,6 +175,7 @@ class IndexController extends Controller
         $hotel = Hotel::find($json["_id"]);
         if($hotel){
             $hotel->name = $json["name"];
+            $hotel->status = $json["status"];
             $hotel->name_en = $json["name_en"];
             $hotel->tag = $json["tag"];
             $hotel->description = $json["description"];

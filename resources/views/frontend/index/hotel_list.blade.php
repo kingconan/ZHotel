@@ -62,6 +62,11 @@
                }
         }
     </style>
+    <style>
+        .tr_not_online{
+            /*background-color: whitesmoke;*/
+        }
+    </style>
 @endsection
 @section('content')
 <div style="width: 100%;clear: both">
@@ -95,6 +100,7 @@
                 <table class="table">
                     <thead>
                     <th width="60px">#</th>
+                    <th width="60px">状态</th>
                     <th width="250px">酒店名称</th>
                     <th width="200px">标签</th>
                     <th width="200px">城市</th>
@@ -105,6 +111,12 @@
                     <tr v-for="(hotel,index) in hotels.data">
                         <td>
                             <% index+1 %>
+                        </td>
+                        <td v-if="hotel.status == 1">
+                            <span style="font-size: 10px;background-color: lightgreen;padding: 3px 6px">已上线</span>
+                        </td>
+                        <td v-else>
+                            <span style="font-size: 10px;background-color: whitesmoke;padding: 3px 6px">未上线</span>
                         </td>
                         <td class="hotel_name">
                             <% hotel.name %> <br/>
@@ -120,6 +132,9 @@
                             <a :href="'edit_hotel?id='+hotel._id" class="btn btn-default btn-sm">编辑</a>
                             <a :href="'plan?id='+hotel._id" class="btn btn-default btn-sm">合同</a>
                             <a :href="'/hotel/detail/'+hotel._id" class="btn btn-default btn-sm">预览</a>
+                            <button v-on:click="online(hotel._id)" class="btn btn-default btn-sm" style="margin-left: 15px;">
+                                <%hotel.status == 1 ? "下线" : "上线"%>
+                            </button>
                             <button v-on:click="confirm_delete(hotel._id,hotel.name)" class="btn btn-default btn-sm" style="margin-left: 15px;color: palevioletred">删除</button>
                         </td>
                     </tr>
@@ -232,6 +247,32 @@
                             self.hotels = response.data.obj;
                             self.loading = false;
 
+                        })
+                        .catch(function(error){
+                            console.log(error);
+                        });
+            },
+            online : function(hotel_id){
+                const self = this;
+                axios.post('api/online/hotel',{
+                            hotel_id: hotel_id
+                        })
+                        .then(function(response){
+                            console.log("delete_hotel");
+                            console.log(hotel_id);
+                            console.log(response.data);
+                            if(response.data.ok == 0){
+                                toastr["success"](response.data.msg);
+                                for(var i= 0,len = self.hotels.data.length;i<len;i++){
+                                    if(self.hotels.data[i]._id == hotel_id){
+                                        self.hotels.data[i].status = response.data.obj.status;
+                                        break;
+                                    }
+                                }
+                            }
+                            else{
+                                toastr["error"](response.data.msg);
+                            }
                         })
                         .catch(function(error){
                             console.log(error);
