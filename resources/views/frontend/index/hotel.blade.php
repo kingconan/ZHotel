@@ -591,7 +591,7 @@
                      style="cursor: pointer; text-align: center;float: left;width: 30px;margin-left: -30px">+</div>
                 <div style="clear: both"></div>
             </div>
-            <div style="text-align: center;font-size: 10px">儿童年龄</div>
+            <div v-if="book.children > 0" style="text-align: center;font-size: 10px">儿童年龄</div>
             <div style="padding: 10px">
                 <div v-for="(age,index) in book.children_age">
                     <select class="form-control" style="float:left;width: 60px;margin: 4px" v-model="book.children_age[index]">
