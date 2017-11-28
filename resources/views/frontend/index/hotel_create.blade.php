@@ -351,7 +351,7 @@
                             </div>
                             <div>
                                 <div class="width_small" style="float: left">
-                                    <z-float-input placeholder="区域" v-model="hotel.location.district" name="district"></z-float-input>
+                                    <z-float-input-district v-on:district_select="event_district" dom_id="district" placeholder="区域" v-model="hotel.location.district" name="district"></z-float-input-district>
                                 </div>
                                 <div class="width_small" style="float: left;margin-left: 10px">
                                     <z-float-input placeholder="lat" v-model="hotel.location.lat" name="lat"></z-float-input>
@@ -671,6 +671,7 @@
 </script>
 <script>
     var all_cities = []
+    var all_districts = []
     function try_to_find(name){
         for(var i= 0,len = all_cities.length;i<len;i++){
             if(all_cities[i].name == name || all_cities[i].name_en == name){
@@ -748,7 +749,55 @@
             }
         }
     });
+    Vue.component('z-float-input-district',{
+        delimiters: ["<%","%>"],
+        props:["placeholder","name", "value", "dom_id"],
+        template: '<label class="form-group has-float-label">' +
+        '<input :id="dom_id" class="form-control form_input" :name="name" :placeholder="placeholder" ' +
+        'v-bind:value="value"' +
+        'v-on:input="update($event.target.value)"/>' +
+        '<span><% placeholder %></span>',
+        mounted:function(){
+            const self = this;
+            const id = ("#"+this.dom_id);
+            axios.get('json/district.json',{
+                    })
+                    .then(function(response){
+                        self.source = response.data;
+                        all_districts = response.data;
 
+                        $(id).typeahead({
+                            source: self.source,
+                            autoSelect: false,
+                            fitToElement:true,
+                            afterSelect:function(v){
+                                self.update(v);
+                            },
+                            displayText:function(item){
+                                return item.district
+                            }
+                        });
+                    })
+                    .catch(function(error){
+                        console.log(error);
+                    });
+        },
+        data : function(){
+            return {
+                dom_id: this.dom_id,
+                source: [
+                ]
+            }
+        },
+        methods: {
+            update:function(item){
+                if(item.hasOwnProperty("district")){
+                    this.$emit('input', item.district)
+                    this.$emit('district_select', item)
+                }
+            }
+        }
+    });
     Vue.component('z-float-input-continent',{
         delimiters: ["<%","%>"],
         props:["placeholder","name", "value", "dom_id"],
@@ -1157,6 +1206,13 @@
                 console.log(item);
                 this.$data.hotel.location.continent = item.continent
                 this.$data.hotel.location.country = item.country_name
+            },
+            event_district : function(item){
+                if(item){
+                    this.$data.hotel.location.continent = item.continent
+                    this.$data.hotel.location.country = item.country
+                    this.$data.hotel.location.city = item.city
+                }
             },
             str_2_arr : function(str){
                 if(!str) return "";
