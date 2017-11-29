@@ -1,4 +1,5 @@
 function zhotel_markdown(str) {//simple markdown parser
+    if(!str || str == "" ) return "";
     var arr = str.split("\n");
     var html = "";
     var item = "";
