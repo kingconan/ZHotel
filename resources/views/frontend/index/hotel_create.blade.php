@@ -653,9 +653,12 @@
         return null;
     }
 </script>
-
-{{--<script src="https://maps.googleapis.com/maps/api/js?key=YOUR_API_KEY&libraries=places&callback=initAutocomplete"--}}
-        {{--async defer></script>--}}
+<script async defer
+        src="http://ditu.google.cn/maps/api/js?key=AIzaSyBJfv6WxdEoTqSgibZDdOL-m-lLWz6UO8E&libraries=geometry,places&callback=cb_map">
+</script>
+{{--<script async defer--}}
+        {{--src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBJfv6WxdEoTqSgibZDdOL-m-lLWz6UO8E&libraries=geometry,places&callback=cb_map">--}}
+{{--</script>--}}
 <script>
     Vue.component('z-float-input',{
         delimiters: ["<%","%>"],
@@ -1456,7 +1459,5 @@
     }
 
 </script>
-<script async defer
-        src="http://ditu.google.cn/maps/api/js?key=AIzaSyBJfv6WxdEoTqSgibZDdOL-m-lLWz6UO8E&libraries=geometry,places&callback=cb_map">
-</script>
+
 @endsection

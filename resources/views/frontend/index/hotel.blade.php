@@ -348,8 +348,8 @@
                         <div style="padding: 10px 0">
                             <form style="display: none" id="form_book">
                                 <div id="div_checkinout">
-                                    <input id="input_checkin" name="checkin" class="input_date" type="text" placeholder="入住日期" readonly/>
-                                    <input id="input_checkout" name="checkout"  class="input_date" type="text" placeholder="退房日期" readonly/>
+                                    <input id="input_checkin" name="checkin" v-model="book.checkin" class="input_date" type="text" placeholder="入住日期" readonly/>
+                                    <input id="input_checkout" name="checkout" v-model="book.checkout"  class="input_date" type="text" placeholder="退房日期" readonly/>
                                     <div style="clear: both"></div>
                                 </div>
                                 <div style="height: 10px;width: 10px;clear: both"></div>
@@ -370,10 +370,10 @@
                     <div class="hotel_nav" id="hotel_nav">
                         <div style="width: 60%;position: relative;margin-left: auto;margin-right: auto;">
                             <div>
-                                <div data-section="detail" v-on:click="nav_section" class="hotel_nav_item_focus">酒店详情</div>
-                                <div data-section="rooms" v-on:click="nav_section" class="hotel_nav_item">客房类型</div>
-                                <div data-section="section_facilities" v-on:click="nav_section" class="hotel_nav_item">设施政策</div>
-                                <div data-section="similar" v-on:click="nav_section" class="hotel_nav_item">相似酒店</div>
+                                <div data-section="detail" v-on:click="nav_section" :class="section == 'detail' ? 'hotel_nav_item_focus' : 'hotel_nav_item'">酒店详情</div>
+                                <div data-section="rooms" v-on:click="nav_section" :class="section == 'rooms' ? 'hotel_nav_item_focus' : 'hotel_nav_item'">客房类型</div>
+                                <div data-section="section_facilities" v-on:click="nav_section" :class="section == 'section_facilities' ? 'hotel_nav_item_focus' : 'hotel_nav_item'">设施政策</div>
+                                <div data-section="similar" v-on:click="nav_section" :class="section == 'similar' ? 'hotel_nav_item_focus' : 'hotel_nav_item'">相似酒店</div>
                             </div>
                             <div style="clear: both"></div>
                         </div>
@@ -407,31 +407,6 @@
                         </div>
                         <div class="hotel_line"></div>
 
-
-                        {{--<div>--}}
-                            {{--<div class="hotel_content_title">酒店环境</div>--}}
-                            {{--<div style="font-size: 14px;line-height: 24px" v-html="markdown(hotel.detail.environment)"></div>--}}
-                        {{--</div>--}}
-                        {{--<div style="height: 30px;width: 100px"></div>--}}
-
-                        {{--<div>--}}
-                            {{--<div class="hotel_content_title">推荐房型</div>--}}
-                            {{--<div style="font-size: 14px;line-height: 24px" v-html="markdown(hotel.detail.room)"></div>--}}
-                        {{--</div>--}}
-                        {{--<div style="height: 30px;width: 100px"></div>--}}
-
-                        {{--<div>--}}
-                            {{--<div class="hotel_content_title">活动体验</div>--}}
-                            {{--<div style="font-size: 14px;line-height: 24px" v-html="markdown(hotel.detail.experience)"></div>--}}
-                        {{--</div>--}}
-                        {{--<div style="height: 30px;width: 100px"></div>--}}
-
-                        {{--<div>--}}
-                            {{--<div class="hotel_content_title">餐厅 & SPA</div>--}}
-                            {{--<div style="font-size: 14px;line-height: 24px" v-html="markdown(hotel.detail.restaurant)"></div>--}}
-                        {{--</div>--}}
-                        {{--<div style="height: 30px;width: 100px"></div>--}}
-
                         <div v-if="hotel.detail.extend">
                             <div v-for="section in detail_extend">
                                 <div class="hotel_content_title"><%section.title%></div>
@@ -440,7 +415,8 @@
                         </div>
                     </div>
                     <div v-else-if="section === 'rooms'">
-                        <div v-for="room in hotel.rooms" style="border-top: 2px solid lightgrey">
+                        <div v-if="room_style == 0">
+                            <div v-for="room in hotel.rooms" style="border-top: 2px solid lightgrey">
                             <div style="float: left;width: 30%">
                                 <img v-if="room.images_str" :src="room.images_str.split('\n')[0]" width="100%">
                             </div>
@@ -459,6 +435,30 @@
                             </div>
                             <div style="clear: both"></div>
                             <div style="height:15px;width: 10px"></div>
+                        </div>
+                        </div>
+                        <div v-else>
+                            <div v-for="room in hotel.rooms" style="border-top: 2px solid lightgrey">
+                                <div style="float: left;width: 30%">
+                                    <img v-if="room.images_str" :src="room.images_str.split('\n')[0]" width="100%">
+                                    <div style="padding: 8px">
+                                        <div style="font-size: 16px;"><% room.name %></div>
+                                        <div style="height: 8px"></div>
+                                        <p style="font-size: 12px;line-height: 20px;margin: 0" v-for="h in str_2_arr(room.highlight)">
+                                            <% h %>
+                                        </p>
+                                        <div v-if="room.is_show == true">
+                                            <p style="font-size: 12px;line-height: 20px;margin: 0" v-html="markdown(room.description)"></p>
+                                            <p style="font-size: 12px;line-height: 20px;margin: 0" v-html="markdown(room.facilities)"></p>
+                                        </div>
+                                        <span class="unselectable" style="cursor: pointer;color: #c29c76" v-on:click="room_show_detail(room)"><%room.is_show?'收起':'更多'%></span>
+                                    </div>
+                                </div>
+                                <div style="float: left;width: 70%;padding:15px 30px 0px 30px">
+                                    plans here
+                                </div>
+                                <div style="clear: both"></div>
+                                <div style="height:15px;width: 10px"></div>
                         </div>
                     </div>
                     <div v-else-if="section === 'section_facilities'">
@@ -668,6 +668,11 @@
                     {
                         $('#input_checkin').val(s1);
                         $('#input_checkout').val(s2);
+                        //hack for event
+                        var evt = document.createEvent('HTMLEvents');
+                        evt.initEvent('input', false, true);
+                        $('#input_checkin')[0].dispatchEvent(evt);
+                        $('#input_checkout')[0].dispatchEvent(evt);
                     },
                     hoveringTooltip: function (days, startTime, hoveringTime) {
                         return days > 1 ? days + "天" + (days - 1) + '晚' : '';
@@ -819,7 +824,8 @@
                 children:0,
                 children_age : [
                 ]
-            }
+            },
+            room_style:0, //0 def, 1 with price
         },
         created:function () {
             var _id = this.$route.params.id;
@@ -873,7 +879,14 @@
                         })
                         .then(function(response){
                             console.log(response.data);
+
+                            var obj = response.data.obj;
+                            for(var i= 0,len = obj.rooms.length;i<len;i++){
+                                obj.rooms[i].is_show = false;
+                            }
+
                             self.hotel = response.data.obj;
+
                             self.loading = false;
                             hotel_lat = self.hotel.location.lat;
                             hotel_lng = self.hotel.location.lng;
@@ -884,21 +897,8 @@
             },
             nav_section : function(e){
                 var self = e.target;
-                $(".hotel_nav_item_focus").each(function(i,obj){
-                    $(obj).attr("class","hotel_nav_item");
-                });
-                $(self).attr("class", "hotel_nav_item_focus");
                 var s = $(self).attr("data-section");
                 this.section = s;
-                if(s == "section_facilities"){
-//                    section_facilities();
-                }
-                else if(s == "detail"){
-//                    section_detail();
-                }
-                else if(s == "rooms"){
-//                    section_room();
-                }
             },
             markdown : function(str){
 //                console.log(str);
@@ -909,13 +909,24 @@
             },
             book_check : function(e){
                 var self = e.target;
+
                 if($("#form_book").is(':visible')){
                     //ajax data
                     //switch to room section
                     //display plans of all room with the checkin-out
-                    var paras = $("#form_book").serialize();
-                    paras = paras + "&adult="+book_adult+"&children="+book_children;
+                    var paras = JSON.parse(JSON.stringify(this.$data.book));
+                    paras._id = this.hotel._id;
                     console.log(paras);
+                    var url = "";
+//                    axios.post(url, paras)
+//                            .then(function(response){
+//                                console.log(response.data);
+//                            })
+//                            .catch(function(error){
+//                                console.log(error);
+//                            });
+                    this.room_style = 1;
+                    this.section = "rooms";
                 }
                 else{
                     $("#form_book").slideDown(200);
@@ -986,6 +997,16 @@
                 if(this.book.children > 0){
                     this.book.children_age.splice(this.book.children - 1,1);
                     this.book.children = this.book.children - 1
+                }
+            },
+            room_show_detail : function(r){
+                console.log("room_show_detail");
+                console.log(r);
+                if(r.hasOwnProperty("is_show")){
+                    r.is_show = !r.is_show;
+                }
+                else{
+                    r.is_show = false;
                 }
             }
         },
