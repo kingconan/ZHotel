@@ -8,6 +8,7 @@ use Illuminate\Http\Request;
 use App\Http\Requests;
 use App\Http\Controllers\Controller;
 use Qiniu\Auth;
+use Qiniu\Storage\BucketManager;
 use Qiniu\Storage\UploadManager;
 use GuzzleHttp\Client;
 use Illuminate\Support\Facades\Log;
@@ -225,6 +226,59 @@ class IndexController extends Controller
                 "ok"=>1,
                 "msg"=>"not found hotel",
                 "obj"=>null
+            ]
+        );
+    }
+    public function fetchImage(Request $request){
+        $url = $request->input('url');
+        if(!$url){
+            return response()->json(
+                [
+                    "ok"=>1,
+                    "msg"=>"no file found",
+                    "obj"=>null
+                ]
+            );
+        }
+        $ext_arr = explode(".",$url);
+        $ext = "jpg";
+        if($ext_arr && count($ext_arr) > 1){
+            $ext = $ext_arr[count($ext_arr)-1];
+        }
+        $auth = new Auth(IndexController::AK, IndexController::SK);
+        $bucket = 'zhotel';
+        $token = $auth->uploadToken($bucket);
+        $uploadMgr = new BucketManager($auth);
+        $key = "zhotel_".time().'.'.$ext;
+        list($ret, $err) = $uploadMgr->fetch($url,$bucket,$key);
+        if($err){
+            return response()->json(
+                [
+                    "ok"=>1,
+                    "msg"=>"upload to qiniu failed",
+                    "obj"=>$err
+                ]
+            );
+        }
+        return response()->json(
+            [
+                "ok"=>0,
+                "msg"=>"上传成功",
+                "obj"=>[
+                    "domain"=>IndexController::Q_DOMAIN,
+                    "ret"=>$ret,
+                    "url"=>IndexController::Q_DOMAIN."/".$ret["key"]
+                ]
+            ]
+        );
+    }
+    public function qToken(Request $request){
+        $auth = new Auth(IndexController::AK, IndexController::SK);
+        $bucket = 'zhotel';
+        $token = $auth->uploadToken($bucket);
+        return response()->json(
+            [
+                "uptoken"=>$token
             ]
         );
     }

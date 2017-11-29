@@ -44,6 +44,8 @@ Route::get('/api/parse/get_rate', 'Backend\IndexController@getRate');
 
 
 Route::post('/uploader/image', 'Backend\IndexController@uploadImage');
+Route::post('/fetcher/image', 'Backend\IndexController@fetchImage');
+Route::get('/qiniu/token', 'Backend\IndexController@qToken');
 Route::get('/api/place', 'Backend\IndexController@getPlaceDetailOfGooglemap');
 Route::get('/hotel/detail1/{id}', 'Backend\IndexController@index');
 Route::get('/hotel/detail/{id}', function () {

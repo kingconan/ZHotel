@@ -405,8 +405,10 @@
                         <div id="detail_custom_div">
                             <div class="sub_title">自定义扩展
                                 <span class="btn_action" v-on:click="insert_image">图片</span>
+                                <span class="btn_action" v-on:click="insert_image2">URL</span>
                                 <a v-on:click="show_covers" class="btn_action">图库</a>
                             </div>
+
                             <div>
                                 <div style="float: left;width: 420px;position: relative">
                                     <p class="info">
@@ -522,7 +524,8 @@
                         <div style="clear: both;height: 30px"></div>
                         <div id="p7" class="section_title">
                             <div style="float: left">图片管理</div>
-                            <span v-on:click="upload_covers"  style="float: right;margin-right: 10px;color: grey;border: 1px solid grey;
+                            {{--<span v-on:click="upload_covers" id="upload"  style="float: right;margin-right: 10px;color: grey;border: 1px solid grey;--}}
+                            <span id="pickfiles"  style="float: right;margin-right: 10px;color: grey;border: 1px solid grey;
                             font-size: 10px;padding: 3px 6px;cursor: pointer">Upload</span>
                             <div style="clear: both"></div>
                         </div>
@@ -609,7 +612,6 @@
         </div>
 
         <div style="clear: both"></div>
-
     </div>
 @endsection
 @section('script')
@@ -621,6 +623,10 @@
 <script src="{{asset('js/libs/bootstrap-modal-popover.js')}}"></script>
 <script src="{{asset('js/libs/toastr.min.js')}}"></script>
 <script src="{{asset('js/libs/bootstrap3-typeahead.min.js')}}"></script>
+
+<script src="https://cdn.staticfile.org/plupload/2.1.9/moxie.min.js"></script>
+<script src="https://cdn.staticfile.org/plupload/2.1.9/plupload.min.js"></script>
+<script src="https://cdn.staticfile.org/qiniu-js-sdk/1.0.14-beta/qiniu.min.js"></script>
 <script>
     toastr.options = {
         "closeButton": false,
@@ -653,9 +659,9 @@
         return null;
     }
 </script>
-<script async defer
-        src="http://ditu.google.cn/maps/api/js?key=AIzaSyBJfv6WxdEoTqSgibZDdOL-m-lLWz6UO8E&libraries=geometry,places&callback=cb_map">
-</script>
+{{--<script async defer--}}
+        {{--src="http://ditu.google.cn/maps/api/js?key=AIzaSyBJfv6WxdEoTqSgibZDdOL-m-lLWz6UO8E&libraries=geometry,places&callback=cb_map">--}}
+{{--</script>--}}
 {{--<script async defer--}}
         {{--src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBJfv6WxdEoTqSgibZDdOL-m-lLWz6UO8E&libraries=geometry,places&callback=cb_map">--}}
 {{--</script>--}}
@@ -1068,6 +1074,50 @@
                     }
                 });
             },
+            insert_image2 : function(e){
+                var url= prompt("Image url is ","")
+                if(url){
+                    var progress = '<div id="div_progress"' +
+                            'style="padding:6px;font-size:10px;margin-top: 6px;border: 1px solid lightgrey">获取图片保存中...</div>'
+                    console.log(url);
+                    const thiz = this;
+                    var self = e.target;
+                    var editor = $(self).parent().parent().find('textarea')[0];
+                    var post_url = "/fetcher/image";
+                    $(self).parent().append(progress);
+                    axios.post(post_url, {url:url})
+                            .then(function(response){
+                                console.log(response.data);
+                                if(response.data.ok == 0){
+                                    var text = '![]('+response.data.obj.url+')\n';
+                                    if(editor.selectionStart || editor.selectionStart === 0) {//working in chrome
+                                        // Others
+                                        var start_pos = editor.selectionStart;
+                                        var end_pos = editor.selectionEnd;
+                                        editor.value = editor.value.substring(0, start_pos) +
+                                                text +
+                                                editor.value.substring(end_pos, editor.value.length);
+                                        editor.selectionStart = start_pos + text.length;
+                                        editor.selectionEnd = start_pos + text.length;
+                                        editor.focus();
+                                        toastr["success"](data.msg);
+                                    }
+                                    thiz.helper_js_event(editor);
+                                }
+                                else{
+                                    toastr["error"](data.msg);
+                                }
+                                $("#div_progress").remove();
+                            })
+                            .catch(function(error){
+                                console.log(error)
+                                $("#div_progress").remove();
+                            });
+                }
+                else{
+                    console.log("no url");
+                }
+            },
             insert_image :  function(e){
                 var self = e.target;
                 var editor = $(self).parent().parent().find('textarea')[0];
@@ -1457,6 +1507,79 @@
             map.fitBounds(bounds);
         });
     }
+
+</script>
+<script>
+    $( document ).ready(function() {
+        console.log( "ready!" );
+        var uploader = Qiniu.uploader({
+            runtimes: 'html5,flash,html4',      // 上传模式，依次退化
+            browse_button: 'pickfiles',
+            uptoken_url: '/qiniu/token',
+            get_new_uptoken: false,             // 设置上传文件的时候是否每次都重新获取新的uptoken
+            domain: 'http://oytstg973.bkt.clouddn.com',     // bucket域名，下载资源时用到，必需
+            //container: 'container',             // 上传区域DOM ID，默认是browser_button的父元素
+            max_file_size: '100mb',             // 最大文件体积限制
+            flash_swf_url: 'https://cdn.staticfile.org/plupload/2.1.9/Moxie.swf',  //引入flash，相对路径
+            max_retries: 3,                     // 上传失败最大重试次数
+            dragdrop: false,                     // 开启可拖曳上传
+            //drop_element: 'container',          // 拖曳上传区域元素的ID，拖曳文件或文件夹后可触发上传
+            chunk_size: '4mb',                  // 分块上传时，每块的体积
+            auto_start: true,                   // 选择文件后自动上传，若关闭需要自己绑定事件触发上传
+            init: {
+                'FilesAdded': function(up, files) {
+                    plupload.each(files, function(file) {
+                        // 文件添加进队列后，处理相关的事情
+                    });
+                },
+                'BeforeUpload': function(up, file) {
+                    // 每个文件上传前，处理相关的事情
+                },
+                'UploadProgress': function(up, file) {
+                    // 每个文件上传时，处理相关的事情
+                },
+                'FileUploaded': function(up, file, info) {
+                    // 每个文件上传成功后，处理相关的事情
+                    // 其中info.response是文件上传成功后，服务端返回的json，形式如：
+                    // {
+                    //    "hash": "Fh8xVqod2MQ1mocfI4S4KpRL6D98",
+                    //    "key": "gogopher.jpg"
+                    //  }
+                    //查看简单反馈
+                    console.log("file uploaded");
+                    console.log(info);
+                    var domain = up.getOption('domain');
+                    var res = JSON.parse(info);
+                    var sourceLink = domain +"/"+ res.key; //获取上传成功后的文件的Url
+//                    console.log("FileUploaded");
+                    console.log(sourceLink);
+                    var image = {
+                        url : sourceLink,
+                        tag : "",
+                        status : 1,
+                        created_at : Date.now()
+                    }
+                    if(!hotelList.hotel.images){
+                        hotelList.hotel.images = [];
+                    }
+                    hotelList.hotel.images.splice(0,0,image);
+
+                },
+                'Error': function(up, err, errTip) {
+                    //上传出错时，处理相关的事情
+                },
+                'UploadComplete': function() {
+                    //队列文件处理完毕后，处理相关的事情
+                },
+                unique_names: true
+            }
+        });
+
+        // domain为七牛空间对应的域名，选择某个空间后，可通过 空间设置->基本设置->域名设置 查看获取
+
+        // uploader为一个plupload对象，继承了所有plupload的方法
+    });
+
 
 </script>
 
