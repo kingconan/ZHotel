@@ -454,6 +454,8 @@
                                 </ul>
                                 <div style="height: 8px"></div>
                                 <p class="hotel_text" v-html="markdown(room.description)"></p>
+                                <div style="height: 8px"></div>
+                                <p class="hotel_text" v-html="markdown(room.facilities)"></p>
                             </div>
                             <div style="clear: both"></div>
                             <div style="height:15px;width: 10px"></div>

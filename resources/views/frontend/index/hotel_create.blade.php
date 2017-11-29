@@ -399,54 +399,6 @@
                         <div style="clear: both;height: 30px"></div>
 
                         <div class="section_title"  id="p3">酒店详情</div>
-                        {{--<div>--}}
-                            {{--<div class="sub_title">酒店环境--}}
-                                {{--<span class="btn_action" v-on:click="insert_image">图片</span>--}}
-                                {{--<a v-on:click="show_covers" class="btn_action">图库</a>--}}
-                            {{--</div>--}}
-                            {{--<div class="width_big" style="float: left;">--}}
-                                {{--<z-float-textarea placeholder="酒店环境描述" v-model="hotel.detail.environment" name="detail_environment"></z-float-textarea>--}}
-                            {{--</div>--}}
-                            {{--<div class="width_big" style="float: left;">--}}
-                            {{--</div>--}}
-                            {{--<div style="clear: both"></div>--}}
-                        {{--</div>--}}
-                        {{--<div>--}}
-                            {{--<div class="sub_title">推荐房型--}}
-                                {{--<span class="btn_action" v-on:click="insert_image">图片</span>--}}
-                                {{--<a v-on:click="show_covers" class="btn_action">图库</a>--}}
-                            {{--</div>--}}
-                            {{--<div class="width_big" style="float: left;">--}}
-                                {{--<z-float-textarea placeholder="房型描述" v-model="hotel.detail.room" name="detail_environment"></z-float-textarea>--}}
-                            {{--</div>--}}
-                            {{--<div class="width_big" style="float: left;">--}}
-                            {{--</div>--}}
-                            {{--<div style="clear: both"></div>--}}
-                        {{--</div>--}}
-                        {{--<div>--}}
-                            {{--<div class="sub_title">活动体验--}}
-                                {{--<span class="btn_action" v-on:click="insert_image">图片</span>--}}
-                                {{--<a v-on:click="show_covers" class="btn_action">图库</a>--}}
-                            {{--</div>--}}
-                            {{--<div class="width_big" style="float: left;">--}}
-                                {{--<z-float-textarea placeholder="活动体验" v-model="hotel.detail.experience" name="detail_environment"></z-float-textarea>--}}
-                            {{--</div>--}}
-                            {{--<div class="width_big" style="float: left;">--}}
-                            {{--</div>--}}
-                            {{--<div style="clear: both"></div>--}}
-                        {{--</div>--}}
-                        {{--<div>--}}
-                            {{--<div class="sub_title">餐厅 & SPA--}}
-                                {{--<span class="btn_action" v-on:click="insert_image">图片</span>--}}
-                                {{--<a v-on:click="show_covers" class="btn_action">图库</a>--}}
-                            {{--</div>--}}
-                            {{--<div class="width_big" style="float: left;">--}}
-                                {{--<z-float-textarea placeholder="餐厅 & SPA" v-model="hotel.detail.restaurant" name="detail_environment"></z-float-textarea>--}}
-                            {{--</div>--}}
-                            {{--<div class="width_big" style="float: left;">--}}
-                            {{--</div>--}}
-                            {{--<div style="clear: both"></div>--}}
-                        {{--</div>--}}
                         <div id="detail_custom_div">
                             <div class="sub_title">自定义扩展
                                 <span class="btn_action" v-on:click="insert_image">图片</span>
@@ -500,9 +452,21 @@
                                 <div style="height: 20px;width: 100%"></div>
 
                                 <z-float-input placeholder="名称" v-model="hotel.rooms[current_room].name" name="name"></z-float-input>
-                                <z-float-textarea placeholder="描述" v-model="hotel.rooms[current_room].description" name="name"></z-float-textarea>
-                                <z-float-textarea placeholder="亮点" v-model="hotel.rooms[current_room].highlight" name="name"></z-float-textarea>
-
+                                <div>
+                                    <div class="width_small" style="float: left">
+                                        <z-float-input placeholder="成人数" v-model="hotel.rooms[current_room].adult" type="number"></z-float-input-city>
+                                    </div>
+                                    <div class="width_small" style="float: left;margin-left: 10px">
+                                        <z-float-input placeholder="儿童数" v-model="hotel.rooms[current_room].children" type="number"></z-float-input>
+                                    </div>
+                                    <div class="width_small" style="float:left;margin-left: 10px">
+                                        <z-float-input placeholder="儿童年龄" v-model="hotel.rooms[current_room].children_age" type="number"></z-float-input>
+                                    </div>
+                                    <div style="clear: both"></div>
+                                </div>
+                                <z-float-textarea placeholder="描述" v-model="hotel.rooms[current_room].description" name="description"></z-float-textarea>
+                                <z-float-textarea placeholder="面积,床,入住人数" v-model="hotel.rooms[current_room].highlight" name="highlight"></z-float-textarea>
+                                <z-float-textarea placeholder="酒店设施" v-model="hotel.rooms[current_room].facilities" name="facilities"></z-float-textarea>
                                 <div>
                                     <div class="sub_title">选封面
                                         <a v-on:click="show_covers" data-image="dir" class="btn_action">图库</a>
@@ -680,7 +644,6 @@
         for(var i= 0,len = all_cities.length;i<len;i++){
             if(all_cities[i].name == name || all_cities[i].name_en == name){
             console.log("find city")
-            console.log(all_cities[i])
             return all_cities[i];
             }
         }
@@ -693,9 +656,9 @@
 <script>
     Vue.component('z-float-input',{
         delimiters: ["<%","%>"],
-        props:["placeholder","name", "value", "dom_id"],
+        props:["placeholder","name", "value", "dom_id","type"],
         template: '<label class="form-group has-float-label">' +
-        '<input :id="dom_id" class="form-control form_input" :name="name" :placeholder="placeholder" ' +
+        '<input :id="dom_id" class="form-control form_input" :type="type" :name="name" :placeholder="placeholder" ' +
         'v-bind:value="value"' +
         'v-on:input="update($event.target.value)"/>' +
         '<span><% placeholder %></span>',
@@ -857,8 +820,6 @@
         '</label>',
         methods: {
             update:function(value){
-                console.log("change textarea input");
-                console.log(value);
                 this.$emit('input', value)
             }
         }
@@ -1017,9 +978,6 @@
                         });
             },
             add_room : function(index){
-                console.log(index);
-
-
                 var id = "room."+performance.now();
                 var name = "房型名字";
                 var empty = {
@@ -1030,7 +988,6 @@
                     zy : "",
                     info : ""
                 }
-                console.log(empty);
                 this.hotel.rooms.splice(index+1, 0, empty);
                 this.current_room = index+1;
             },
@@ -1097,7 +1054,6 @@
                                 vue_data.hotel.images.splice(0,0,image);
                             }
 
-                            console.log(vue_data.hotel.images);
                         }
                         else{
                             toastr["error"](data.msg);
@@ -1109,8 +1065,6 @@
             insert_image :  function(e){
                 var self = e.target;
                 var editor = $(self).parent().parent().find('textarea')[0];
-                console.log(self);
-                console.log(editor);
 
                 var progress = '<div id="div_progress" class="progress" style="height: 10px;margin-top: 6px">\
                         <div id="progress" class="progress-bar progress-bar-success" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100"\
@@ -1207,7 +1161,6 @@
             },
             event_city : function(item){
                 console.log("parent event callback");
-                console.log(item);
                 this.$data.hotel.location.continent = item.continent
                 this.$data.hotel.location.country = item.country_name
             },
@@ -1290,7 +1243,6 @@
                 this.current_room = index;
             },
             markdown : function(str){
-                console.log(str);
                 return zhotel_markdown(str);
             },
 
@@ -1358,7 +1310,6 @@
         for(var i= 0,len = all_cities.length;i<len;i++){
             if(all_cities[i].name == name || all_cities[i].name_en == name){
                 console.log("find city")
-                console.log(all_cities[i])
                 return all_cities[i];
             }
         }
