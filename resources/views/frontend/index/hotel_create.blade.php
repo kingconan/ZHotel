@@ -525,7 +525,7 @@
                         <div id="p7" class="section_title">
                             <div style="float: left">图片管理</div>
                             {{--<span v-on:click="upload_covers" id="upload"  style="float: right;margin-right: 10px;color: grey;border: 1px solid grey;--}}
-                            <span id="pickfiles"  style="float: right;margin-right: 10px;color: grey;border: 1px solid grey;
+                            <span id="pickfiles1"  style="float: right;margin-right: 10px;color: grey;border: 1px solid grey;
                             font-size: 10px;padding: 3px 6px;cursor: pointer">Upload</span>
                             <div style="clear: both"></div>
                         </div>
@@ -612,6 +612,7 @@
         </div>
 
         <div style="clear: both"></div>
+        <button id="pickfiles" type="button" class="btn btn-default">test</button>
     </div>
 @endsection
 @section('script')
