@@ -215,6 +215,7 @@
             padding: 6px;
             border: 1px solid lightgrey;
             margin-right: 10px;
+            margin-bottom: 10px;
             height: 34px;
             cursor: pointer;
         }
@@ -223,6 +224,7 @@
             padding: 6px;
             border: 1px solid lightgrey;
             margin-right: 10px;
+            margin-bottom: 10px;
             background-color: lightblue;
             height: 34px;
             cursor: pointer;
@@ -232,6 +234,7 @@
             border: 1px dashed lightgrey;
             padding:6px;
             margin-right: 10px;
+            margin-bottom: 10px;
             cursor: pointer;
         }
     </style>
@@ -431,7 +434,7 @@
                         </div>
                         <div style="clear: both;height: 30px"></div>
                         <div class="section_title" id="p4">客房类型</div>
-                        <div style="border: 1px solid lightgrey;padding: 8px">
+                        <div style="border: 1px solid lightgrey;padding-top: 10px;padding-right: 10px;padding-left: 10px">
                             <div class="btn_room_insert" v-on:click="add_room(-1)">+</div>
                             <div v-for="(room,index) in hotel.rooms" >
                                 <div :class="current_room == index ? 'btn_room_focus' : 'btn_room' "
