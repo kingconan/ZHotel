@@ -383,7 +383,7 @@
                 </div>
                 <div id="hotel_content_container" style="width: 60%;position: relative;margin-left: auto;margin-right: auto;">
                     <div style="height: 30px;width:100px"></div>
-                    <div v-if="section === 'detail'">
+                    <div v-if="section == 'detail'">
                         <div style="height: 30px"></div>
                         <div class="hotel_des">
                             <img style="float: left" width="24px" src="/images/hotel_quote_left.png"/>
@@ -416,7 +416,7 @@
                             </div>
                         </div>
                     </div>
-                    <div v-else-if="section === 'rooms'">
+                    <div v-else-if="section == 'rooms'">
                         <div v-if="room_style == 0">
                             <div v-for="room in hotel.rooms" style="border-top: 2px solid lightgrey">
                             <div style="float: left;width: 30%">
@@ -463,7 +463,8 @@
                                 <div style="height:15px;width: 10px"></div>
                         </div>
                     </div>
-                    <div v-else-if="section === 'section_facilities'">
+                    </div>
+                    <div v-else-if="section == 'section_facilities'">
                         <div class="hotel_content_title">酒店设施</div>
                         <div v-for="item in arr_facilities" class="font_sub_4">
                             <% item %>
@@ -492,9 +493,9 @@
                         <div class="font_sub">酒店接受的银行卡类型：<% hotel.policy.payment %></div>
                         <div style="height: 30px;width: 100px"></div>
                     </div>
-                    <div v-else-if="section === 'similar'">similar</div>
+                    <div v-else-if="section == 'similar'"><div>similar</div></div>
                 </div>
-                <div v-show="section === 'detail'" class="hotel_map" style="position: relative;width: 100%">
+                <div v-show="section == 'detail'" class="hotel_map" style="position: relative;width: 100%">
                     <div id="map" style="width: 100%;height: 300px;"></div>
                     <div style="position: absolute;width: 60%;margin-left: auto;margin-right: auto;left: 0;top: 0;">
                         <div style="height: 20px"></div>
