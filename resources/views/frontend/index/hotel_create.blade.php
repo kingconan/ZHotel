@@ -307,6 +307,9 @@
             max-height: 150px;
             object-fit: cover;
         }
+        .bg_progress{
+            padding:6px;font-size:10px;margin-top: 6px;border: 1px solid lightgrey;background-color: dimgrey;color:white
+        }
     </style>
 @endsection
 @section('content')
@@ -659,10 +662,23 @@
         }
         return null;
     }
+    function progress_add(container){
+        var progress = '<div id="div_progress" class="bg_progress">获取图片保存中...</div>'
+        container.append(progress);
+    }
+    function progress_remove(){
+        $("#div_progress").remove();
+    }
+    function progress_go(percent){
+        $("#div_progress").text("上传中("+percent+")...");
+    }
 </script>
 <script>
     var uploader = null;
     var uploader2 = null;
+
+    var progress_files = 0;
+    var progress_current = 1;
     function init_7n(){
         if(uploader == null){
             console.log("init 7n");
@@ -680,8 +696,19 @@
                 unique_names: false,
                 save_key: false,
                 init: {
+                    'FilesAdded': function(up, files) {
+                        progress_add($("#pickfiles").parent());
+                        progress_files = files.length;
+                        progress_current = 1;
+                        console.log("files added "+progress_files+"("+progress_current+")");
+                    },
                     'UploadProgress': function(up, file) {
                         // 每个文件上传时，处理相关的事情
+                        var percent = file.percent;
+                        var f = progress_current * 1.0 / progress_files;
+                        var p = percent * f;
+                        console.log(p);
+                        progress_go(p + "%");
                     },
                     'FileUploaded': function(up, file, info) {
                         console.log("file uploaded");
@@ -690,16 +717,8 @@
                         var res = JSON.parse(info);
                         var sourceLink = domain +"/"+ res.key;
                         console.log(sourceLink);
-                        var image = {
-                            url : sourceLink,
-                            tag : "",
-                            status : 1,
-                            created_at : Date.now()
-                        }
-                        if(!hotelList.hotel.images){
-                            hotelList.hotel.images = [];
-                        }
-                        hotelList.hotel.images.splice(0,0,image);
+                        hotelList.helper_append_hotel_images(sourceLink);
+                        progress_current++;
                     },
                     'Key': function(up, file) {
                         // 若想在前端对每个文件的key进行个性化处理，可以配置该函数
@@ -715,7 +734,12 @@
                         var key = "zhotel_"+hotel_id+"_"+ Date.now()+"."+ext;
                         // do something with key here
                         return key
-                    }
+                    },
+                    'UploadComplete': function() {
+                        progress_remove();
+                        progress_current = 1;
+                        console.log("UploadComplete");
+                    },
                 }
             });
         }
@@ -736,8 +760,19 @@
                 unique_names: false,
                 save_key: false,
                 init: {
+                    'FilesAdded': function(up, files) {
+                        progress_add($("#qn_custom").parent());
+                        progress_files = files.length;
+                        progress_current = 1;
+                        console.log("files added "+progress_files+"("+progress_current+")");
+                    },
                     'UploadProgress': function(up, file) {
                         // 每个文件上传时，处理相关的事情
+                        var percent = file.percent;
+                        var f = progress_current * 1.0 / progress_files;
+                        var p = percent * f;
+                        console.log(p);
+                        progress_go(p + "%");
                     },
                     'FileUploaded': function(up, file, info) {
                         console.log("file uploaded 2");
@@ -746,13 +781,18 @@
                         var res = JSON.parse(info);
                         var sourceLink = domain +"/"+ res.key;
                         helper_insert(sourceLink);
+                        hotelList.helper_append_hotel_images(sourceLink);
+                        progress_current++;
+                    },
+                    'UploadComplete': function() {
+                        progress_remove();
+                        progress_current = 1;
+                        console.log("UploadComplete");
                     },
                     'Key': function(up, file) {
                         // 若想在前端对每个文件的key进行个性化处理，可以配置该函数
                         // 该配置必须要在 unique_names: false , save_key: false 时才生效
                         console.log("get key here");
-                        console.log(up);
-                        console.log(file);
                         var ext = file.name.split('.').pop();;
                         var hotel_id = "none";
                         if(hotelList.hotel._id){
@@ -1261,14 +1301,12 @@
             insert_image2 : function(e){//通过url方式下载
                 var url= prompt("Image url is ","")
                 if(url){
-                    var progress = '<div id="div_progress"' +
-                            'style="padding:6px;font-size:10px;margin-top: 6px;border: 1px solid lightgrey">获取图片保存中...</div>'
                     console.log(url);
                     const thiz = this;
                     var self = e.target;
                     var editor = $(self).parent().parent().find('textarea')[0];
                     var post_url = "/fetcher/image";
-                    $(self).parent().append(progress);
+                    progress_add($(self).parent());
                     axios.post(post_url, {url:url,_id:thiz.hotel._id})
                             .then(function(response){
                                 console.log(response.data);
@@ -1284,18 +1322,19 @@
                                         editor.selectionStart = start_pos + text.length;
                                         editor.selectionEnd = start_pos + text.length;
                                         editor.focus();
-                                        toastr["success"](data.msg);
+                                        toastr["success"](response.data.msg);
                                     }
                                     thiz.helper_js_event(editor);
+                                    thiz.helper_append_hotel_images(response.data.obj.url);
                                 }
                                 else{
                                     toastr["error"](data.msg);
                                 }
-                                $("#div_progress").remove();
+                                progress_remove();
                             })
                             .catch(function(error){
                                 console.log(error)
-                                $("#div_progress").remove();
+                                progress_remove();
                             });
                 }
                 else{
@@ -1431,7 +1470,18 @@
             markdown : function(str){
                 return zhotel_markdown(str);
             },
-
+            helper_append_hotel_images : function (link){
+                var image = {
+                    url : link,
+                    tag : "",
+                    status : 0,
+                    created_at : Date.now()
+                }
+                if(!this.hotel.images){
+                    this.hotel.images = [];
+                }
+                this.hotel.images.splice(0,0,image);
+            }
         },
         computed : {
             sortedCover :function(){

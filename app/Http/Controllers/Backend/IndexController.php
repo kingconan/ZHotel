@@ -244,7 +244,8 @@ class IndexController extends Controller
                 ]
             );
         }
-        $ext_arr = explode(".",$url);
+        $url_pure = strtok($url, '?');
+        $ext_arr = explode(".",$url_pure);
         $ext = "jpg";
         if($ext_arr && count($ext_arr) > 1){
             $ext = $ext_arr[count($ext_arr)-1];
