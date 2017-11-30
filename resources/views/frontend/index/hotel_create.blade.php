@@ -459,7 +459,18 @@
                                 {{--</div>--}}
                                 <div style="height: 20px;width: 100%"></div>
 
-                                <z-float-input placeholder="名称" v-model="hotel.rooms[current_room].name" name="name"></z-float-input>
+                                <div>
+                                    <div class="width_normal" style="float: left">
+                                        <z-float-input placeholder="名称" v-model="hotel.rooms[current_room].name" name="name"></z-float-input>
+                                    </div>
+                                    <div style="float: left;margin-left: 10px;width: 80px">
+                                        <select class="form-control" v-model="hotel.rooms[current_room].online">
+                                            <option value="1">有效</option>
+                                            <option value="0">无效</option>
+                                        </select>
+                                    </div>
+                                    <div style="clear: both"></div>
+                                </div>
                                 <div>
                                     <div class="width_small" style="float: left">
                                         <z-float-input placeholder="成人数" v-model="hotel.rooms[current_room].adult" type="number"></z-float-input>
@@ -1191,10 +1202,16 @@
                 var empty = {
                     id : id,
                     name : name,
+                    online : 1,
                     description : "",
                     highlight : "",
                     zy : "",
-                    info : ""
+                    info : "",
+                    facilities : "",
+                    adult : "2",
+                    children : "0",
+                    children_age : "12",
+
                 }
                 this.hotel.rooms.splice(index+1, 0, empty);
                 this.current_room = index+1;
