@@ -920,6 +920,9 @@
                 return zhotel_markdown(str);
             },
             str_2_arr : function(str){
+                if(!str){
+                    return "";
+                }
                 return str.split("\n");
             },
             book_check : function(e){
