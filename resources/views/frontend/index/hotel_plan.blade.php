@@ -1685,6 +1685,7 @@
                                                 self.dom_event(ele_out[0]);
 
                                             },
+                                            stickyMonths: true,
                                             language: "cn",
                                             format: "YYYY-MM-DD"
                                         }
