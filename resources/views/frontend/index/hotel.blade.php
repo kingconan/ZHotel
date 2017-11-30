@@ -923,7 +923,8 @@
                 if(!str){
                     return "";
                 }
-                return str.split("\n");
+
+                return str.split("\n").filter(function(entry) { return entry.trim() != ''; });
             },
             book_check : function(e){
                 var self = e.target;
