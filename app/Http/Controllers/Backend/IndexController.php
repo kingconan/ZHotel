@@ -231,6 +231,10 @@ class IndexController extends Controller
     }
     public function fetchImage(Request $request){
         $url = $request->input('url');
+        $_id = $request->input('_id');
+        if(!$_id){
+            $_id = "none";
+        }
         if(!$url){
             return response()->json(
                 [
@@ -249,7 +253,7 @@ class IndexController extends Controller
         $bucket = 'zhotel';
         $token = $auth->uploadToken($bucket);
         $uploadMgr = new BucketManager($auth);
-        $key = "zhotel_".time().'.'.$ext;
+        $key = "zhotel_".$_id."_".time().'.'.$ext;
         list($ret, $err) = $uploadMgr->fetch($url,$bucket,$key);
         if($err){
             return response()->json(
@@ -293,6 +297,10 @@ class IndexController extends Controller
             );
         }
         $file = $request->file('file');
+        $_id = $request->input('_id');
+        if(!$_id){
+            $_id = "none";
+        }
         $auth = new Auth(IndexController::AK, IndexController::SK);
         $bucket = 'zhotel';
         $token = $auth->uploadToken($bucket);
@@ -302,7 +310,7 @@ class IndexController extends Controller
             $failed_cnt = 0;
             $urls = [];
             foreach($file as $f){
-                $key = "zhotel_".time().'.'.$f->getClientOriginalExtension();
+                $key = "zhotel_".$_id."_".time().'.'.$f->getClientOriginalExtension();
                 list($ret, $err) = $uploadMgr->putFile($token, $key, $f->getRealPath());
                 if($err){
                     $failed_cnt = $failed_cnt + 1;
@@ -326,7 +334,7 @@ class IndexController extends Controller
         }
         else{
 
-            $key = "zhotel_".time().'.'.$file->getClientOriginalExtension();
+            $key = "zhotel_".$_id."_".time().'.'.$file->getClientOriginalExtension();
             list($ret, $err) = $uploadMgr->putFile($token, $key, $file->getRealPath());
             if($err){
                 return response()->json(

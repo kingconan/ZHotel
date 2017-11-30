@@ -404,7 +404,7 @@
                         <div class="section_title"  id="p3">酒店详情</div>
                         <div id="detail_custom_div">
                             <div class="sub_title">自定义扩展
-                                <span class="btn_action" v-on:click="insert_image">图片</span>
+                                <span id="qn_custom" class="btn_action">图片</span>
                                 <span class="btn_action" v-on:click="insert_image2">URL</span>
                                 <a v-on:click="show_covers" class="btn_action">图库</a>
                             </div>
@@ -417,7 +417,7 @@
                                         description
                                     </p>
                                     <div class="width_big" style="float: left;">
-                                        <z-float-textarea placeholder="自定义" v-model="hotel.detail.extend" rows="30" name="detail_environment"></z-float-textarea>
+                                        <z-float-textarea id="ta_custom" placeholder="自定义" v-model="hotel.detail.extend" rows="30" name="detail_environment"></z-float-textarea>
                                     </div>
                                     <div style="clear: both"></div>
                                 </div>
@@ -459,7 +459,7 @@
                                 <z-float-input placeholder="名称" v-model="hotel.rooms[current_room].name" name="name"></z-float-input>
                                 <div>
                                     <div class="width_small" style="float: left">
-                                        <z-float-input placeholder="成人数" v-model="hotel.rooms[current_room].adult" type="number"></z-float-input-city>
+                                        <z-float-input placeholder="成人数" v-model="hotel.rooms[current_room].adult" type="number"></z-float-input>
                                     </div>
                                     <div class="width_small" style="float: left;margin-left: 10px">
                                         <z-float-input placeholder="儿童数" v-model="hotel.rooms[current_room].children" type="number"></z-float-input>
@@ -662,80 +662,131 @@
 </script>
 <script>
     var uploader = null;
+    var uploader2 = null;
     function init_7n(){
-        if(uploader != null) return;
-        console.log("init 7n");
-        uploader = Qiniu.uploader({
-            runtimes: 'html5,flash,html4',      // 上传模式，依次退化
-            browse_button: 'pickfiles',
-            uptoken_url: '/qiniu/token',
-            get_new_uptoken: false,             // 设置上传文件的时候是否每次都重新获取新的uptoken
-            domain: 'http://oytstg973.bkt.clouddn.com',     // bucket域名，下载资源时用到，必需
-            //container: 'container',             // 上传区域DOM ID，默认是browser_button的父元素
-            max_file_size: '100mb',             // 最大文件体积限制
-            flash_swf_url: 'https://cdn.staticfile.org/plupload/2.1.9/Moxie.swf',  //引入flash，相对路径
-            max_retries: 3,                     // 上传失败最大重试次数
-            dragdrop: false,                     // 开启可拖曳上传
-            //drop_element: 'container',          // 拖曳上传区域元素的ID，拖曳文件或文件夹后可触发上传
-            chunk_size: '4mb',                  // 分块上传时，每块的体积
-            auto_start: true,                   // 选择文件后自动上传，若关闭需要自己绑定事件触发上传
-            init: {
-                'FilesAdded': function(up, files) {
-                    plupload.each(files, function(file) {
-                        // 文件添加进队列后，处理相关的事情
-                    });
-                },
-                'BeforeUpload': function(up, file) {
-                    // 每个文件上传前，处理相关的事情
-                },
-                'UploadProgress': function(up, file) {
-                    // 每个文件上传时，处理相关的事情
-                },
-                'FileUploaded': function(up, file, info) {
-                    // 每个文件上传成功后，处理相关的事情
-                    // 其中info.response是文件上传成功后，服务端返回的json，形式如：
-                    // {
-                    //    "hash": "Fh8xVqod2MQ1mocfI4S4KpRL6D98",
-                    //    "key": "gogopher.jpg"
-                    //  }
-                    //查看简单反馈
-                    console.log("file uploaded");
-                    console.log(info);
-                    var domain = up.getOption('domain');
-                    var res = JSON.parse(info);
-                    var sourceLink = domain +"/"+ res.key; //获取上传成功后的文件的Url
-//                    console.log("FileUploaded");
-                    console.log(sourceLink);
-                    var image = {
-                        url : sourceLink,
-                        tag : "",
-                        status : 1,
-                        created_at : Date.now()
+        if(uploader == null){
+            console.log("init 7n");
+            uploader = Qiniu.uploader({
+                runtimes: 'html5,flash,html4',      // 上传模式，依次退化
+                browse_button: 'pickfiles',
+                uptoken_url: '/qiniu/token',
+                get_new_uptoken: false,             // 设置上传文件的时候是否每次都重新获取新的uptoken
+                domain: 'http://oytstg973.bkt.clouddn.com',     // bucket域名，下载资源时用到，必需
+                max_file_size: '20mb',             // 最大文件体积限制
+                flash_swf_url: 'https://cdn.staticfile.org/plupload/2.1.9/Moxie.swf',  //引入flash，相对路径
+                max_retries: 3,                     // 上传失败最大重试次数
+                chunk_size: '4mb',                  // 分块上传时，每块的体积
+                auto_start: true,                   // 选择文件后自动上传，若关闭需要自己绑定事件触发上传
+                unique_names: false,
+                save_key: false,
+                init: {
+                    'UploadProgress': function(up, file) {
+                        // 每个文件上传时，处理相关的事情
+                    },
+                    'FileUploaded': function(up, file, info) {
+                        console.log("file uploaded");
+                        console.log(info);
+                        var domain = up.getOption('domain');
+                        var res = JSON.parse(info);
+                        var sourceLink = domain +"/"+ res.key;
+                        console.log(sourceLink);
+                        var image = {
+                            url : sourceLink,
+                            tag : "",
+                            status : 1,
+                            created_at : Date.now()
+                        }
+                        if(!hotelList.hotel.images){
+                            hotelList.hotel.images = [];
+                        }
+                        hotelList.hotel.images.splice(0,0,image);
+                    },
+                    'Key': function(up, file) {
+                        // 若想在前端对每个文件的key进行个性化处理，可以配置该函数
+                        // 该配置必须要在 unique_names: false , save_key: false 时才生效
+                        console.log("get key here");
+                        console.log(up);
+                        console.log(file);
+                        var ext = file.name.split('.').pop();;
+                        var hotel_id = "none";
+                        if(hotelList.hotel._id){
+                            hotel_id = hotelList.hotel._id;
+                        }
+                        var key = "zhotel_"+hotel_id+"_"+ Date.now()+"."+ext;
+                        // do something with key here
+                        return key
                     }
-                    if(!hotelList.hotel.images){
-                        hotelList.hotel.images = [];
+                }
+            });
+        }
+        if(uploader2 == null){
+            console.log("init 7n 2");
+            var Q2 = new QiniuJsSDK();
+            uploader2 = Q2.uploader({
+                runtimes: 'html5,flash,html4',      // 上传模式，依次退化
+                browse_button: 'qn_custom',
+                uptoken_url: '/qiniu/token',
+                get_new_uptoken: false,             // 设置上传文件的时候是否每次都重新获取新的uptoken
+                domain: 'http://oytstg973.bkt.clouddn.com',     // bucket域名，下载资源时用到，必需
+                max_file_size: '20mb',             // 最大文件体积限制
+                flash_swf_url: 'https://cdn.staticfile.org/plupload/2.1.9/Moxie.swf',  //引入flash，相对路径
+                max_retries: 3,                     // 上传失败最大重试次数
+                chunk_size: '4mb',                  // 分块上传时，每块的体积
+                auto_start: true,                   // 选择文件后自动上传，若关闭需要自己绑定事件触发上传
+                unique_names: false,
+                save_key: false,
+                init: {
+                    'UploadProgress': function(up, file) {
+                        // 每个文件上传时，处理相关的事情
+                    },
+                    'FileUploaded': function(up, file, info) {
+                        console.log("file uploaded 2");
+                        console.log(info);
+                        var domain = up.getOption('domain');
+                        var res = JSON.parse(info);
+                        var sourceLink = domain +"/"+ res.key;
+                        helper_insert(sourceLink);
+                    },
+                    'Key': function(up, file) {
+                        // 若想在前端对每个文件的key进行个性化处理，可以配置该函数
+                        // 该配置必须要在 unique_names: false , save_key: false 时才生效
+                        console.log("get key here");
+                        console.log(up);
+                        console.log(file);
+                        var ext = file.name.split('.').pop();;
+                        var hotel_id = "none";
+                        if(hotelList.hotel._id){
+                            hotel_id = hotelList.hotel._id;
+                        }
+                        var key = "zhotel_"+hotel_id+"_"+ Date.now()+"."+ext;
+                        // do something with key here
+                        return key;
                     }
-                    hotelList.hotel.images.splice(0,0,image);
+                }
+            });
+        }
+        function helper_insert(link){
+            var editor = $("#ta_custom")[0];
+            var text = link + "\n";
 
-                },
-                'Error': function(up, err, errTip) {
-                    //上传出错时，处理相关的事情
-                },
-                'UploadComplete': function() {
-                    //队列文件处理完毕后，处理相关的事情
-                },
-                unique_names: true
+            if(editor.selectionStart || editor.selectionStart === 0) {//working in chrome
+                // Others
+                var start_pos = editor.selectionStart;
+                var end_pos = editor.selectionEnd;
+                editor.value = editor.value.substring(0, start_pos) +
+                        text +
+                        editor.value.substring(end_pos, editor.value.length);
+                editor.selectionStart = start_pos + text.length;
+                editor.selectionEnd = start_pos + text.length;
+                editor.focus();
             }
-        });
-
-        // domain为七牛空间对应的域名，选择某个空间后，可通过 空间设置->基本设置->域名设置 查看获取
-
-        // uploader为一个plupload对象，继承了所有plupload的方法
-    };
+            hotelList.helper_js_event(editor);
+        }
+    }
 </script>
-{{--<script async defer--}}
-        {{--src="http://ditu.google.cn/maps/api/js?key=AIzaSyBJfv6WxdEoTqSgibZDdOL-m-lLWz6UO8E&libraries=geometry,places&callback=cb_map">--}}
-{{--</script>--}}
+<script async defer
+        src="http://ditu.google.cn/maps/api/js?key=AIzaSyBJfv6WxdEoTqSgibZDdOL-m-lLWz6UO8E&libraries=geometry,places&callback=cb_map">
+</script>
 {{--<script async defer--}}
         {{--src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBJfv6WxdEoTqSgibZDdOL-m-lLWz6UO8E&libraries=geometry,places&callback=cb_map">--}}
 {{--</script>--}}
@@ -896,9 +947,9 @@
     });
     Vue.component('z-float-textarea',{
         delimiters: ["<%","%>"],
-        props:["placeholder","name", "value", "rows"],
+        props:["placeholder","name", "value", "rows","id"],
         template: '<label class="form-group has-float-label">' +
-        '<textarea class="form-control form_input" :name="name" :placeholder="placeholder" :rows="rows ? rows : 6"' +
+        '<textarea :id="id" class="form-control form_input" :name="name" :placeholder="placeholder" :rows="rows ? rows : 6"' +
         'v-bind:value="value"' +
         'v-on:input="update($event.target.value)"/>' +
         '</textarea>' +
@@ -1102,7 +1153,7 @@
                 if(confirm("确定要删除图片 "+(index+1)+"?"))
                     this.hotel.images.splice(index,1);
             },
-            upload_covers : function(e){
+            upload_covers : function(e){//批量上传,使用js方式,本方法暂时弃用
                 var self = e.target;
                 const vue_data = this;
                 var progress = '<div id="div_progress" style="padding:8px;margin-top: 6px">上传图片中...</div>'
@@ -1151,52 +1202,9 @@
                     }
                 });
             },
-            insert_image2 : function(e){
-                var url= prompt("Image url is ","")
-                if(url){
-                    var progress = '<div id="div_progress"' +
-                            'style="padding:6px;font-size:10px;margin-top: 6px;border: 1px solid lightgrey">获取图片保存中...</div>'
-                    console.log(url);
-                    const thiz = this;
-                    var self = e.target;
-                    var editor = $(self).parent().parent().find('textarea')[0];
-                    var post_url = "/fetcher/image";
-                    $(self).parent().append(progress);
-                    axios.post(post_url, {url:url})
-                            .then(function(response){
-                                console.log(response.data);
-                                if(response.data.ok == 0){
-                                    var text = '![]('+response.data.obj.url+')\n';
-                                    if(editor.selectionStart || editor.selectionStart === 0) {//working in chrome
-                                        // Others
-                                        var start_pos = editor.selectionStart;
-                                        var end_pos = editor.selectionEnd;
-                                        editor.value = editor.value.substring(0, start_pos) +
-                                                text +
-                                                editor.value.substring(end_pos, editor.value.length);
-                                        editor.selectionStart = start_pos + text.length;
-                                        editor.selectionEnd = start_pos + text.length;
-                                        editor.focus();
-                                        toastr["success"](data.msg);
-                                    }
-                                    thiz.helper_js_event(editor);
-                                }
-                                else{
-                                    toastr["error"](data.msg);
-                                }
-                                $("#div_progress").remove();
-                            })
-                            .catch(function(error){
-                                console.log(error)
-                                $("#div_progress").remove();
-                            });
-                }
-                else{
-                    console.log("no url");
-                }
-            },
-            insert_image :  function(e){
+            insert_image :  function(e){//暂时弃用,使用js-sdk上传
                 var self = e.target;
+                const thiz = this;
                 var editor = $(self).parent().parent().find('textarea')[0];
 
                 var progress = '<div id="div_progress" class="progress" style="height: 10px;margin-top: 6px">\
@@ -1209,6 +1217,7 @@
                 $.ajaxUploadSettings.name = 'file';
                 $.ajaxUploadPrompt({
                     url : '/uploader/image',
+                    data : {_id:thiz.hotel._id},
                     beforeSend : function(){
                         $(self).parent().append(progress);
                     },
@@ -1248,6 +1257,50 @@
                 });
 
 
+            },
+            insert_image2 : function(e){//通过url方式下载
+                var url= prompt("Image url is ","")
+                if(url){
+                    var progress = '<div id="div_progress"' +
+                            'style="padding:6px;font-size:10px;margin-top: 6px;border: 1px solid lightgrey">获取图片保存中...</div>'
+                    console.log(url);
+                    const thiz = this;
+                    var self = e.target;
+                    var editor = $(self).parent().parent().find('textarea')[0];
+                    var post_url = "/fetcher/image";
+                    $(self).parent().append(progress);
+                    axios.post(post_url, {url:url,_id:thiz.hotel._id})
+                            .then(function(response){
+                                console.log(response.data);
+                                if(response.data.ok == 0){
+                                    var text = '![]('+response.data.obj.url+')\n';
+                                    if(editor.selectionStart || editor.selectionStart === 0) {//working in chrome
+                                        // Others
+                                        var start_pos = editor.selectionStart;
+                                        var end_pos = editor.selectionEnd;
+                                        editor.value = editor.value.substring(0, start_pos) +
+                                                text +
+                                                editor.value.substring(end_pos, editor.value.length);
+                                        editor.selectionStart = start_pos + text.length;
+                                        editor.selectionEnd = start_pos + text.length;
+                                        editor.focus();
+                                        toastr["success"](data.msg);
+                                    }
+                                    thiz.helper_js_event(editor);
+                                }
+                                else{
+                                    toastr["error"](data.msg);
+                                }
+                                $("#div_progress").remove();
+                            })
+                            .catch(function(error){
+                                console.log(error)
+                                $("#div_progress").remove();
+                            });
+                }
+                else{
+                    console.log("no url");
+                }
             },
             show_covers : function(e){
                 console.log("show images");
