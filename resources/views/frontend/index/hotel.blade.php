@@ -4,6 +4,8 @@
     <link rel="stylesheet" href="{{asset('css/libs/toastr.min.css')}}"/>
     <link rel="stylesheet" href="{{asset('css/libs/swiper.min.css')}}"/>
     <link rel="stylesheet" href="{{asset('css/libs/daterangepicker_ihotel.min.css')}}"/>
+    <link rel="stylesheet" href="https://cdn.staticfile.org/blueimp-gallery/2.25.0/css/blueimp-gallery-indicator.min.css"/>
+    <link rel="stylesheet" href="https://cdn.staticfile.org/blueimp-gallery/2.25.0/css/blueimp-gallery.min.css"/>
     <style>
         [v-cloak] {
             display: none;
@@ -418,7 +420,7 @@
                         <div v-if="room_style == 0">
                             <div v-for="room in hotel.rooms" style="border-top: 2px solid lightgrey">
                             <div style="float: left;width: 30%">
-                                <img v-if="room.images_str" :src="room.images_str.split('\n')[0]" width="100%">
+                                <img v-if="room.images_str" :src="room.images_str.split('\n')[0]" width="100%" v-on:click="view_room_images(room.images_str)">
                             </div>
                             <div style="float: left;width: 70%;padding:15px 30px 0px 30px">
                                 <div class="hotel_content_title"><% room.name %></div>
@@ -623,7 +625,15 @@
         </div>
     </div>
 </div>
-
+    <div id="blueimp-gallery" class="blueimp-gallery">
+        <div class="slides"></div>
+        <h3 class="title"></h3>
+        <a class="prev">‹</a>
+        <a class="next">›</a>
+        <a class="close">×</a>
+        {{--<a class="play-pause"></a>--}}
+        <ol class="indicator"></ol>
+    </div>
 </div>
 @endsection
 @section('script')
@@ -634,6 +644,10 @@
 <script src="{{asset('js/libs/swiper.min.js')}}"></script>
 <script src="{{asset('js/libs/moment.min.js')}}"></script>
 <script src="{{asset('js/libs/jquery.daterangepicker.min.js')}}"></script>
+
+<script src="https://cdn.staticfile.org/blueimp-gallery/2.25.0/js/blueimp-helper.min.js"></script>
+<script src="https://cdn.staticfile.org/blueimp-gallery/2.25.0/js/blueimp-gallery.min.js"></script>
+<script src="https://cdn.staticfile.org/blueimp-gallery/2.25.0/js/blueimp-gallery-fullscreen.min.js"></script>
 <script>
     toastr.options = {
         "closeButton": false,
@@ -1008,6 +1022,22 @@
                 else{
                     r.is_show = false;
                 }
+            },
+            view_room_images : function(images_str,event){
+                var arr1 = images_str.split('\n');
+                var arr = [];
+                for(var i= 0,len = arr1.length;i<len;i++){
+                    if(arr1[i].length > 3){
+                        arr.push(arr1[i]);
+                    }
+                }
+                console.log("view_room_images");
+                event = event || window.event;
+                var target = event.target || event.srcElement,
+                        options = {index: arr[0], event: event},
+                        links = arr;
+                console.log(links);
+                blueimp.Gallery(links, options);
             }
         },
         computed : {
