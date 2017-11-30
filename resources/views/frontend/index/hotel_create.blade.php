@@ -533,29 +533,47 @@
                             <div style="clear: both"></div>
                         </div>
 
-                        <table class="table" id="covers">
-                            <thead>
-                                <th width="60px">#</th>
-                                <th width="200px">IMAGE</th>
-                                <th width="200px">TAG</th>
-                                <th width="120px">状态</th>
-                                <th>操作</th>
-                            </thead>
-                            <tbody>
-                                <tr v-for="(image,index) in sortedCover">
-                                    <td><% index + 1 %></td>
-                                    <td><img :src="image.url" style="object-fit: cover;max-width: 200px"/></td>
-                                    <td><input v-model="image.tag" class="form-control input_table" placeholder="tag" style="max-width: 120px" /></td>
-                                    <td><% image.status %></td>
-                                    <td>
-                                        <button v-on:click="set_image_valid(index)" type="button" class="btn btn-default btn-sm" style="color:green">有效</button>
-                                        <button v-on:click="set_image_top(index)" type="button" class="btn btn-default btn-sm" style="color:blue">置顶</button>
-                                        <button v-on:click="set_image_invalid(index)" type="button" class="btn btn-default btn-sm" style="color:indianred">无效</button>
-                                        <button v-on:click="confirm_delete_cover(index)" type="button" class="btn btn-default btn-sm" style="color:indianred">删除</button>
-                                    </td>
-                                </tr>
-                            </tbody>
-                        </table>
+                        <div>
+                            <div v-for="(image,index) in sortedCover" style="float: left;width: 200px;margin-right: 10px;margin-bottom: 10px;position: relative">
+                                <img :src="image.url" style="object-fit: cover;width: 200px;height: 160px"/>
+                                <div style="margin-top: 6px">
+                                    <button v-on:click="set_image_valid(index)" type="button" class="btn btn-default btn-sm" style="color:green">有效</button>
+                                    <button v-on:click="set_image_top(index)" type="button" class="btn btn-default btn-sm" style="color:blue">置顶</button>
+                                    <button v-on:click="set_image_invalid(index)" type="button" class="btn btn-default btn-sm" style="color:indianred">无效</button>
+                                    <button v-on:click="confirm_delete_cover(index)" type="button" class="btn btn-default btn-sm" style="color:indianred">删除</button>
+                                </div>
+                                <div style="margin-top: 6px">
+                                    <input v-model="image.tag" class="form-control input_table" placeholder="tag" style="max-width: 120px" />
+                                </div>
+                                <span v-if="image.status == 0" style="position: absolute;left:0;top:0;background-color: darkred;padding: 3px 6px;font-size: 8px;color: white">无效</span>
+                                {{--<span v-else-if="image.status == 1" style="position: absolute;left:0;top:0;background-color: whitesmoke;padding: 3px 6px;font-size: 8px"><% image.status %></span>--}}
+                                {{--<span v-else style="position: absolute;left:0;top:0;background-color: darkgreen;padding: 3px 6px;font-size: 8px;color: white"><% image.status %></span>--}}
+                            </div>
+                        </div>
+
+                        {{--<table class="table" id="covers">--}}
+                            {{--<thead>--}}
+                                {{--<th width="60px">#</th>--}}
+                                {{--<th width="200px">IMAGE</th>--}}
+                                {{--<th width="200px">TAG</th>--}}
+                                {{--<th width="120px">状态</th>--}}
+                                {{--<th>操作</th>--}}
+                            {{--</thead>--}}
+                            {{--<tbody>--}}
+                                {{--<tr v-for="(image,index) in sortedCover">--}}
+                                    {{--<td><% index + 1 %></td>--}}
+                                    {{--<td><img :src="image.url" style="object-fit: cover;max-width: 200px"/></td>--}}
+                                    {{--<td><input v-model="image.tag" class="form-control input_table" placeholder="tag" style="max-width: 120px" /></td>--}}
+                                    {{--<td><% image.status %></td>--}}
+                                    {{--<td>--}}
+                                        {{--<button v-on:click="set_image_valid(index)" type="button" class="btn btn-default btn-sm" style="color:green">有效</button>--}}
+                                        {{--<button v-on:click="set_image_top(index)" type="button" class="btn btn-default btn-sm" style="color:blue">置顶</button>--}}
+                                        {{--<button v-on:click="set_image_invalid(index)" type="button" class="btn btn-default btn-sm" style="color:indianred">无效</button>--}}
+                                        {{--<button v-on:click="confirm_delete_cover(index)" type="button" class="btn btn-default btn-sm" style="color:indianred">删除</button>--}}
+                                    {{--</td>--}}
+                                {{--</tr>--}}
+                            {{--</tbody>--}}
+                        {{--</table>--}}
 
                         <div style="clear: both;height: 30px"></div>
                     </div>
@@ -563,21 +581,30 @@
                 <div id="popupBottom" class="popover">
                     <div class="arrow"></div>
                     <h3 class="popover-title">选择图片</h3>
+                    <input class="form-control" placeholder="filter by tag" v-model="filter_words" />
                     <div class="popover-content">
-                        <table class="table">
-                            <thead>
-                            <th width="60px">#</th>
-                            <th width="200px">IMAGE</th>
-                            <th width="200px">TAG</th>
-                            </thead>
-                            <tbody>
-                            <tr v-for="(image,index) in sortedCover" v-on:click="select_image">
-                                <td><% index + 1 %></td>
-                                <td><img :src="image.url" style="object-fit: cover;max-width: 200px"/></td>
-                                <td><input v-model="image.tag" class="form-control input_table" placeholder="tag" style="max-width: 120px" /></td>
-                            </tr>
-                            </tbody>
-                        </table>
+                        <div v-for="(image,index) in filter_covers" v-on:click="select_image" style="float: left;width: 200px;margin-right: 10px;margin-bottom: 10px;position: relative">
+                            <img :src="image.url" style="object-fit: cover;width: 200px;height: 160px"/>
+                            <div style="margin-top: 6px">
+                                <%image.tag%>
+                            </div>
+                            <span v-if="image.status == 0" style="position: absolute;left:0;top:0;background-color: darkred;padding: 3px 6px;font-size: 8px;color: white">无效</span>
+                        </div>
+                        <div style="clear: both"></div>
+                        {{--<table class="table">--}}
+                            {{--<thead>--}}
+                            {{--<th width="60px">#</th>--}}
+                            {{--<th width="200px">IMAGE</th>--}}
+                            {{--<th width="200px">TAG</th>--}}
+                            {{--</thead>--}}
+                            {{--<tbody>--}}
+                            {{--<tr v-for="(image,index) in sortedCover" v-on:click="select_image">--}}
+                                {{--<td><% index + 1 %></td>--}}
+                                {{--<td><img :src="image.url" style="object-fit: cover;max-width: 200px"/></td>--}}
+                                {{--<td><%image.tag%></td>--}}
+                            {{--</tr>--}}
+                            {{--</tbody>--}}
+                        {{--</table>--}}
                     </div>
                 </div>
 
@@ -824,9 +851,9 @@
         }
     }
 </script>
-<script async defer
-        src="http://ditu.google.cn/maps/api/js?key=AIzaSyBJfv6WxdEoTqSgibZDdOL-m-lLWz6UO8E&libraries=geometry,places&callback=cb_map">
-</script>
+{{--<script async defer--}}
+        {{--src="http://ditu.google.cn/maps/api/js?key=AIzaSyBJfv6WxdEoTqSgibZDdOL-m-lLWz6UO8E&libraries=geometry,places&callback=cb_map">--}}
+{{--</script>--}}
 {{--<script async defer--}}
         {{--src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBJfv6WxdEoTqSgibZDdOL-m-lLWz6UO8E&libraries=geometry,places&callback=cb_map">--}}
 {{--</script>--}}
@@ -845,7 +872,6 @@
             }
         }
     });
-
     Vue.component('z-float-input-city',{
         delimiters: ["<%","%>"],
         props:["placeholder","name", "value", "dom_id"],
@@ -1056,7 +1082,9 @@
             },
             current_btn : null,
             current_room : -1,
-            loading:true
+            loading:true,
+            filter_words : "",
+            filter_covers : []
         },
         created:function () {
             var _id = this.$route.query.id;
@@ -1345,6 +1373,8 @@
                 console.log("show images");
                 this.current_btn = e.target;
 
+                this.filter_words = "";
+                this.helper_filter_cover();
                 $("#popupBottom").modalPopover({
                     backdrop:true,
                     target:e.target
@@ -1481,6 +1511,43 @@
                     this.hotel.images = [];
                 }
                 this.hotel.images.splice(0,0,image);
+            },
+            helper_filter_cover :function(){
+                function compare(a, b) {
+                    if (a.status > b.status)
+                        return -1;
+                    if (a.status < b.status)
+                        return 1;
+                    if (a.created_at > b.created_at)
+                        return -1;
+                    if (a.created_at < b.created_at)
+                        return 1;
+                    return 0;
+                }
+                console.log("filter_covers");
+                console.log(this.hotel.images);
+
+                if(this.filter_words == ""){
+                    this.filter_covers = this.hotel.images.sort(compare);
+                }
+                else{
+                    this.filter_covers = [];
+                    for(var i= 0,len = this.hotel.images.length;i<len;i++){
+                        if(this.hotel.images[i].tag.indexOf(this.filter_words) !== -1)
+                            this.filter_covers.push(this.hotel.images[i]);
+                    }
+                }
+
+            }
+        },
+        watch:{
+            'filter_words' : {
+                handler : function(newData, oldData){
+                    console.log("filter words");
+                    console.log("new : "+newData);
+                    console.log("old : "+oldData);
+                    this.helper_filter_cover();
+                }
             }
         },
         computed : {
