@@ -316,7 +316,7 @@
                 <div class="swiper-container" style="height: 432px">
                     <div class="swiper-wrapper">
                         <div v-for="(image, index) in sorted_covers" class="swiper-slide" style="width: 70%;height:600px">
-                            <img style="height: 600px;width: 100%;object-fit: cover;" :src="image.url" />
+                            <img style="height: 432px;width: 100%;object-fit: cover;" :src="image.url" />
                         </div>
                     </div>
 
