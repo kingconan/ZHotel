@@ -710,6 +710,17 @@
     function progress_go(percent){
         $("#div_progress").text("上传中("+percent+")...");
     }
+
+    var hash_back = "";
+
+    window.addEventListener("beforeunload", function (e) {
+        if(hash_back != hotelList.helper_hotel_json()){
+            var confirmationMessage = '离开之前请确认保存,否则更改信息会丢失的!!!';
+
+            (e || window.event).returnValue = confirmationMessage; //Gecko + IE
+            return confirmationMessage; //Gecko + Webkit, Safari, Chrome etc.
+        }
+    });
 </script>
 <script>
     var uploader = null;
@@ -1159,10 +1170,12 @@
                         .then(function(response){
                             console.log(response.data);
                             self.hotel = response.data.obj;
+
                             if(self.hotel.rooms && self.hotel.rooms.length > 0){
                                 self.current_room = 0;
                             }
                             self.loading = false;
+                            hash_back = self.helper_hotel_json();
                         })
                         .catch(function(error){
                             console.log(error);
@@ -1191,6 +1204,7 @@
                             console.log(response.data);
                             self.hotel = response.data.obj;
                             toastr["success"](response.data.msg);
+                            hash_back = self.helper_hotel_json();
                         })
                         .catch(function(error){
                             console.log(error);
@@ -1555,6 +1569,9 @@
                     }
                 }
 
+            },
+            helper_hotel_json :function(){
+                return JSON.stringify(this.$data.hotel);
             }
         },
         watch:{
