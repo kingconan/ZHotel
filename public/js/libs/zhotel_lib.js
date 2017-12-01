@@ -73,6 +73,7 @@ function zhotel_markdown(str) {//simple markdown parser
                 if (ext == "jpg"
                     || ext == "jpeg"
                     || ext == "gif"
+                    || ext == "tif"
                     || ext == "png") {
                     if(gallery == 1){
                         gallery_str = gallery_str + '<div class="swiper-slide">';
