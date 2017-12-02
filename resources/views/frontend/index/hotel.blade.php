@@ -1170,12 +1170,15 @@
             console.log("map already init");
             return;
         }
-        if(hotel_lat == undefined || hotel_lat == null){
+        if(hotel_lng == undefined || hotel_lat == null){
             console.log("hotel lat lng not ready");
             return;
         }
 
         console.log("init map here");
+
+        console.log(hotel_lat);
+        console.log(hotel_lng);
 
         //define map
         var Map = google.maps.Map,
