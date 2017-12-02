@@ -6,7 +6,12 @@
     <link rel="stylesheet" href="{{asset('css/libs/daterangepicker_ihotel.min.css')}}"/>
     <link rel="stylesheet" href="https://cdn.staticfile.org/blueimp-gallery/2.25.0/css/blueimp-gallery-indicator.min.css"/>
     <link rel="stylesheet" href="https://cdn.staticfile.org/blueimp-gallery/2.25.0/css/blueimp-gallery.min.css"/>
+
     <style>
+        /*
+            cover
+            max-height : 580px
+        */
         [v-cloak] {
             display: none;
         }
@@ -68,20 +73,23 @@
     <style>
         .hotel_des{
             line-height: 28px;
+            font-weight:200;
         }
         .hotel_content_title{
             font-size: 22px;
-            font-weight: bolder;
-            margin-bottom: 10px;
+            font-weight: 300;
+            margin-bottom: 20px;
+            margin-top: 20px;
         }
         .hotel_content_title_small{
             font-size: 20px;
-            font-weight: bolder;
+            font-weight: 300;
             margin-bottom: 10px;
         }
         .hotel_text{
             font-size: 14px;
-            line-height: 24px;
+            line-height: 28px;
+            font-weight:200;
         }
         .hotel_nav_item{
             float: left;
@@ -136,7 +144,7 @@
         .hotel_line{
             width: 100%;
             height: 1px;
-            background-color: #e4e4e4;
+            background-color: #EBEBEB;
             clear: both;
             margin: 15px 0;
         }
@@ -151,12 +159,12 @@
         .font_sub{
             color: #666666;
             font-size: 14px;
-            line-height: 24px;
+            line-height: 28px;
         }
         .font_sub_4{
             color: #666666;
             font-size: 14px;
-            line-height: 24px;
+            line-height: 28px;
             float: left;
             width: 25%;
             padding-right: 30px;
@@ -313,10 +321,10 @@
         </div>
         <div v-else>
             <div class="hotel_header" id="hotel_header">
-                <div class="swiper-container" style="height: 432px">
+                <div class="swiper-container">
                     <div class="swiper-wrapper">
-                        <div v-for="(image, index) in sorted_covers" class="swiper-slide" style="width: 70%;height:432px">
-                            <img style="height: 432px;width: 100%;object-fit: cover;" :src="image.url" />
+                        <div v-for="(image, index) in sorted_covers" class="swiper-slide" style="width:870px ;height:580px">
+                            <img style="height: 580px;width:870px ;object-fit: cover;" :src="image.url" />
                         </div>
                     </div>
 
@@ -387,7 +395,7 @@
                         <div style="height: 30px"></div>
                         <div class="hotel_des">
                             <img style="float: left" width="24px" src="/images/hotel_quote_left.png"/>
-                            <p style="padding:0 40px;font-size: 16px;line-height: 38px"><%hotel.description%></p>
+                            <p style="padding:0 40px;font-size: 16px;line-height: 38px;"><%hotel.description%></p>
                             <img style="float: right;margin-top: -30px" width="24px" src="/images/hotel_quote_right.png"/>
                         </div>
                         <div class="hotel_line"></div>
@@ -395,24 +403,27 @@
                         <div>
                             <div class="zy_float">
                                 <div class="hotel_content_title">致游推荐</div>
-                                <ul style="padding:0 20px;color: #C19B76">
-                                    <li v-for="v in zy_recommend_arr"><span style="color: #3c3c3c;font-size: 14px;line-height: 24px"><%v%></span></li>
+                                <ul style="padding:0 20px;color: #C19B76;font-weight:200;">
+                                    <li style="margin-bottom: 20px;font-size: 14px;line-height: 28px" v-for="v in zy_recommend_arr">
+                                        <span style="color: #3c3c3c;"><%v%></span></li>
                                 </ul>
                             </div>
                             <div class="zy_float">
                                 <div class="hotel_content_title">致游知道</div>
-                                <ul style="padding:0 20px;color: #C19B76">
-                                    <li v-for="v in zy_g2k_arr"><span style="color: #3c3c3c;font-size: 14px;line-height: 24px"><%v%></span></li>
+                                <ul style="padding:0 20px;color: #C19B76;font-weight:200;">
+                                    <li style="margin-bottom: 20px;font-size: 14px;line-height: 28px" v-for="v in zy_g2k_arr">
+                                        <span style="color: #3c3c3c;"><%v%></span></li>
                                 </ul>
                             </div>
                             <div style="clear: both"></div>
                         </div>
-                        <div class="hotel_line"></div>
 
+                        <div class="hotel_line"></div>
+                        <div style="height: 1px"></div>
                         <div v-if="hotel.detail.extend">
                             <div v-for="section in detail_extend">
                                 <div class="hotel_content_title"><%section.title%></div>
-                                <div style="font-size: 14px;line-height: 24px" v-html="markdown(section.content)"></div>
+                                <div style="font-size: 14px;line-height: 28px;font-weight:200;" v-html="markdown(section.content)"></div>
                             </div>
                         </div>
                     </div>
@@ -515,13 +526,13 @@
                 <div style="width: 60%;margin-right: auto;margin-left: auto">
                     <div style="float: left;width: 50%;padding: 30px">
                         <div class="hotel_content_title">主要奖项</div>
-                        <p style="font-size: 14px;line-height: 24px" v-html="markdown(hotel.honor)">
+                        <p style="font-size: 14px;line-height: 28px" v-html="markdown(hotel.honor)">
 
                         </p>
                     </div>
                     <div style="float: left;width: 50%;padding: 30px">
                         <div class="hotel_content_title">礼宾服务</div>
-                        <div style="font-size: 14px;line-height: 24px">
+                        <div style="font-size: 14px;line-height: 28px">
                             致游的顾问团队很乐意为您提供免费的礼宾服务
                             <br/>
                             <br/>
@@ -1122,6 +1133,7 @@
     var mapLoaded = false;
     function mapCallback(){
         mapLoaded = true;
+        initMap();
     }
 
     function initMap() {
