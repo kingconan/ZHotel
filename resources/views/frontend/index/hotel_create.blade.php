@@ -291,7 +291,7 @@
             z-index: 10;
             cursor: pointer;
             -moz-background-size: 36px 36px;
-            -webkit-background-size: 36px 5436;
+            -webkit-background-size: 36px 36px;
             background-size: 36px 36px;
             background-position: center;
             background-repeat: no-repeat;
@@ -313,6 +313,22 @@
     </style>
 @endsection
 @section('content')
+    <div id="div_map" style="border: 1px solid lightgrey;padding: 10px;height: 200px;width: 100%;display: none">
+        <div style="float: left;width: 70%;height: 100%">
+            <input id="pac-input" class="controls" type="text" placeholder="Search Box">
+            <div id="map"></div>
+        </div>
+        <div style="float: left;width: 30%;height: 100%;background-color: white">
+            <table class="table" style="">
+                <thead>
+                <th width="20px">#</th><th>name</th>
+                </thead>
+                <tbody id="map_result">
+                </tbody>
+            </table>
+        </div>
+        <div style="clear: both"></div>
+    </div>
     <div id="hotel_list" v-cloak >
         <div style="width: 100%;float: left;padding-left: 150px;">
 
@@ -376,22 +392,7 @@
                             <z-float-textarea placeholder="交通方式" v-model="hotel.location.transportation" name="transportation"></z-float-textarea>
                         </div>
                         <div style="clear: both"></div>
-                        <div id="div_map" style="border: 1px solid lightgrey;padding: 10px;height: 200px;width: 100%;display: none">
-                            <div style="float: left;width: 70%;height: 100%">
-                                <input id="pac-input" class="controls" type="text" placeholder="Search Box">
-                                <div id="map"></div>
-                            </div>
-                            <div style="float: left;width: 30%;height: 100%;background-color: white">
-                                <table class="table" style="">
-                                    <thead>
-                                    <th width="20px">#</th><th>name</th>
-                                    </thead>
-                                    <tbody id="map_result">
-                                    </tbody>
-                                </table>
-                            </div>
-                            <div style="clear: both"></div>
-                        </div>
+
                         <div style="clear: both;height: 30px"></div>
 
                         <div class="section_title"  id="p2">致游推荐</div>
@@ -655,6 +656,7 @@
         <div style="clear: both"></div>
         {{--<button id="pickfiles" type="button" class="btn btn-default">test</button>--}}
     </div>
+
 @endsection
 @section('script')
 <script src="{{asset('js/libs/vue.min.js')}}"></script>
@@ -873,9 +875,9 @@
         }
     }
 </script>
-{{--<script async defer--}}
-        {{--src="http://ditu.google.cn/maps/api/js?key=AIzaSyBJfv6WxdEoTqSgibZDdOL-m-lLWz6UO8E&libraries=geometry,places&callback=cb_map">--}}
-{{--</script>--}}
+<script async defer
+        src="http://ditu.google.cn/maps/api/js?key=AIzaSyBsq4XZqfUvjU686OBnxAV9FZSwfXjXy9k&libraries=geometry,places&callback=cb_map">
+</script>
 {{--<script async defer--}}
         {{--src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBJfv6WxdEoTqSgibZDdOL-m-lLWz6UO8E&libraries=geometry,places&callback=cb_map">--}}
 {{--</script>--}}

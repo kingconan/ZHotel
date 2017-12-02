@@ -758,7 +758,7 @@
     });
 </script>
 <script async defer
-        src="http://ditu.google.cn/maps/api/js?key=AIzaSyBJfv6WxdEoTqSgibZDdOL-m-lLWz6UO8E&libraries=geometry,places&callback=initMap">
+        src="http://ditu.google.cn/maps/api/js?key=AIzaSyBJfv6WxdEoTqSgibZDdOL-m-lLWz6UO8E&libraries=geometry,places&callback=mapCallback">
 </script>
 <script>
     var hotel_lat,hotel_lng;
@@ -856,6 +856,7 @@
             console.log(_id)
         },
         mounted:function(){
+
             },
         updated:function(){
             var swiper = new Swiper('.swiper-container', {
@@ -885,6 +886,7 @@
                         }
                     }
             );
+            initMap();
         },
         methods:{
             get_data : function(_id){
@@ -1117,8 +1119,23 @@
     var markers = [];
     var curveMarkers = [];
     var arrowMarkers = [];
+    var mapLoaded = false;
+    function mapCallback(){
+        mapLoaded = true;
+    }
+
     function initMap() {
-        console.log("init map here")
+        if(!mapLoaded){
+            console.log("map js is not loaded");
+            return;
+        }
+        if(map != undefined && map != null){
+            console.log(map);
+            console.log("map already init");
+            return;
+        }
+        console.log("init map here");
+
         //define map
         var Map = google.maps.Map,
                 LatLng = google.maps.LatLng,
