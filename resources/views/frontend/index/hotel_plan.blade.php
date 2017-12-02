@@ -163,6 +163,9 @@
             border: 1px solid lightgrey;
             padding-top: 3px;
         }
+        .price_color_base{
+            font-size: 10px;font-weight: bolder;margin-top: -3px
+        }
     </style>
 @endsection
 @section('content')
@@ -603,7 +606,8 @@
                                                                 <%priceView.date_arr[(i-1)*7+(j-1)].value%>
                                                             </div>
                                                             <div v-if="priceView.date_arr[(i-1)*7+(j-1)].price > 0"
-                                                                 style="color:indianred;font-size: 10px;font-weight: bolder;margin-top: -3px">
+                                                                 class="price_color_base"
+                                                                 :style="'color:'+priceView.date_arr[(i-1)*7+(j-1)].color">
                                                                 ¥ <%priceView.date_arr[(i-1)*7+(j-1)].price%>
                                                             </div>
                                                             <div v-else style="color:grey;margin-top: -3px;font-size: 10px;">
@@ -1098,6 +1102,9 @@
                 config : [],
                 config_unit : "",
                 config_rate : 1
+            },
+            priceColor : {
+
             }
         },
         created:function () {
@@ -1135,6 +1142,14 @@
                 }
                 this.update_price_view();
             },
+            helper_random_color:function(){
+                var letters = '456789ABCD';
+                var color = '#';
+                for (var i = 0; i < 6; i++) {
+                    color += letters[Math.floor(Math.random() * 10)];
+                }
+                return color;
+            },
             update_price_view : function(){
                 var setting_arr = this.priceView.config;
                 var current = moment({
@@ -1154,12 +1169,14 @@
                 var daysInMonth = current.daysInMonth();
                 var currentRow = 0;
                 var arr = [];
+                var last_color = 0;
                 for(var i=0;i<weekOfFirst;i++){//填补前面
                     var item = {
                         row : 1,
                         col : i,
                         price : -1,
-                        value : 0
+                        value : 0,
+                        color : 0
                     }
                     arr.push(item)
                 }
@@ -1177,11 +1194,22 @@
                     var found = false;
                     for(var j= 0,jLen = setting_arr.length;j<jLen;j++){
                         if(currentStr >= setting_arr[j].date_from && currentStr <= setting_arr[j].date_to){
+                            var p = Math.ceil( setting_arr[j].price * this.priceView.config_rate );
+                            console.log(p);
+                            var str_p = p.toString();
+                            if(this.priceColor.hasOwnProperty(str_p)){
+
+                            }
+                            else{
+                                this.priceColor[str_p] = this.helper_random_color();
+                            }
+
                             var item = {
                                 row : currentRow,
                                 col : weekOfFirst,
-                                price : Math.ceil( setting_arr[j].price * this.priceView.config_rate ),
-                                value : i+1
+                                price : p,
+                                value : i+1,
+                                color : this.priceColor[str_p]
                             }
                             arr.push(item);
                             found = true;
@@ -1193,7 +1221,8 @@
                             row : currentRow,
                             col : weekOfFirst,
                             price : -1,
-                            value : i+1
+                            value : i+1,
+                            color : 0
                         }
                         arr.push(item);
                     }
@@ -1203,12 +1232,14 @@
                 var c = arr.length;
                 var l = c % 7;
                 var left = 7 - l;
+
                 for(var i=0;i<left;i++){//填补前面
                     var item = {
                         row : currentRow,
                         col : weekOfFirst,
                         price : -1,
-                        value : 0
+                        value : 0,
+                        color : 0
                     }
                     weekOfFirst = weekOfFirst + 1;
                     arr.push(item)
