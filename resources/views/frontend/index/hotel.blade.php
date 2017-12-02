@@ -312,7 +312,7 @@
         .markdown-image{
             width: 100%;
             margin: 8px 0;
-            max-height: 320px;
+            max-height: 360px;
             object-fit: cover;
         }
         .shadow_gallery{
@@ -538,7 +538,7 @@
                 </div>
                 <div id="footer2">
                 <div id="div_map" v-show="section == 'detail'" class="hotel_map" style="position: relative;width: 100%">
-                    <div id="map" style="width: 100%;height: 300px;"></div>
+                    <div id="map" style="width: 100%;height: 360px;"></div>
                     <div style="position: absolute;width: 60%;margin-left: auto;margin-right: auto;left: 0;top: 0;">
                         <div style="height: 20px"></div>
                         <div  style="padding: 20px;background-color: #FFF;margin-left: 20%;width: 320px;height: 260px;">
