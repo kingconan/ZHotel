@@ -932,8 +932,8 @@
                             self.hotel = response.data.obj;
 
                             self.loading = false;
-                            hotel_lat = self.hotel.location.lat;
-                            hotel_lng = self.hotel.location.lng;
+                            hotel_lat = parseFloat(self.hotel.location.lat);
+                            hotel_lng = parseFloat(self.hotel.location.lng);
                         })
                         .catch(function(error){
                             console.log(error);
