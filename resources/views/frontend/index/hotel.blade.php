@@ -316,10 +316,10 @@
             object-fit: cover;
         }
         .shadow_gallery{
-            z-index: 2;background-color: rgba(0,0,0,0.3);height: 580px;position: absolute;left: 0;top: 0
+            z-index: 2;background-color: rgba(0,0,0,0.6);height: 580px;position: absolute;left: 0;top: 0
         }
         .shadow_gallery_r{
-            z-index: 2;background-color: rgba(0,0,0,0.3);height: 580px;position: absolute;right: 0;top: 0
+            z-index: 2;background-color: rgba(0,0,0,0.6);height: 580px;position: absolute;right: 0;top: 0
         }
         .c1{
             position: relative;margin-left: auto;margin-right: auto;
@@ -541,7 +541,7 @@
                     <div id="map" style="width: 100%;height: 360px;"></div>
                     <div style="position: absolute;width: 60%;margin-left: auto;margin-right: auto;left: 0;top: 0;">
                         <div style="height: 20px"></div>
-                        <div  style="padding: 20px;background-color: #FFF;margin-left: 20%;width: 320px;height: 260px;">
+                        <div  style="padding: 20px;background-color: #FFF;margin-left: 20%;width: 340px;height: 320px;">
                             <div style="overflow-y: auto;height: 220px;">
                                 <div class="hotel_content_title_small">地址</div>
                                 <div class="hotel_text"><%hotel.location.address%></div>
@@ -557,13 +557,13 @@
                 <div  style="width: 60%;margin-right: auto;margin-left: auto">
                     <div style="float: left;width: 50%;padding: 30px">
                         <div class="hotel_content_title">主要奖项</div>
-                        <p style="font-size: 14px;line-height: 28px" v-html="markdown(hotel.honor)">
+                        <p style="font-size: 14px;line-height: 28px;font-weight: 200" v-html="markdown(hotel.honor)">
 
                         </p>
                     </div>
                     <div style="float: left;width: 50%;padding: 30px">
                         <div class="hotel_content_title">礼宾服务</div>
-                        <div style="font-size: 14px;line-height: 28px">
+                        <div style="font-size: 14px;line-height: 28px;font-weight: 200">
                             致游的顾问团队很乐意为您提供免费的礼宾服务
                             <br/>
                             <br/>

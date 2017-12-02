@@ -17,6 +17,9 @@ function zhotel_markdown(str) {//simple markdown parser
         if(item.indexOf('//') == 0){
             //skip
         }
+        else if(item == ""){
+            html = html + '<div style="height: 14px;width: 100px;background-color: white"></div>';
+        }
         else if(item.indexOf("{") == 0){
             //gallery start
             gallery = 1;
