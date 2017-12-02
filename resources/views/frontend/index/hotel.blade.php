@@ -115,7 +115,7 @@
             background-color: #5F6164;
             font-size: 16px;
             color: white;
-            font-weight: bolder;
+            font-weight: 300;
             background-position: bottom center;
             background-size: 12px;
             background-repeat: no-repeat;
@@ -155,6 +155,13 @@
             top:0;
             z-index: 10 !important;
             display: block;
+        }
+        #right_picker.affix{
+            top:60px;
+            /*z-index: 10 !important;*/
+            /*display: block;*/
+            /*position: fixed;*/
+            /*right: 0;*/
         }
         .font_sub{
             color: #666666;
@@ -233,6 +240,10 @@
             -ms-user-select: none;
             user-select: none;
         }
+        .affix-bottom{
+            position: absolute;
+            bottom:0
+        }
 
     </style>
     <style>
@@ -301,8 +312,17 @@
         .markdown-image{
             width: 100%;
             margin: 8px 0;
-            max-height: 300px;
+            max-height: 320px;
             object-fit: cover;
+        }
+        .shadow_gallery{
+            z-index: 2;background-color: rgba(0,0,0,0.3);height: 580px;position: absolute;left: 0;top: 0
+        }
+        .shadow_gallery_r{
+            z-index: 2;background-color: rgba(0,0,0,0.3);height: 580px;position: absolute;right: 0;top: 0
+        }
+        .c1{
+            position: relative;margin-left: auto;margin-right: auto;
         }
     </style>
 @endsection
@@ -323,22 +343,22 @@
             <div class="hotel_header" id="hotel_header">
                 <div class="swiper-container">
                     <div class="swiper-wrapper">
-                        <div v-for="(image, index) in sorted_covers" class="swiper-slide" style="width:870px ;height:580px">
-                            <img style="height: 580px;width:870px ;object-fit: cover;" :src="image.url" />
+                        <div v-for="(image, index) in sorted_covers" class="swiper-slide" :style="style_gallery_image">
+                            <img :style="style_gallery_image+';object-fit: cover'" :src="image.url" />
                         </div>
                     </div>
 
                     <div style="position: absolute;left: 0;top: 0;width: 100%">
-                        <div style="z-index: 2;width: 15%;background-color: rgba(0,0,0,0.3);height: 600px;position: absolute;left: 0;top: 0">
+                        <div class="shadow_gallery" :style="'width:'+ hack_width">
                         </div>
-                        <div style="z-index: 2;width: 15%;background-color: rgba(0,0,0,0.3);height: 600px;position: absolute;right: 0;top: 0">
+                        <div class="shadow_gallery_r" :style="'width:'+ hack_width">
                         </div>
                     </div>
                     <div class="swiper-button-next2"></div>
                     <div class="swiper-button-prev2"></div>
                     <div class="swiper-pagination"></div>
                 </div>
-                <div style="position: relative;width: 60%;margin-left: auto;margin-right: auto">
+                <div class="c1" :style="content_width">
                     <div style="width: 100%;padding-right: 300px;float: left">
                         <div style="height: 30px"></div>
                         <div class="hotel_name"><% hotel.name %></div>
@@ -358,13 +378,13 @@
                         <div style="padding: 10px 0">
                             <form style="display: none" id="form_book">
                                 <div id="div_checkinout">
-                                    <input id="input_checkin" name="checkin" v-model="book.checkin" class="input_date" type="text" placeholder="入住日期" readonly/>
-                                    <input id="input_checkout" name="checkout" v-model="book.checkout"  class="input_date" type="text" placeholder="退房日期" readonly/>
+                                    <input style="color:#999999" id="input_checkin" name="checkin" v-model="book.checkin" class="input_date" type="text" placeholder="入住日期" readonly/>
+                                    <input style="color:#999999" id="input_checkout" name="checkout" v-model="book.checkout"  class="input_date" type="text" placeholder="退房日期" readonly/>
                                     <div style="clear: both"></div>
                                 </div>
                                 <div style="height: 10px;width: 10px;clear: both"></div>
                                 <div>
-                                    <input v-on:click="click_people" id="input_people" class="input_people" type="text" :value="book.adult+'成人, '+book.children+'儿童'" placeholder="请选择入住人数" readonly/>
+                                    <input style="color:#999999" v-on:click="click_people" id="input_people" class="input_people" type="text" :value="book.adult+'成人, '+book.children+'儿童'" placeholder="请选择入住人数" readonly/>
                                 </div>
                                 <div style="height: 10px;width: 10px;clear: both"></div>
                             </form>
@@ -378,7 +398,7 @@
             <div class="hotel_content">
                 <div style="height: 60px">
                     <div class="hotel_nav" id="hotel_nav">
-                        <div style="width: 60%;position: relative;margin-left: auto;margin-right: auto;">
+                        <div  class="c1" :style="content_width">
                             <div>
                                 <div data-section="detail" v-on:click="nav_section" :class="section == 'detail' ? 'hotel_nav_item_focus' : 'hotel_nav_item'">酒店详情</div>
                                 <div data-section="rooms" v-on:click="nav_section" :class="section == 'rooms' ? 'hotel_nav_item_focus' : 'hotel_nav_item'">客房类型</div>
@@ -389,124 +409,135 @@
                         </div>
                     </div>
                 </div>
-                <div id="hotel_content_container" style="width: 60%;position: relative;margin-left: auto;margin-right: auto;">
-                    <div style="height: 30px;width:100px"></div>
-                    <div v-if="section == 'detail'">
-                        <div style="height: 30px"></div>
-                        <div class="hotel_des">
-                            <img style="float: left" width="24px" src="/images/hotel_quote_left.png"/>
-                            <p style="padding:0 40px;font-size: 16px;line-height: 38px;"><%hotel.description%></p>
-                            <img style="float: right;margin-top: -30px" width="24px" src="/images/hotel_quote_right.png"/>
-                        </div>
-                        <div class="hotel_line"></div>
+                <div id="hotel_content_container" class="c1" :style="content_width">
+                    <div style="width: 100%;padding-right:260px;float: left">
+                        <div style="height: 30px;width:100px"></div>
+                        <div v-if="section == 'detail'">
+                            <div style="height: 30px"></div>
+                            <div class="hotel_des">
+                                <img style="float: left" width="24px" src="/images/hotel_quote_left.png"/>
+                                <p style="padding:0 40px;font-size: 16px;line-height: 38px;"><%hotel.description%></p>
+                                <img style="float: right;margin-top: -30px" width="24px" src="/images/hotel_quote_right.png"/>
+                            </div>
+                            <div style="height: 30px;"></div>
+                            <div class="hotel_line"></div>
 
-                        <div>
-                            <div class="zy_float">
-                                <div class="hotel_content_title">致游推荐</div>
-                                <ul style="padding:0 20px;color: #C19B76;font-weight:200;">
-                                    <li style="margin-bottom: 20px;font-size: 14px;line-height: 28px" v-for="v in zy_recommend_arr">
-                                        <span style="color: #3c3c3c;"><%v%></span></li>
-                                </ul>
+                            <div>
+                                <div class="zy_float">
+                                    <div class="hotel_content_title">致游推荐</div>
+                                    <ul style="padding:0 20px;color: #C19B76;font-weight:200;">
+                                        <li style="margin-bottom: 20px;font-size: 14px;line-height: 28px" v-for="v in zy_recommend_arr">
+                                            <span style="color: #3c3c3c;"><%v%></span></li>
+                                    </ul>
+                                </div>
+                                <div class="zy_float">
+                                    <div class="hotel_content_title">致游知道</div>
+                                    <ul style="padding:0 20px;color: #C19B76;font-weight:200;">
+                                        <li style="margin-bottom: 20px;font-size: 14px;line-height: 28px" v-for="v in zy_g2k_arr">
+                                            <span style="color: #3c3c3c;"><%v%></span></li>
+                                    </ul>
+                                </div>
+                                <div style="clear: both"></div>
                             </div>
-                            <div class="zy_float">
-                                <div class="hotel_content_title">致游知道</div>
-                                <ul style="padding:0 20px;color: #C19B76;font-weight:200;">
-                                    <li style="margin-bottom: 20px;font-size: 14px;line-height: 28px" v-for="v in zy_g2k_arr">
-                                        <span style="color: #3c3c3c;"><%v%></span></li>
-                                </ul>
-                            </div>
-                            <div style="clear: both"></div>
-                        </div>
 
-                        <div class="hotel_line"></div>
-                        <div style="height: 1px"></div>
-                        <div v-if="hotel.detail.extend">
-                            <div v-for="section in detail_extend">
-                                <div class="hotel_content_title"><%section.title%></div>
-                                <div style="font-size: 14px;line-height: 28px;font-weight:200;" v-html="markdown(section.content)"></div>
+                            <div class="hotel_line"></div>
+                            <div style="height: 1px"></div>
+                            <div v-if="hotel.detail.extend">
+                                <div v-for="section in detail_extend">
+                                    <div class="hotel_content_title"><%section.title%></div>
+                                    <div style="font-size: 14px;line-height: 28px;font-weight:200;" v-html="markdown(section.content)"></div>
+                                </div>
                             </div>
                         </div>
-                    </div>
-                    <div v-else-if="section == 'rooms'">
-                        <div v-if="room_style == 0">
-                            <div v-for="room in hotel.rooms" style="border-top: 2px solid lightgrey">
-                            <div style="float: left;width: 30%">
-                                <img v-if="room.images_str" :src="room.images_str.split('\n')[0]" width="100%" v-on:click="view_room_images(room.images_str)">
-                            </div>
-                            <div style="float: left;width: 70%;padding:15px 30px 0px 30px">
-                                <div class="hotel_content_title"><% room.name %></div>
-                                <div style="height: 8px"></div>
-                                <ul style="padding:0 15px;color: #C19B76">
-                                    <li v-for="h in str_2_arr(room.highlight)">
-                                        <span style="color: #3c3c3c;font-size: 14px;line-height: 22px"><% h %></span>
-                                    </li>
-                                </ul>
-                                <div style="height: 8px"></div>
-                                <p class="hotel_text" v-html="markdown(room.description)"></p>
-                                <div style="height: 8px"></div>
-                                <p class="hotel_text" v-html="markdown(room.facilities)"></p>
-                            </div>
-                            <div style="clear: both"></div>
-                            <div style="height:15px;width: 10px"></div>
-                        </div>
-                        </div>
-                        <div v-else>
-                            <div v-for="room in hotel.rooms" style="border-top: 2px solid lightgrey">
+                        <div v-else-if="section == 'rooms'">
+                            <div v-if="room_style == 0">
+                                <div v-for="room in hotel.rooms" style="border-top: 2px solid lightgrey">
                                 <div style="float: left;width: 30%">
-                                    <img v-if="room.images_str" :src="room.images_str.split('\n')[0]" width="100%">
-                                    <div style="padding: 8px">
-                                        <div style="font-size: 16px;"><% room.name %></div>
-                                        <div style="height: 8px"></div>
-                                        <p style="font-size: 12px;line-height: 20px;margin: 0" v-for="h in str_2_arr(room.highlight)">
-                                            <% h %>
-                                        </p>
-                                        <div v-if="room.is_show == true">
-                                            <p style="font-size: 12px;line-height: 20px;margin: 0" v-html="markdown(room.description)"></p>
-                                            <p style="font-size: 12px;line-height: 20px;margin: 0" v-html="markdown(room.facilities)"></p>
-                                        </div>
-                                        <span class="unselectable" style="cursor: pointer;color: #c29c76" v-on:click="room_show_detail(room)"><%room.is_show?'收起':'更多'%></span>
-                                    </div>
+                                    <img v-if="room.images_str" :src="room.images_str.split('\n')[0]" width="100%" v-on:click="view_room_images(room.images_str)">
                                 </div>
                                 <div style="float: left;width: 70%;padding:15px 30px 0px 30px">
-                                    plans here
+                                    <div class="hotel_content_title"><% room.name %></div>
+                                    <div style="height: 8px"></div>
+                                    <ul style="padding:0 15px;color: #C19B76">
+                                        <li v-for="h in str_2_arr(room.highlight)">
+                                            <span style="color: #3c3c3c;font-size: 14px;line-height: 22px"><% h %></span>
+                                        </li>
+                                    </ul>
+                                    <div style="height: 8px"></div>
+                                    <p class="hotel_text" v-html="markdown(room.description)"></p>
+                                    <div style="height: 8px"></div>
+                                    <p class="hotel_text" v-html="markdown(room.facilities)"></p>
                                 </div>
                                 <div style="clear: both"></div>
                                 <div style="height:15px;width: 10px"></div>
+                            </div>
+                            </div>
+                            <div v-else>
+                                <div v-for="room in hotel.rooms" style="border-top: 2px solid lightgrey">
+                                    <div style="float: left;width: 30%">
+                                        <img v-if="room.images_str" :src="room.images_str.split('\n')[0]" width="100%">
+                                        <div style="padding: 8px">
+                                            <div style="font-size: 16px;"><% room.name %></div>
+                                            <div style="height: 8px"></div>
+                                            <p style="font-size: 12px;line-height: 20px;margin: 0" v-for="h in str_2_arr(room.highlight)">
+                                                <% h %>
+                                            </p>
+                                            <div v-if="room.is_show == true">
+                                                <p style="font-size: 12px;line-height: 20px;margin: 0" v-html="markdown(room.description)"></p>
+                                                <p style="font-size: 12px;line-height: 20px;margin: 0" v-html="markdown(room.facilities)"></p>
+                                            </div>
+                                            <span class="unselectable" style="cursor: pointer;color: #c29c76" v-on:click="room_show_detail(room)"><%room.is_show?'收起':'更多'%></span>
+                                        </div>
+                                    </div>
+                                    <div style="float: left;width: 70%;padding:15px 30px 0px 30px">
+                                        plans here
+                                    </div>
+                                    <div style="clear: both"></div>
+                                    <div style="height:15px;width: 10px"></div>
+                            </div>
                         </div>
+                        </div>
+                        <div v-else-if="section == 'section_facilities'">
+                            <div class="hotel_content_title">酒店设施</div>
+                            <div v-for="item in arr_facilities" class="font_sub_4">
+                                <% item %>
+                            </div>
+                            <div style="height: 30px;clear: both"></div>
+                            <div class="hotel_content_title">订前必读</div>
+                            <div class="font_sub">入住时间：<% hotel.policy.checkin %></div>
+                            <div class="font_sub">退房时间：<% hotel.policy.checkout %></div>
+                            <div class="font_sub">取消政策：<% hotel.policy.cancellation %></div>
+                            <div style="height: 20px;width: 1px"></div>
+                            <div class="font_sub">儿童政策</div>
+                            <div v-for="item in str_2_arr(hotel.policy.children)" class="font_sub">
+                                <% item %>
+                            </div>
+                            <div style="height: 20px;width: 1px"></div>
+                            <div class="font_sub">加床</div>
+                            <div v-for="item in str_2_arr(hotel.policy.extra_bed)" class="font_sub">
+                                <% item %>
+                            </div>
+                            <div style="height: 20px;width: 1px"></div>
+                            <div class="font_sub">宠物</div>
+                            <div v-for="item in str_2_arr(hotel.policy.pet)" class="font_sub">
+                                <% item %>
+                            </div>
+                            <div style="height: 20px;width: 1px"></div>
+                            <div class="font_sub">酒店接受的银行卡类型：<% hotel.policy.payment %></div>
+                            <div style="height: 30px;width: 100px"></div>
+                        </div>
+                        <div v-else-if="section == 'similar'"><div>similar</div></div>
                     </div>
+                    <div  style="float:left;margin-left: -225px;width: 225px;">
+                        <div id="right_picker" style="min-height: 180px;width: 225px;border: 1px solid lightgrey">
+                            date picker here
+                        </div>
+
                     </div>
-                    <div v-else-if="section == 'section_facilities'">
-                        <div class="hotel_content_title">酒店设施</div>
-                        <div v-for="item in arr_facilities" class="font_sub_4">
-                            <% item %>
-                        </div>
-                        <div style="height: 30px;clear: both"></div>
-                        <div class="hotel_content_title">订前必读</div>
-                        <div class="font_sub">入住时间：<% hotel.policy.checkin %></div>
-                        <div class="font_sub">退房时间：<% hotel.policy.checkout %></div>
-                        <div class="font_sub">取消政策：<% hotel.policy.cancellation %></div>
-                        <div style="height: 20px;width: 1px"></div>
-                        <div class="font_sub">儿童政策</div>
-                        <div v-for="item in str_2_arr(hotel.policy.children)" class="font_sub">
-                            <% item %>
-                        </div>
-                        <div style="height: 20px;width: 1px"></div>
-                        <div class="font_sub">加床</div>
-                        <div v-for="item in str_2_arr(hotel.policy.extra_bed)" class="font_sub">
-                            <% item %>
-                        </div>
-                        <div style="height: 20px;width: 1px"></div>
-                        <div class="font_sub">宠物</div>
-                        <div v-for="item in str_2_arr(hotel.policy.pet)" class="font_sub">
-                            <% item %>
-                        </div>
-                        <div style="height: 20px;width: 1px"></div>
-                        <div class="font_sub">酒店接受的银行卡类型：<% hotel.policy.payment %></div>
-                        <div style="height: 30px;width: 100px"></div>
-                    </div>
-                    <div v-else-if="section == 'similar'"><div>similar</div></div>
+                    <div style="clear: both"></div>
                 </div>
-                <div v-show="section == 'detail'" class="hotel_map" style="position: relative;width: 100%">
+                <div id="footer2">
+                <div id="div_map" v-show="section == 'detail'" class="hotel_map" style="position: relative;width: 100%">
                     <div id="map" style="width: 100%;height: 300px;"></div>
                     <div style="position: absolute;width: 60%;margin-left: auto;margin-right: auto;left: 0;top: 0;">
                         <div style="height: 20px"></div>
@@ -523,7 +554,7 @@
                     </div>
                 </div>
                 <div style="clear: both"></div>
-                <div style="width: 60%;margin-right: auto;margin-left: auto">
+                <div  style="width: 60%;margin-right: auto;margin-left: auto">
                     <div style="float: left;width: 50%;padding: 30px">
                         <div class="hotel_content_title">主要奖项</div>
                         <p style="font-size: 14px;line-height: 28px" v-html="markdown(hotel.honor)">
@@ -546,8 +577,9 @@
                     </div>
                     <div style="clear: both"></div>
                 </div>
+                </div>
             </div>
-            <div class="hotel_footer">
+            <div class="hotel_footer" id="footer">
                 <div style="text-align: center;color: lightgrey;margin-left: auto;margin-right: auto;width: 60%;padding: 30px 0;">
                     <div style="float: left;width: 25%">
                         <div>礼宾服务</div>
@@ -707,51 +739,12 @@
                 }
         );
     });
+
+    var hotel_lat,hotel_lng;
+
     var book_adult = 2;
     var book_children = 0;
-    function adult_add(self){
-        var c = $(self).next();
-        var n = book_adult;
-        c.text(n+1);
-        book_adult = n + 1;
-        set_adult_children();
-    }
-    function adult_minus(self){
-        var c = $(self).prev();
-        var n = book_adult;
-        if(n-1 > -1){
-            c.text(n-1);
-            book_adult = n-1;
-        }
-        else{
-            c.text(0);
-            book_adult = 0
-        }
-        set_adult_children();
-    }
-    function children_add(self){
-        var c = $(self).next();
-        var n = book_children;
-        c.text(n+1);
-        book_children = n + 1;
-        set_adult_children();
-    }
-    function children_minus(self){
-        var c = $(self).prev();
-        var n = book_children;
-        if(n-1 > -1){
-            c.text(n-1);
-            book_children = n-1;
-        }
-        else{
-            c.text(0);
-            book_children = 0
-        }
-        set_adult_children();
-    }
-    function set_adult_children(){
-        $("#input_people").val(""+book_adult+"成人，"+book_children+"儿童")
-    }
+
     function close_people(self){
         $("#div_people").hide();
     }
@@ -772,7 +765,7 @@
         src="http://ditu.google.cn/maps/api/js?key=AIzaSyBJfv6WxdEoTqSgibZDdOL-m-lLWz6UO8E&libraries=geometry,places&callback=mapCallback">
 </script>
 <script>
-    var hotel_lat,hotel_lng;
+
     Vue.component('z-float-input',{
         delimiters: ["<%","%>"],
         props:["placeholder","name", "value", "dom_id"],
@@ -852,6 +845,9 @@
                 ]
             },
             room_style:0, //0 def, 1 with price
+            hack_width : "100px",
+            style_gallery_image : "width:1028px;height:580px",
+            content_width : "width:1028px"
         },
         created:function () {
             var _id = this.$route.params.id;
@@ -867,8 +863,12 @@
             console.log(_id)
         },
         mounted:function(){
-
-            },
+            window.addEventListener('resize', this.handle_resize)
+            this.handle_resize(null);
+        },
+        beforeDestroy: function () {
+            window.removeEventListener('resize', this.handle_resize)
+        },
         updated:function(){
             var swiper = new Swiper('.swiper-container', {
                 navigation: {
@@ -893,6 +893,22 @@
 
                                 var offset_nav = 0;
                                 return bottom_of_banner - offset_nav;
+                            }
+                        }
+                    }
+            );
+            $("#right_picker").affix(
+                    {
+                        offset:{
+                            top: function(){
+                                //hotel_header
+                                var bottom_of_banner = $("#hotel_header").offset().top + $("#hotel_header").outerHeight();
+
+                                var offset_nav = 0;
+                                return bottom_of_banner - offset_nav;
+                            },
+                            bottom : function(){
+                                return ( $('#footer').outerHeight(true) + $('#footer2').outerHeight(true) )
                             }
                         }
                     }
@@ -1056,6 +1072,12 @@
                         links = arr;
                 console.log(links);
                 blueimp.Gallery(links, options);
+            },
+            handle_resize : function(event){
+                var height = document.documentElement.clientHeight;
+                var width = document.documentElement.clientWidth;
+                console.log("resize(wxh) = "+width+","+height);
+                this.hack_width = (width - 1028 )/2 + "px";
             }
         },
         computed : {
@@ -1131,6 +1153,8 @@
     var curveMarkers = [];
     var arrowMarkers = [];
     var mapLoaded = false;
+
+
     function mapCallback(){
         mapLoaded = true;
         initMap();
@@ -1146,6 +1170,11 @@
             console.log("map already init");
             return;
         }
+        if(hotel_lat == undefined || hotel_lat == null){
+            console.log("hotel lat lng not ready");
+            return;
+        }
+
         console.log("init map here");
 
         //define map
