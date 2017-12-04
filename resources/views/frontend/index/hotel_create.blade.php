@@ -463,6 +463,7 @@
                                 <div>
                                     <div class="width_normal" style="float: left">
                                         <z-float-input placeholder="名称" v-model="hotel.rooms[current_room].name" name="name"></z-float-input>
+                                        <z-float-input placeholder="英文名" v-model="hotel.rooms[current_room].name_en" name="name_en"></z-float-input>
                                     </div>
                                     <div style="float: left;margin-left: 10px;width: 80px">
                                         <select class="form-control" v-model="hotel.rooms[current_room].online">
@@ -1400,7 +1401,7 @@
                 $("#popupBottom").modalPopover("show");
             },
             select_image : function(e){
-                $('#popupBottom').modalPopover('hide')
+//                $('#popupBottom').modalPopover('hide')
                 var self = this.current_btn;
                 var type = $(self).attr("data-image");
                 var editor_j = $(self).parent().parent().find('textarea');

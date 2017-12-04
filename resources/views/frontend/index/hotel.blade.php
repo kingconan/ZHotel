@@ -374,6 +374,10 @@
             color:#999999;
             font-weight: 200;
         }
+        .font_cap{
+            font-size: 30px;
+            font-weight: 300;
+        }
     </style>
 @endsection
 @section('content')
@@ -466,7 +470,7 @@
                             <div style="height: 30px"></div>
                             <div class="font_normal">
                                 <img style="float: left" width="24px" src="/images/hotel_quote_left.png"/>
-                                <p style="padding:0 40px;font-size: 16px;line-height: 38px;"><%hotel.description%></p>
+                                <p style="padding:0 40px;font-size: 16px;line-height: 38px;" v-html="hotel.description"></p>
                                 <img style="float: right;margin-top: -30px" width="24px" src="/images/hotel_quote_right.png"/>
                             </div>
                             <div style="height: 30px;"></div>
