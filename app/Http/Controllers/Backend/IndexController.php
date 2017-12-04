@@ -188,8 +188,16 @@ class IndexController extends Controller
             $hotel->detail = $json["detail"];
             $hotel->facilities = $json["facilities"];
             $hotel->honor = $json["honor"];
-            $hotel->honor_img = $json["honor_img"];
-            $hotel->honor_word = $json["honor_word"];
+            if(isset($json["honor_img"]))
+                $hotel->honor_img = $json["honor_img"];
+            else{
+                $hotel->honor_img = "";
+            }
+            if(isset($json["honor_word"]))
+                $hotel->honor_word = $json["honor_word"];
+            else{
+                $hotel->honor_word = "";
+            }
             $hotel->policy = $json["policy"];
             $hotel->rooms = $json["rooms"];
             $hotel->images = $json["images"];
