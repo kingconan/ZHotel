@@ -198,6 +198,23 @@
             color: white;
         }
 
+        .input_normal{
+            font-size: 20px;
+            font-weight: 200;
+            border-bottom: 1px solid #CCCCCC;
+            border-top: 1px solid #FFF;
+            border-left: 1px solid #FFF;
+            border-right: 1px solid #FFF;
+            outline: none;
+            padding: 6px 0;
+            background-size: 12px 6px;
+            background-position: right 6px center;
+            background-repeat: no-repeat;
+            background-image: url("{{URL::to('images/hotel_arrow_down.png')}}");
+            width: 100%;
+            margin-bottom: 20px;
+        }
+
         .input_date{
             float: left;
             width: 120px;
@@ -352,6 +369,10 @@
         #div_trans::-webkit-scrollbar-thumb {
             background-color: #F0F0F0;
             outline: 1px solid #F0F0F0;
+        }
+        .label_d{
+            color:#999999;
+            font-weight: 200;
         }
     </style>
 @endsection
@@ -569,8 +590,22 @@
                         <div v-else-if="section == 'similar'"><div>similar</div></div>
                     </div>
                     <div  style="float:left;margin-left: -225px;width: 225px;">
-                        <div id="right_picker" style="min-height: 180px;width: 225px;border: 1px solid lightgrey">
-                            date picker here
+                        <div id="right_picker" style="height: 333px;width: 223px;border: 1px solid lightgrey;padding: 15px;">
+                            <div id="div_checkinout2">
+                                <label class="label_d">入住日期</label>
+                                <input style="color:#666666;" class="input_normal"
+                                       id="input_checkin2" name="checkin" v-model="book.checkin" type="text" placeholder="入住日期" readonly/>
+                                <label class="label_d">退房日期</label>
+                                <input style="color:#666666"  class="input_normal"
+                                       id="input_checkout2" name="checkout" v-model="book.checkout" type="text" placeholder="退房日期" readonly/>
+                            </div>
+                            <div>
+                                <label class="label_d">访客</label>
+                                <input style="color:#666666" class="input_normal" v-on:click="click_people" id="input_people2"
+                                       type="text" :value="book.adult+'成人, '+book.children+'儿童'" placeholder="请选择入住人数" readonly/>
+                            </div>
+                            <button type="button" style="width: 100%" class="btn btn_book" v-on:click="book_check2">查询预订</button>
+                            <div style="clear: both"></div>
                         </div>
 
                     </div>
@@ -780,6 +815,33 @@
                         evt.initEvent('input', false, true);
                         $('#input_checkin')[0].dispatchEvent(evt);
                         $('#input_checkout')[0].dispatchEvent(evt);
+                    },
+                    hoveringTooltip: function (days, startTime, hoveringTime) {
+                        return days > 1 ? days + "天" + (days - 1) + '晚' : '';
+                    },
+                    language:"cn"
+                }
+        );
+        $("#div_checkinout2").dateRangePicker(
+                {
+                    separator : ' to ',
+                    autoClose: true,
+                    getValue: function()
+                    {
+                        if ($('#input_checkin2').val() && $('#input_checkout2').val() )
+                            return $('#input_checkin2').val() + ' to ' + $('#input_checkout2').val();
+                        else
+                            return '';
+                    },
+                    setValue: function(s,s1,s2)
+                    {
+                        $('#input_checkin2').val(s1);
+                        $('#input_checkout2').val(s2);
+                        //hack for event
+                        var evt = document.createEvent('HTMLEvents');
+                        evt.initEvent('input', false, true);
+                        $('#input_checkin2')[0].dispatchEvent(evt);
+                        $('#input_checkout2')[0].dispatchEvent(evt);
                     },
                     hoveringTooltip: function (days, startTime, hoveringTime) {
                         return days > 1 ? days + "天" + (days - 1) + '晚' : '';
@@ -1003,6 +1065,9 @@
                 }
 
                 return str.split("\n").filter(function(entry) { return entry.trim() != ''; });
+            },
+            book_check2 : function(e){
+
             },
             book_check : function(e){
                 var self = e.target;
