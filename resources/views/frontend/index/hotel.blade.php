@@ -600,7 +600,7 @@
                                        id="input_checkout2" name="checkout" v-model="book.checkout" type="text" placeholder="退房日期" readonly/>
                             </div>
                             <div>
-                                <label class="label_d">访客</label>
+                                <label class="label_d">房客</label>
                                 <input style="color:#666666" class="input_normal" v-on:click="click_people" id="input_people2"
                                        type="text" :value="book.adult+'成人, '+book.children+'儿童'" placeholder="请选择入住人数" readonly/>
                             </div>
