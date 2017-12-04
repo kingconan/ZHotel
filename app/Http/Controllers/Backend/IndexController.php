@@ -34,6 +34,8 @@ class IndexController extends Controller
         $hotel->detail = $json["detail"];
         $hotel->facilities = $json["facilities"];
         $hotel->honor = $json["honor"];
+        $hotel->honor_img = $json["honor_img"];
+        $hotel->honor_word = $json["honor_word"];
         $hotel->policy = $json["policy"];
         $hotel->rooms = $json["rooms"];
         $hotel->images = $json["images"];
@@ -186,6 +188,8 @@ class IndexController extends Controller
             $hotel->detail = $json["detail"];
             $hotel->facilities = $json["facilities"];
             $hotel->honor = $json["honor"];
+            $hotel->honor_img = $json["honor_img"];
+            $hotel->honor_word = $json["honor_word"];
             $hotel->policy = $json["policy"];
             $hotel->rooms = $json["rooms"];
             $hotel->images = $json["images"];

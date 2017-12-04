@@ -520,8 +520,9 @@
                                                     plans here
                                                 </div>
                                             </div>
-                                            <div style="clear: both;height:15px;width: 10px"></div>
+                                            <div style="clear: both;"></div>
                                         </div>
+                                        <div style="clear: both;height:15px;width: 10px"></div>
                                     </div>
                             </div>
                         </div>
@@ -585,9 +586,12 @@
                 <div  :style="content_width+';margin-right: auto;margin-left: auto'">
                     <div style="float: left;width: 33%;padding: 30px">
                         <div class="hotel_content_title">品牌和荣誉</div>
-                        <p class="font_normal" v-html="markdown(hotel.honor)">
-
-                        </p>
+                        <div>
+                            <img v-for="img in str_2_arr(hotel.honor_img)"
+                                 :src="img" width="100px" height="50px" style="margin-right: 10px"
+                            />
+                            <p class="font_normal"><%hotel.honor_word%></p>
+                        </div>
                     </div>
                     <div style="float: left;width: 33%;padding: 30px">
                         <div class="hotel_content_title">主要奖项</div>

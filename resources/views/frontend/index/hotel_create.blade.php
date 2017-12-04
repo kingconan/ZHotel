@@ -524,7 +524,7 @@
 
                         <div style="clear: both;height: 30px"></div>
 
-                        <div class="section_title" id="p6">奖项</div>
+                        <div class="section_title" id="p6">奖项与荣誉</div>
                         <p class="info">
                             格式说明<br />
                             一行奖项名称<br />
@@ -533,7 +533,25 @@
                         <div class="width_big">
                             <z-float-textarea placeholder="奖项" v-model="hotel.honor" name="name"></z-float-textarea>
                         </div>
-
+                        <div class="width_big">
+                            <div class="sub_title">荣誉图片
+                                {{--<span id="qn_custom2" class="btn_action">图片</span>--}}
+                                <span class="btn_action" data-image="dir" v-on:click="insert_image2">URL</span>
+                                <a v-on:click="show_covers" data-image="dir" class="btn_action">图库</a>
+                            </div>
+                            <z-float-textarea placeholder="图片" v-model="hotel.honor_img" name="name"></z-float-textarea>
+                        </div>
+                        <div class="width_big">
+                            <z-float-textarea placeholder="品牌与荣誉" v-model="hotel.honor_word" name="name"></z-float-textarea>
+                        </div>
+                        <div id="img-preview" style="padding: 10px;border: 1px solid lightgrey">
+                            <div>
+                                <img v-for="img in str_2_arr(hotel.honor_img)"
+                                    :src="img" width="100px" height="50px" style="margin-right: 10px"
+                                />
+                                <p style="font-size: 12px;line-height: 24px"><%hotel.honor_word%></p>
+                            </div>
+                        </div>
 
 
                         <div style="clear: both;height: 30px"></div>
@@ -563,29 +581,6 @@
                             </div>
                         </div>
 
-                        {{--<table class="table" id="covers">--}}
-                            {{--<thead>--}}
-                                {{--<th width="60px">#</th>--}}
-                                {{--<th width="200px">IMAGE</th>--}}
-                                {{--<th width="200px">TAG</th>--}}
-                                {{--<th width="120px">状态</th>--}}
-                                {{--<th>操作</th>--}}
-                            {{--</thead>--}}
-                            {{--<tbody>--}}
-                                {{--<tr v-for="(image,index) in sortedCover">--}}
-                                    {{--<td><% index + 1 %></td>--}}
-                                    {{--<td><img :src="image.url" style="object-fit: cover;max-width: 200px"/></td>--}}
-                                    {{--<td><input v-model="image.tag" class="form-control input_table" placeholder="tag" style="max-width: 120px" /></td>--}}
-                                    {{--<td><% image.status %></td>--}}
-                                    {{--<td>--}}
-                                        {{--<button v-on:click="set_image_valid(index)" type="button" class="btn btn-default btn-sm" style="color:green">有效</button>--}}
-                                        {{--<button v-on:click="set_image_top(index)" type="button" class="btn btn-default btn-sm" style="color:blue">置顶</button>--}}
-                                        {{--<button v-on:click="set_image_invalid(index)" type="button" class="btn btn-default btn-sm" style="color:indianred">无效</button>--}}
-                                        {{--<button v-on:click="confirm_delete_cover(index)" type="button" class="btn btn-default btn-sm" style="color:indianred">删除</button>--}}
-                                    {{--</td>--}}
-                                {{--</tr>--}}
-                            {{--</tbody>--}}
-                        {{--</table>--}}
 
                         <div style="clear: both;height: 30px"></div>
                     </div>
@@ -603,20 +598,6 @@
                             <span v-if="image.status == 0" style="position: absolute;left:0;top:0;background-color: darkred;padding: 3px 6px;font-size: 8px;color: white">无效</span>
                         </div>
                         <div style="clear: both"></div>
-                        {{--<table class="table">--}}
-                            {{--<thead>--}}
-                            {{--<th width="60px">#</th>--}}
-                            {{--<th width="200px">IMAGE</th>--}}
-                            {{--<th width="200px">TAG</th>--}}
-                            {{--</thead>--}}
-                            {{--<tbody>--}}
-                            {{--<tr v-for="(image,index) in sortedCover" v-on:click="select_image">--}}
-                                {{--<td><% index + 1 %></td>--}}
-                                {{--<td><img :src="image.url" style="object-fit: cover;max-width: 200px"/></td>--}}
-                                {{--<td><%image.tag%></td>--}}
-                            {{--</tr>--}}
-                            {{--</tbody>--}}
-                        {{--</table>--}}
                     </div>
                 </div>
 
@@ -875,12 +856,10 @@
         }
     }
 </script>
-<script async defer
-        src="http://ditu.google.cn/maps/api/js?key=AIzaSyBsq4XZqfUvjU686OBnxAV9FZSwfXjXy9k&libraries=geometry,places&callback=cb_map">
-</script>
 {{--<script async defer--}}
-        {{--src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBJfv6WxdEoTqSgibZDdOL-m-lLWz6UO8E&libraries=geometry,places&callback=cb_map">--}}
+        {{--src="http://ditu.google.cn/maps/api/js?key=AIzaSyBsq4XZqfUvjU686OBnxAV9FZSwfXjXy9k&libraries=geometry,places&callback=cb_map">--}}
 {{--</script>--}}
+
 <script>
     Vue.component('z-float-input',{
         delimiters: ["<%","%>"],
@@ -1071,6 +1050,8 @@
                 description:"",
                 facilities:"",
                 honor:"",
+                honor_img:"",
+                honor_word:"",
                 location:{
                     continent:"",
                     country:"",
@@ -1365,6 +1346,7 @@
                     console.log(url);
                     const thiz = this;
                     var self = e.target;
+                    var dir = $(self).attr("data-image");
                     var editor = $(self).parent().parent().find('textarea')[0];
                     var post_url = "/fetcher/image";
                     progress_add($(self).parent());
@@ -1373,6 +1355,9 @@
                                 console.log(response.data);
                                 if(response.data.ok == 0){
                                     var text = '![]('+response.data.obj.url+')\n';
+                                    if(dir){
+                                        text = response.data.obj.url+'\n';
+                                    }
                                     if(editor.selectionStart || editor.selectionStart === 0) {//working in chrome
                                         // Others
                                         var start_pos = editor.selectionStart;
@@ -1402,15 +1387,15 @@
                     console.log("no url");
                 }
             },
-            show_covers : function(e){
+            show_covers : function(event){
                 console.log("show images");
-                this.current_btn = e.target;
+                this.current_btn = event.target;
 
                 this.filter_words = "";
                 this.helper_filter_cover();
                 $("#popupBottom").modalPopover({
                     backdrop:true,
-                    target:e.target
+                    target:event.target
                 });
                 $("#popupBottom").modalPopover("show");
             },
