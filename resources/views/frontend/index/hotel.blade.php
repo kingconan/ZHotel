@@ -168,6 +168,16 @@
             width: 25%;
             padding-right: 30px;
         }
+        .font_sub_fa{
+            color: #666666;
+            font-size: 14px;
+            font-weight: 200;
+            line-height: 28px;
+            float: left;
+            width: 25%;
+            padding-right: 30px;
+            margin-bottom: 20px;
+        }
         .hotel_footer{
             background-color: #161D21;
             width: 100%;
@@ -528,9 +538,10 @@
                         </div>
                         <div v-else-if="section == 'section_facilities'">
                             <div class="hotel_content_title">酒店设施</div>
-                            <div v-for="item in arr_facilities" class="font_sub_4">
-                                <% item %>
-                            </div>
+                            <template v-for="(item,index) in arr_facilities" >
+                                <div class="font_sub_fa"><% item %></div>
+                                <div v-if="index%4 == 3" style="clear: both"></div>
+                            </template>
                             <div style="height: 30px;clear: both"></div>
                             <div class="hotel_content_title">订前必读</div>
                             <div class="font_sub">入住时间：<% hotel.policy.checkin %></div>
@@ -1126,7 +1137,7 @@
                 return this.hotel.zy.good_to_known.split("\n");
             },
             arr_facilities: function(){
-                return this.hotel.facilities.split("\n");
+                return this.hotel.facilities.split("\n").filter(function(entry) { return entry.trim() != ''; });;
             },
             detail_extend : function(){
                 if(this.hotel.detail.extend){
