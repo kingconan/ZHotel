@@ -71,10 +71,6 @@
         }
     </style>
     <style>
-        .hotel_des{
-            line-height: 28px;
-            font-weight:200;
-        }
         .hotel_content_title{
             font-size: 22px;
             font-weight: 300;
@@ -85,11 +81,6 @@
             font-size: 20px;
             font-weight: 300;
             margin-bottom: 10px;
-        }
-        .hotel_text{
-            font-size: 14px;
-            line-height: 28px;
-            font-weight:200;
         }
         .hotel_nav_item{
             float: left;
@@ -171,6 +162,7 @@
         .font_sub_4{
             color: #666666;
             font-size: 14px;
+            font-weight: 200;
             line-height: 28px;
             float: left;
             width: 25%;
@@ -201,7 +193,6 @@
             width: 120px;
             height: 30px;
             font-size: 14px;
-            margin-right: 10px;
             border: 1px solid #CCCCCC;
             outline: none;
             padding: 6px;
@@ -222,15 +213,21 @@
             background-repeat: no-repeat;
             background-image: url("{{URL::to('images/hotel_arrow_down.png')}}");
         }
+        .date-picker-wrapper{
+            -webkit-box-shadow: 0px 0px 8px rgba(0,0,0,.2);
+            -moz-box-shadow: 0px 0px 8px rgba(0,0,0,.2);
+            box-shadow:0px 0px 8px rgba(0,0,0,.2);
+            border:1px solid #f0f0f0;
+        }
         .input_people_box{
-            -webkit-box-shadow: 3px 3px 10px rgba(0,0,0,.5);
-            -moz-box-shadow: 3px 3px 10px rgba(0,0,0,.5);
-            border:1px solid #bfbfbf;
+            -webkit-box-shadow: 0px 0px 8px rgba(0,0,0,.2);
+            -moz-box-shadow: 0px 0px 8px rgba(0,0,0,.2);
+            border:1px solid #f0f0f0;
             background-color:#FFF;
             padding:5px 12px;
             line-height:20px;
             color:#aaa;
-            box-shadow:3px 3px 10px rgba(0,0,0,.5);
+            box-shadow:0px 0px 8px rgba(0,0,0,.2);
         }
         .unselectable {
             -webkit-touch-callout: none;
@@ -243,6 +240,12 @@
         .affix-bottom{
             position: absolute;
             bottom:0
+        }
+
+        .font_normal{
+            font-size: 14px;
+            font-weight: 200;
+            line-height: 28px;
         }
 
     </style>
@@ -324,6 +327,22 @@
         .c1{
             position: relative;margin-left: auto;margin-right: auto;
         }
+
+
+        #div_trans::-webkit-scrollbar {
+            width: 4px;/*滚动条宽度*/
+        }
+
+        #div_trans::-webkit-scrollbar-track {
+            -webkit-box-shadow: inset 0 0 6px rgba(255,255,255,0.3);
+            background-color: #FFFFFF;/*滚动条北京*/
+
+        }
+
+        #div_trans::-webkit-scrollbar-thumb {
+            background-color: #F0F0F0;
+            outline: 1px solid #F0F0F0;
+        }
     </style>
 @endsection
 @section('content')
@@ -372,13 +391,13 @@
                         </div>
                         <div style="height: 30px"></div>
                     </div>
-                    <div style="width: 300px;float: left;margin-left: -300px">
+                    <div style="width: 250px;float: left;margin-left: -250px">
                         <div style="height: 30px"></div>
                         <div class="hotel_price">??<span style="font-size: 16px;font-weight: normal;margin-left: 6px">起 / 晚</span></div>
                         <div style="padding: 10px 0">
                             <form style="display: none" id="form_book">
                                 <div id="div_checkinout">
-                                    <input style="color:#999999" id="input_checkin" name="checkin" v-model="book.checkin" class="input_date" type="text" placeholder="入住日期" readonly/>
+                                    <input style="color:#999999;margin-right: 10px" id="input_checkin" name="checkin" v-model="book.checkin" class="input_date" type="text" placeholder="入住日期" readonly/>
                                     <input style="color:#999999" id="input_checkout" name="checkout" v-model="book.checkout"  class="input_date" type="text" placeholder="退房日期" readonly/>
                                     <div style="clear: both"></div>
                                 </div>
@@ -414,7 +433,7 @@
                         <div style="height: 30px;width:100px"></div>
                         <div v-if="section == 'detail'">
                             <div style="height: 30px"></div>
-                            <div class="hotel_des">
+                            <div class="font_normal">
                                 <img style="float: left" width="24px" src="/images/hotel_quote_left.png"/>
                                 <p style="padding:0 40px;font-size: 16px;line-height: 38px;"><%hotel.description%></p>
                                 <img style="float: right;margin-top: -30px" width="24px" src="/images/hotel_quote_right.png"/>
@@ -425,14 +444,14 @@
                             <div>
                                 <div class="zy_float">
                                     <div class="hotel_content_title">致游推荐</div>
-                                    <ul style="padding:0 20px;color: #C19B76;font-weight:200;">
+                                    <ul class="font_normal" style="padding:0 20px;color: #C19B76;">
                                         <li style="margin-bottom: 20px;font-size: 14px;line-height: 28px" v-for="v in zy_recommend_arr">
                                             <span style="color: #3c3c3c;"><%v%></span></li>
                                     </ul>
                                 </div>
                                 <div class="zy_float">
                                     <div class="hotel_content_title">致游知道</div>
-                                    <ul style="padding:0 20px;color: #C19B76;font-weight:200;">
+                                    <ul class="font_normal" style="padding:0 20px;color: #C19B76;">
                                         <li style="margin-bottom: 20px;font-size: 14px;line-height: 28px" v-for="v in zy_g2k_arr">
                                             <span style="color: #3c3c3c;"><%v%></span></li>
                                     </ul>
@@ -445,57 +464,66 @@
                             <div v-if="hotel.detail.extend">
                                 <div v-for="section in detail_extend">
                                     <div class="hotel_content_title"><%section.title%></div>
-                                    <div style="font-size: 14px;line-height: 28px;font-weight:200;" v-html="markdown(section.content)"></div>
+                                    <div class="font_normal" v-html="markdown(section.content)"></div>
                                 </div>
                             </div>
                         </div>
                         <div v-else-if="section == 'rooms'">
                             <div v-if="room_style == 0">
-                                <div v-for="room in hotel.rooms" style="border-top: 2px solid lightgrey">
-                                <div style="float: left;width: 30%">
-                                    <img v-if="room.images_str" :src="room.images_str.split('\n')[0]" width="100%" v-on:click="view_room_images(room.images_str)">
+                                <div v-for="room in hotel.rooms">
+                                    <div style="background-color: #FAFAFA">
+                                        <div style="float: left;width: 240px;">
+                                            <img v-if="room.images_str" :src="room.images_str.split('\n')[0]" width="100%" v-on:click="view_room_images(room.images_str)">
+                                        </div>
+                                        <div style="float: left;width: 528px;padding:0 ;background-color: white">
+                                            <div style="height: 1px;width: 100%;background-color: lightgrey"></div>
+                                            <div style="padding: 0 30px">
+                                                <div class="hotel_content_title"><% room.name %></div>
+                                                <div style="height: 8px"></div>
+                                                <ul class="font_normal" style="padding:0 15px;color: #C19B76">
+                                                    <li v-for="h in str_2_arr(room.highlight)">
+                                                        <span style="color: #3c3c3c;font-size: 14px;line-height: 22px"><% h %></span>
+                                                    </li>
+                                                </ul>
+                                                <div style="height: 8px"></div>
+                                                <p class="font_normal" v-html="markdown(room.description)"></p>
+                                                <div style="height: 8px"></div>
+                                                <p class="font_normal" v-html="markdown(room.facilities)"></p>
+                                            </div>
+                                        </div>
+                                        <div style="clear: both"></div>
+                                    </div>
+                                    <div style="clear: both;height:15px;width: 10px"></div>
                                 </div>
-                                <div style="float: left;width: 70%;padding:15px 30px 0px 30px">
-                                    <div class="hotel_content_title"><% room.name %></div>
-                                    <div style="height: 8px"></div>
-                                    <ul style="padding:0 15px;color: #C19B76">
-                                        <li v-for="h in str_2_arr(room.highlight)">
-                                            <span style="color: #3c3c3c;font-size: 14px;line-height: 22px"><% h %></span>
-                                        </li>
-                                    </ul>
-                                    <div style="height: 8px"></div>
-                                    <p class="hotel_text" v-html="markdown(room.description)"></p>
-                                    <div style="height: 8px"></div>
-                                    <p class="hotel_text" v-html="markdown(room.facilities)"></p>
-                                </div>
-                                <div style="clear: both"></div>
-                                <div style="height:15px;width: 10px"></div>
-                            </div>
                             </div>
                             <div v-else>
-                                <div v-for="room in hotel.rooms" style="border-top: 2px solid lightgrey">
-                                    <div style="float: left;width: 30%">
-                                        <img v-if="room.images_str" :src="room.images_str.split('\n')[0]" width="100%">
-                                        <div style="padding: 8px">
-                                            <div style="font-size: 16px;"><% room.name %></div>
-                                            <div style="height: 8px"></div>
-                                            <p style="font-size: 12px;line-height: 20px;margin: 0" v-for="h in str_2_arr(room.highlight)">
-                                                <% h %>
-                                            </p>
-                                            <div v-if="room.is_show == true">
-                                                <p style="font-size: 12px;line-height: 20px;margin: 0" v-html="markdown(room.description)"></p>
-                                                <p style="font-size: 12px;line-height: 20px;margin: 0" v-html="markdown(room.facilities)"></p>
+                                    <div v-for="room in hotel.rooms">
+                                        <div style="background-color: #FAFAFA">
+                                            <div style="float: left;width: 240px;">
+                                                <img v-if="room.images_str" :src="room.images_str.split('\n')[0]" width="100%">
+                                                <div style="padding: 8px">
+                                                    <div style="font-size: 16px;"><% room.name %></div>
+                                                    <div style="height: 8px"></div>
+                                                    <p style="font-size: 12px;line-height: 20px;margin: 0" v-for="h in str_2_arr(room.highlight)">
+                                                        <% h %>
+                                                    </p>
+                                                    <div v-if="room.is_show == true">
+                                                        <p style="font-size: 12px;line-height: 20px;margin: 0" v-html="markdown(room.description)"></p>
+                                                        <p style="font-size: 12px;line-height: 20px;margin: 0" v-html="markdown(room.facilities)"></p>
+                                                    </div>
+                                                    <span class="unselectable" style="cursor: pointer;color: #c29c76" v-on:click="room_show_detail(room)"><%room.is_show?'收起':'更多'%></span>
+                                                </div>
                                             </div>
-                                            <span class="unselectable" style="cursor: pointer;color: #c29c76" v-on:click="room_show_detail(room)"><%room.is_show?'收起':'更多'%></span>
+                                            <div style="float: left;width: 528px;padding:0 ;background-color: white;min-height: 300px">
+                                                <div style="height: 1px;width: 100%;background-color: lightgrey"></div>
+                                                <div style="padding: 0 30px">
+                                                    plans here
+                                                </div>
+                                            </div>
+                                            <div style="clear: both;height:15px;width: 10px"></div>
                                         </div>
                                     </div>
-                                    <div style="float: left;width: 70%;padding:15px 30px 0px 30px">
-                                        plans here
-                                    </div>
-                                    <div style="clear: both"></div>
-                                    <div style="height:15px;width: 10px"></div>
                             </div>
-                        </div>
                         </div>
                         <div v-else-if="section == 'section_facilities'">
                             <div class="hotel_content_title">酒店设施</div>
@@ -541,29 +569,35 @@
                     <div id="map" style="width: 100%;height: 360px;"></div>
                     <div style="position: absolute;width: 60%;margin-left: auto;margin-right: auto;left: 0;top: 0;">
                         <div style="height: 20px"></div>
-                        <div  style="padding: 20px;background-color: #FFF;margin-left: 20%;width: 340px;height: 320px;">
-                            <div style="overflow-y: auto;height: 220px;">
+                        <div  style="padding: 15px 6px 15px 15px;background-color: #FFF;margin-left: 20%;width: 340px;height: 320px;">
+                            <div id="div_trans" style="overflow-y: auto;height: 290px;padding-right: 8px">
                                 <div class="hotel_content_title_small">地址</div>
-                                <div class="hotel_text"><%hotel.location.address%></div>
+                                <div class="font_normal"><%hotel.location.address%></div>
                                 <div style="height: 20px"></div>
                                 <div class="hotel_content_title_small">交通指南</div>
-                                <div class="hotel_text" v-html="markdown(hotel.location.transportation)"></div>
+                                <div class="font_normal" v-html="markdown(hotel.location.transportation)"></div>
                             </div>
                         </div>
                         <div style="height: 20px"></div>
                     </div>
                 </div>
                 <div style="clear: both"></div>
-                <div  style="width: 60%;margin-right: auto;margin-left: auto">
-                    <div style="float: left;width: 50%;padding: 30px">
-                        <div class="hotel_content_title">主要奖项</div>
-                        <p style="font-size: 14px;line-height: 28px;font-weight: 200" v-html="markdown(hotel.honor)">
+                <div  :style="content_width+';margin-right: auto;margin-left: auto'">
+                    <div style="float: left;width: 33%;padding: 30px">
+                        <div class="hotel_content_title">品牌和荣誉</div>
+                        <p class="font_normal" v-html="markdown(hotel.honor)">
 
                         </p>
                     </div>
-                    <div style="float: left;width: 50%;padding: 30px">
+                    <div style="float: left;width: 33%;padding: 30px">
+                        <div class="hotel_content_title">主要奖项</div>
+                        <p class="font_normal" v-html="markdown(hotel.honor)">
+
+                        </p>
+                    </div>
+                    <div style="float: left;width: 33%;padding: 30px">
                         <div class="hotel_content_title">礼宾服务</div>
-                        <div style="font-size: 14px;line-height: 28px;font-weight: 200">
+                        <div class="font_normal">
                             致游的顾问团队很乐意为您提供免费的礼宾服务
                             <br/>
                             <br/>
@@ -572,7 +606,7 @@
                         <div style="font-size: 20px">
                             <br/>
                             周一至周六 10:00 - 19:00<br/>
-                            <strong>4001-567-165</strong>
+                            <span>4001-567-165</span>
                         </div>
                     </div>
                     <div style="clear: both"></div>
@@ -580,7 +614,7 @@
                 </div>
             </div>
             <div class="hotel_footer" id="footer">
-                <div style="text-align: center;color: lightgrey;margin-left: auto;margin-right: auto;width: 60%;padding: 30px 0;">
+                <div :style="content_width+';text-align: center;color: lightgrey;margin-left: auto;margin-right: auto;padding: 30px 0;'">
                     <div style="float: left;width: 25%">
                         <div>礼宾服务</div>
                         <div>联系我们</div>
