@@ -50,7 +50,7 @@ class IndexController extends Controller
     }
     public function test(Request $request){
 //        $res = Hotel::withTrashed()->paginate(2);
-        $res = Hotel::paginate(3);
+        $res = Hotel::paginate(20);
         return response()->json(
             [
                 "ok"=>0,
@@ -65,7 +65,7 @@ class IndexController extends Controller
                     ->orWhere("name_en",'like', '%'.$keyword."%")
                     ->orWhere("location.country",'like', '%'.$keyword."%")
                     ->orWhere("location.city",'like', '%'.$keyword."%")
-                    ->paginate(3);
+                    ->paginate(20);
         $res->appends(["keyword"=>$keyword]);
         return response()->json(
             [
