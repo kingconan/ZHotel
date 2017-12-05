@@ -29,7 +29,7 @@ function zhotel_markdown(str) {//simple markdown parser
             gallery = 0;
             if(gallery_str){
                 html = html + gallery_pre + gallery_str + gallery_post;
-                html = html + '<br />'
+                //html = html + '<br />'
             }
             gallery_str = '';
         }
