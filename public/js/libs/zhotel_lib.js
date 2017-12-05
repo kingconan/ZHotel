@@ -94,9 +94,6 @@ function zhotel_markdown(str) {//simple markdown parser
                 }
             }
         }
-        else if (item.indexOf("{") == 0) {
-
-        }
         else {
             html = html + item;
             html = html + '<br />';

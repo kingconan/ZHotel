@@ -421,6 +421,64 @@ class IndexController extends Controller
     }
 
 
+    public function chromeTest(Request $request){
+        Log::info("chrome test");
+        $cnt = 0;
+        $cnt_n = 0;
+        $json = $request->json()->all();
+        $hotel = Hotel::find($json["id"]);
+        if($hotel){
+            $arr = $json["arr"];
+
+            $rooms = $hotel->rooms;
+            foreach ($arr as $key=>$item) {
+                $found = false;
+                foreach($rooms as $room){
+                    if($room["name"] == $item["name"]){
+                        $found = true;
+                        break;
+                    }
+                }
+                if(!$found){
+                    list($usec, $sec) = explode(" ", microtime());
+                    $empty = [
+                        "name" => $item["name"],
+                        "highlight" => $item["highlight"],
+                        "facilities" => $item["facilities"],
+                        "adult"=>"2",
+                        "children"=>"0",
+                        "children_age"=>"12",
+                        "description"=>"",
+                        "id"=>"room.".$sec.$usec,
+                        "images_str"=>"",
+                        "info"=>"",
+                        "online"=>"0",
+                    ];
+                    $cnt++;
+                    array_push($rooms,$empty);
+                }
+                else{
+                    $cnt_n++;
+                }
+                $hotel->rooms = $rooms;
+                $hotel->save();
+            }
+            return response()->json(
+                [
+                    "ok"=>0,
+                    "msg"=>"操作成功: 添加房型 <span style='color:green;font-size: 20px'>".$cnt."</span> 个。 重复房型名 <span style='color:red;font-size: 20px'>".$cnt_n."</span>个",
+                    "obj"=>$hotel
+                ]
+            );
+        }
+        return response()->json(
+            [
+                "ok"=>1,
+                "msg"=>"not found hotel",
+                "obj"=>""
+            ]
+        );
+    }
 
 
 

@@ -304,7 +304,7 @@
         .markdown-image{
             width: 100%;
             margin: 8px 0;
-            max-height: 150px;
+            max-height: 180px;
             object-fit: cover;
         }
         .bg_progress{
@@ -345,7 +345,7 @@
                     <div class="box" style="padding: 30px">
                         <div style="padding: 15px 0">
                             <div style="float: left;width:500px">
-                                <z-float-input placeholder="hotel refer link here" name="name" dom_id="magic_url"></z-float-input>
+                                <z-float-input placeholder="booking or lhw.cn" name="name" dom_id="magic_url"></z-float-input>
                             </div>
                             <button v-on:click="magic_url" style="float: left;margin-left: 10px;height: 34px;width: 120px"
                                     type="button" class="btn btn-default btn-sm" data-loading-text="parsing...">TRY</button>
@@ -1200,6 +1200,7 @@
                 var empty = {
                     id : id,
                     name : name,
+                    name_en : "",
                     online : 1,
                     description : "",
                     highlight : "",
@@ -1497,6 +1498,45 @@
                                     if(s){
                                         self.hotel.location.country = s.country_name;
                                         self.hotel.location.continent = s.continent;
+                                    }
+                                }
+                                else if(d.refer=="leading"){
+                                    console.log("magic link");
+                                    self.hotel.description = d.description;
+                                    self.hotel.name = d.name;
+                                    self.hotel.name_en = d.name_en;
+                                    self.hotel.honor = d.honor;
+                                    self.hotel.location.lat = d.lat;
+                                    self.hotel.location.lng = d.lng;
+                                    self.hotel.location.address = d.address;
+                                    self.hotel.location.city = d.city;
+                                    self
+                                    var s = try_to_find(d.city);
+                                    if(s){
+                                        self.hotel.location.country = s.country_name;
+                                        self.hotel.location.continent = s.continent;
+                                    }
+                                    if(d.room){
+
+                                        for(var i= 0,len = d.room.length;i<len;i++){
+                                            var id = "room."+performance.now();
+                                            var empty = {
+                                                id : id,
+                                                name : d.room[i].name,
+                                                name_en : d.room[i].name_en,
+                                                online : 1,
+                                                description : "",
+                                                highlight : d.room[i].highlight,
+                                                zy : "",
+                                                info : "",
+                                                facilities : "",
+                                                adult : d.room[i].adult,
+                                                children : d.room[i].children,
+                                                children_age : "12",
+
+                                            }
+                                            self.hotel.rooms.splice(i, 0, empty);
+                                        }
                                     }
                                 }
                                 else{
