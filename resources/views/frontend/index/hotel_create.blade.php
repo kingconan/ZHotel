@@ -719,7 +719,7 @@
                 runtimes: 'html5,flash,html4',      // 上传模式，依次退化
                 browse_button: 'pickfiles',
                 uptoken_url: '/qiniu/token',
-                get_new_uptoken: false,             // 设置上传文件的时候是否每次都重新获取新的uptoken
+                get_new_uptoken: true,             // 设置上传文件的时候是否每次都重新获取新的uptoken
                 domain: 'http://oytstg973.bkt.clouddn.com',     // bucket域名，下载资源时用到，必需
                 max_file_size: '20mb',             // 最大文件体积限制
                 flash_swf_url: 'https://cdn.staticfile.org/plupload/2.1.9/Moxie.swf',  //引入flash，相对路径
@@ -783,7 +783,7 @@
                 runtimes: 'html5,flash,html4',      // 上传模式，依次退化
                 browse_button: 'qn_custom',
                 uptoken_url: '/qiniu/token',
-                get_new_uptoken: false,             // 设置上传文件的时候是否每次都重新获取新的uptoken
+                get_new_uptoken: true,             // 设置上传文件的时候是否每次都重新获取新的uptoken
                 domain: 'http://oytstg973.bkt.clouddn.com',     // bucket域名，下载资源时用到，必需
                 max_file_size: '20mb',             // 最大文件体积限制
                 flash_swf_url: 'https://cdn.staticfile.org/plupload/2.1.9/Moxie.swf',  //引入flash，相对路径

@@ -289,6 +289,25 @@ class IndexController extends Controller
             ]
         );
     }
+    private function _fetchImage($_id,$url){
+        if(!$_id){
+            $_id = "none";
+        }
+        $url_pure = strtok($url, '?');
+        $ext_arr = explode(".",$url_pure);
+        $ext = "jpg";
+        if($ext_arr && count($ext_arr) > 1){
+            $ext = $ext_arr[count($ext_arr)-1];
+        }
+        $auth = new Auth(IndexController::AK, IndexController::SK);
+        $bucket = 'zhotel';
+        $token = $auth->uploadToken($bucket);
+        $uploadMgr = new BucketManager($auth);
+        $key = "zhotel_".$_id."_".time().'.'.$ext;
+        list($ret, $err) = $uploadMgr->fetch($url,$bucket,$key);
+        if($err) return null;
+        return IndexController::Q_DOMAIN."/".$ret["key"];
+    }
     public function qToken(Request $request){
         $auth = new Auth(IndexController::AK, IndexController::SK);
         $bucket = 'zhotel';
@@ -421,7 +440,7 @@ class IndexController extends Controller
     }
 
 
-    public function chromeTest(Request $request){
+    public function chromeTest(Request $request){//aman chrome plugin api
         Log::info("chrome test");
         $cnt = 0;
         $cnt_n = 0;
@@ -441,6 +460,14 @@ class IndexController extends Controller
                 }
                 if(!$found){
                     list($usec, $sec) = explode(" ", microtime());
+                    $image_arr = explode(PHP_EOL,trim($item["images_str"]));
+                    $image_str = "";
+                    foreach($image_arr as $url){
+                        $res = self::_fetchImage($hotel->_id,$url);
+                        if($res){
+                            $image_str = $image_str . $res . PHP_EOL;
+                        }
+                    }
                     $empty = [
                         "name" => $item["name"],
                         "highlight" => $item["highlight"],
@@ -450,7 +477,7 @@ class IndexController extends Controller
                         "children_age"=>"12",
                         "description"=>"",
                         "id"=>"room.".$sec.$usec,
-                        "images_str"=>"",
+                        "images_str"=>$image_str,
                         "info"=>"",
                         "online"=>"0",
                     ];
