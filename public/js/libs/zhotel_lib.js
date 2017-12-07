@@ -101,3 +101,11 @@ function zhotel_markdown(str) {//simple markdown parser
     }
     return html;
 }
+function zhotel_clear_url_parameters(url){
+    var urlparts= url.split('?');
+    if (urlparts.length>=2) {
+        return urlparts[0];
+    } else {
+        return url;
+    }
+}

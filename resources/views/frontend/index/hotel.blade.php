@@ -383,6 +383,13 @@
             top: 50%;
             margin: 0 auto;
         }
+        .plan_check{
+            list-style-image:url("{{URL::to('images/hotel_li_check.png')}}");
+            padding: 0 20px;
+            line-height: 24px;
+            color: #666666;
+            font-size: 14px;
+        }
     </style>
 @endsection
 @section('content')
@@ -558,8 +565,8 @@
                                             </div>
                                             <div style="display: table-cell;width: 528px;border-top: 1px solid lightgrey;min-height: 600px">
                                                 {{--<div style="height: 1px;width: 100%;background-color: lightgrey"></div>--}}
-                                                <div style="padding:30px">
-                                                    <table v-if="room.price && room.price.plans">
+                                                <div v-if="room.price" style="padding:30px">
+                                                    <table v-if="room.price.plans">
                                                         <tr v-for="(plan, index) in room.price.plans" style="border: 1px solid lightgrey;">
                                                             <td style="padding: 12px" width="200px"><%plan.name%></td>
                                                             <td style="padding: 12px" v-if="plan.ok"><%plan.price%> </td>
@@ -567,6 +574,16 @@
                                                         </tr>
                                                     </table>
                                                     <div v-else>暂无价格</div>
+                                                    <div style="height: 30px;width: 30px"></div>
+                                                    <div style="font-size: 16px;">费用包含</div>
+                                                    <ul class="plan_check">
+                                                       <li v-for="item in str_2_arr(room.price.include)"><%item%></li>
+                                                    </ul>
+                                                    <div style="height: 30px;width: 30px"></div>
+                                                    <div style="font-size: 16px;">退改规则</div>
+                                                    <ul class="plan_check">
+                                                        <li v-for="item in str_2_arr(room.price.cancellation)"><%item%></li>
+                                                    </ul>
                                                 </div>
                                             </div>
                                             <div style="clear: both;"></div>

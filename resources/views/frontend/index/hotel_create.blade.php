@@ -496,7 +496,7 @@
                                         <z-float-textarea placeholder="点击图库选择" v-model="hotel.rooms[current_room].images_str" name="name"></z-float-textarea>
                                     </div>
                                     <div>
-                                        <img v-for="item in str_2_arr(hotel.rooms[current_room].images_str)" :src="item"
+                                        <img v-for="item in str_2_arr(hotel.rooms[current_room].images_str)" :src="item+'?imageView2/2/w/200'"
                                              style="width: 100px;margin-left: 3px;margin-bottom: 3px" />
                                     </div>
                                 </div>
@@ -566,7 +566,7 @@
 
                         <div>
                             <div v-for="(image,index) in sortedCover" style="float: left;width: 200px;margin-right: 10px;margin-bottom: 10px;position: relative">
-                                <img :src="image.url" style="object-fit: cover;width: 200px;height: 160px"/>
+                                <img :src="image.url+'?imageView2/2/w/200'" style="object-fit: cover;width: 200px;height: 160px"/>
                                 <div style="margin-top: 6px">
                                     <button v-on:click="set_image_valid(index)" type="button" class="btn btn-default btn-sm" style="color:green">有效</button>
                                     <button v-on:click="set_image_top(index)" type="button" class="btn btn-default btn-sm" style="color:blue">置顶</button>
@@ -577,8 +577,6 @@
                                     <input v-model="image.tag" class="form-control input_table" placeholder="tag" style="max-width: 120px" />
                                 </div>
                                 <span v-if="image.status == 0" style="position: absolute;left:0;top:0;background-color: darkred;padding: 3px 6px;font-size: 8px;color: white">无效</span>
-                                {{--<span v-else-if="image.status == 1" style="position: absolute;left:0;top:0;background-color: whitesmoke;padding: 3px 6px;font-size: 8px"><% image.status %></span>--}}
-                                {{--<span v-else style="position: absolute;left:0;top:0;background-color: darkgreen;padding: 3px 6px;font-size: 8px;color: white"><% image.status %></span>--}}
                             </div>
                         </div>
 
@@ -592,7 +590,7 @@
                     <input class="form-control" placeholder="filter by tag" v-model="filter_words" />
                     <div class="popover-content">
                         <div v-for="(image,index) in filter_covers" v-on:click="select_image" style="float: left;width: 200px;margin-right: 10px;margin-bottom: 10px;position: relative">
-                            <img :src="image.url" style="object-fit: cover;width: 200px;height: 160px"/>
+                            <img :src="image.url+'?imageView2/2/w/200'" style="object-fit: cover;width: 200px;height: 160px"/>
                             <div style="margin-top: 6px">
                                 <%image.tag%>
                             </div>
@@ -1407,7 +1405,8 @@
                 var type = $(self).attr("data-image");
                 var editor_j = $(self).parent().parent().find('textarea');
                 var editor = editor_j[0];
-                var text = $(e.target).parent().find("img").attr("src");
+                var text = zhotel_clear_url_parameters($(e.target).parent().find("img").attr("src"));
+
                 if(type && type == "dir"){
                     text = text + "\n";
                 }

@@ -196,7 +196,8 @@ class IndexController extends Controller
             foreach($contract["rooms"] as $c){
                 if($c["room_id"] == $room_id){
                     //#1 basic price
-                    $ans = self::calculateRoomPrice($c,$checkin,$checkout,$adult,$children,$children_age);
+                    $ans = self::calculateRoomPrice($c,$checkin,$checkout,$adult,$children,$children_age
+                        ,$contract["price_rate"],$contract["price_unit"]);
                     if($ans){
                         $room["price"] = $ans;
                     }
@@ -213,8 +214,9 @@ class IndexController extends Controller
             ]
         );
     }
-    private function calculateRoomPrice($plan,$checkin,$checkout,$adult,$children,$ages){
+    private function calculateRoomPrice($plan,$checkin,$checkout,$adult,$children,$ages,$price_rate,$price_unit){
         Log::info("calculateRoomPrice");
+        Log::info($plan);
         $last_night = self::lastNightDate($checkout);
         $room_prices = $plan["prices"];
         $plans = $plan["plans"];
@@ -275,14 +277,14 @@ class IndexController extends Controller
             "reason"=> true
         ]);
         //优化价格计划
-        foreach($plans as $plan){
+        foreach($plans as $item){
             //无班期拒绝
-            if($checkin < $plan["date_from"]  || $last_night > $plan["date_to"]) {
+            if($checkin < $item["date_from"]  || $last_night > $item["date_to"]) {
                 continue;
             }
 
             $ok = true;
-            foreach($plan["dates_not"] as $not){
+            foreach($item["dates_not"] as $not){
                 if($checkin >= $not["date_from"] || $checkin <= $not["date_to"]){
                     $ok = false;
                     break;
@@ -295,7 +297,7 @@ class IndexController extends Controller
             //特殊日期拒绝
             if($ok == false){
                 array_push($ans_plans,[
-                    "name"=>$plan["name"],
+                    "name"=>$item["name"],
                     "price"=>-1,
                     "ok"=> false,
                     "reason"=>"date not allowed"
@@ -303,55 +305,55 @@ class IndexController extends Controller
                 continue;
             }
             //最低入住晚数拒绝
-            if($total_cnt < (int)$plan["night_min"]){
+            if($total_cnt < (int)$item["night_min"]){
                 array_push($ans_plans,[
-                    "name"=>$plan["name"],
+                    "name"=>$item["name"],
                     "price"=>-1,
                     "ok"=> false,
-                    "reason"=>"min nights ".$plan["night_min"]
+                    "reason"=>"min nights ".$item["night_min"]
                 ]);
                 continue;
             }
 
             $all_price = -1;
-            if($plan["type"] == "住X付Y"  ){
-                $x = (int)$plan["obj"]["x"];
-                $y = (int)$plan["obj"]["y"];
+            if($item["type"] == "住X付Y"  ){
+                $x = (int)$item["obj"]["x"];
+                $y = (int)$item["obj"]["y"];
                 $left = $total_cnt % $x;
                 $num = ($total_cnt - $left)/$x;
                 $all_price = $num*$y*$ans[0] + $left*$ans[0];
             }
-            else if($plan["type"] == "日期T之前Z折扣"){
-                if($checkout > $plan["obj"]["date"]){
+            else if($item["type"] == "日期T之前Z折扣"){
+                if($checkout > $item["obj"]["date"]){
                     array_push($ans_plans,[
-                        "name"=>$plan["name"],
+                        "name"=>$item["name"],
                         "price"=>-1,
                         "ok"=> false,
-                        "reason"=>"before date  ".$plan["obj"]["date"]
+                        "reason"=>"before date  ".$item["obj"]["date"]
                     ]);
                     continue;
                 }
-                $all_price = ceil($basic_price * (int)$plan["obj"]["z"] / 100);
+                $all_price = ceil($basic_price * (int)$item["obj"]["z"] / 100);
             }
-            else if($plan["type"] == "提起X天Z折扣"){
+            else if($item["type"] == "提起X天Z折扣"){
                 $now = Carbon::now();
                 $left_day = self::diffDateString($now, $checkin);
 
-                if($left_day <  0 || $left_day < (int)$plan["obj"]["day"]){
+                if($left_day <  0 || $left_day < (int)$item["obj"]["day"]){
                     array_push($ans_plans,[
-                        "name"=>$plan["name"],
+                        "name"=>$item["name"],
                         "price"=>-1,
                         "ok"=> false,
-                        "reason"=>"days  ".$plan["obj"]["day"]
+                        "reason"=>"days  ".$item["obj"]["day"]
                     ]);
                     continue;
                 }
-                $all_price = ceil($basic_price * (int)$plan["obj"]["z"] / 100);
+                $all_price = ceil($basic_price * (int)$item["obj"]["z"] / 100);
             }
 
             //有效优惠
             array_push($ans_plans,[
-                "name"=>$plan["name"],
+                "name"=>$item["name"],
                 "price"=>$all_price,
                 "ok"=> true,
                 "reason"=>""
@@ -401,13 +403,16 @@ class IndexController extends Controller
         if($find == 2){
             return [
                 "basic" => $ans,
-                "plans" => $ans_plans
+                "plans" => $ans_plans,
+                "cancellation" => isset($plan["cancellation"]) ? $plan["cancellation"] : "",
+                "include" => isset($plan["include"]) ? $plan["include"] : "",
             ];
         }
         else{
             return null;
         }
     }
+
 
     private function diffDateString($date1,$date2){
         //return $date2 - $date1
