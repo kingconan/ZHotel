@@ -359,7 +359,7 @@ class IndexController extends Controller
         }
 
         //额外 成人费用
-        if($adult > 2 && $plan["extra_adult"]){
+        if($adult > 2 && isset($plan["extra_adult"]) && $plan["extra_adult"]){
             foreach($plan["extra_adult"] as $item){
                 /**
                  * date_from date_to price price
@@ -369,7 +369,7 @@ class IndexController extends Controller
             }
         }
         //额外 儿童费用
-        if($children > 0 && $plan["extra_children"]){
+        if($children > 0 && isset($plan["extra_children"]) && $plan["extra_children"]){
             /**
              *  date_from date_to age_from age_to price
              * foreach children_age as age
@@ -379,12 +379,12 @@ class IndexController extends Controller
              */
         }
         //强制费用 plus type=0,
-        if($plan["plus"]){
+        if(isset($plan["plus"]) && $plan["plus"]){
             //adult[] date_from date_to price
             //children[] date_from date_to age_from age_to price
         }
         //入住限制 limit
-        if($plan["limit"]){
+        if(isset($plan["limit"]) && $plan["limit"]){
             foreach ($plan["limit"] as $item) {
                 /**
                  * date_from date_to night_max night_min
