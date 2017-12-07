@@ -310,6 +310,7 @@
         .bg_progress{
             padding:6px;font-size:10px;margin-top: 6px;border: 1px solid lightgrey;background-color: dimgrey;color:white
         }
+
     </style>
 @endsection
 @section('content')

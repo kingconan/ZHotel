@@ -375,10 +375,6 @@
             color:#999999;
             font-weight: 200;
         }
-        .font_cap{
-            font-size: 30px;
-            font-weight: 300;
-        }
         .toast-top-center {
             top: 50%;
             margin: 0 auto;
@@ -389,6 +385,10 @@
             line-height: 24px;
             color: #666666;
             font-size: 14px;
+        }
+        strong{
+            font-size: 30px;
+            font-weight: 300;
         }
     </style>
 @endsection
