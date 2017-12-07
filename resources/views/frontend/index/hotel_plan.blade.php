@@ -385,11 +385,16 @@
                                                         <input class="form-control checkout" placeholder="结束日期" v-model="child.date_to"/>
                                                     </div>
                                                 </td>
-                                                <td width="200px">
-                                                    <input class="form-control table_input_s" type="number" min="0" max="18" placeholder="年龄起" v-model="child.age_from"/>
-                                                    <input class="form-control table_input_s" style="margin-left: 8px" type="number" min="0" max="18" placeholder="年龄止" v-model="child.age_to"/>
+                                                <td width="320px">
+                                                    <button v-on:click="add_extra_children_age_for_room(childIndex)" type="button" class="btn btn-default btn-sm">+年龄</button>
+                                                    <div v-for="(age,ageIndex) in child.ages">
+                                                        <input class="form-control table_input_s" type="number" min="0" max="18" placeholder="年龄起" v-model="age.age_from"/>
+                                                        <input class="form-control table_input_s" style="margin-left: 8px" type="number" min="0" max="18" placeholder="年龄止" v-model="age.age_to"/>
+                                                        <input class="form-control table_input_s" style="margin-left: 8px" type="number" placeholder="价格"  v-model="age.price" />
+                                                        <button v-on:click="delete_extra_children_age_for_room(childIndex,ageIndex)" type="button" class="btn btn-default btn-sm"><i class="fa fa-times" aria-hidden="true"></i></button>
+                                                        <div style="clear: both"></div>
+                                                    </div>
                                                 </td>
-                                                <td width="100px"><input class="form-control" type="number" placeholder="价格"  v-model="child.price" /></td>
                                                 <td><button v-on:click="delete_extra_children_for_room(childIndex)" type="button" class="btn btn-sm btn-default" style="color: indianred">
                                                         <i class="fa fa-times" aria-hidden="true"></i>
                                                     </button></td>
@@ -445,11 +450,16 @@
                                                             <input class="form-control checkout" placeholder="结束日期" v-model="child.date_to"/>
                                                         </div>
                                                     </td>
-                                                    <td width="200px">
-                                                        <input class="form-control table_input_s" type="number" min="0" max="18" placeholder="年龄起" v-model="child.age_from"/>
-                                                        <input class="form-control table_input_s" style="margin-left: 8px" type="number" min="0" max="18" placeholder="年龄止" v-model="child.age_to"/>
+                                                    <td width="310px">
+                                                        <button  v-on:click="add_plus_children_age_for_room(plusIndex,childIndex)" type="button" class="btn btn-default btn-sm">+年龄</button>
+                                                        <div v-for="(age,ageIndex) in child.ages">
+                                                            <input class="form-control table_input_s" type="number" min="0" max="18" placeholder="年龄起" v-model="age.age_from"/>
+                                                            <input class="form-control table_input_s" style="margin-left: 8px" type="number" min="0" max="18" placeholder="年龄止" v-model="age.age_to"/>
+                                                            <input class="form-control table_input_s" style="margin-left: 8px"  type="number" placeholder="价格"  v-model="age.price" />
+                                                            <button  v-on:click="delete_plus_children_age_for_room(plusIndex,childIndex,ageIndex)" type="button" class="btn btn-default btn-sm"><i class="fa fa-times" aria-hidden="true"></i></button>
+                                                            <div style="clear: both"></div>
+                                                        </div>
                                                     </td>
-                                                    <td width="100px"><input class="form-control" type="number" placeholder="价格"  v-model="child.price" /></td>
                                                     <td><button v-on:click="delete_plus_children_for_room(childIndex,plusIndex)" type="button" class="btn btn-sm btn-default" style="color: indianred"><i class="fa fa-times" aria-hidden="true"></i></button></td>
                                                 </tr>
                                                 </tbody>
@@ -708,10 +718,11 @@
                                                 <td width="220px">
                                                     <%child.date_from%><span style="padding: 0 12px;color: grey">~</span><%child.date_to%>
                                                 </td>
-                                                <td width="220px">
-                                                    <%child.age_from%>岁<span style="padding: 0 12px;color: grey">~</span><%child.age_to%>岁
+                                                <td width="300px">
+                                                    <div v-for="age in child.ages">
+                                                        <%age.age_from%>岁<span style="padding: 0 12px;color: grey">~</span><%age.age_to%>岁 <%age.price%>
+                                                    </div>
                                                 </td>
-                                                <td><%child.price%></td>
                                             </tr>
                                             </tbody>
                                         </table>
@@ -745,10 +756,11 @@
                                                     <td width="220px">
                                                         <%child.date_from%><span style="padding: 0 12px;color: grey">~</span><%child.date_to%>
                                                     </td>
-                                                    <td width="220px">
-                                                        <%child.age_from%>岁<span style="padding: 0 12px;color: grey">~</span><%child.age_to%>岁
+                                                    <td width="310px">
+                                                        <div v-for="age in child.ages">
+                                                            <%age.age_from%>岁<span style="padding: 0 12px;color: grey">~</span><%age.age_to%>岁 <%age.price%>
+                                                        </div>
                                                     </td>
-                                                    <td><%child.price%></td>
                                                 </tr>
                                                 </tbody>
                                             </table>
@@ -968,9 +980,14 @@
                                     {
                                         date_from : "2017-10-10",
                                         date_to : "2017-10-10",
-                                        age_from : "",
-                                        age_to : "",
-                                        price : ""
+                                        ages : [
+                                            {
+                                                age_from : "",
+                                                age_to : "",
+                                                price : ""
+                                            }
+                                        ]
+
                                     }
                                 ],
                                 plus_adult : [//强制费用
@@ -1524,9 +1541,12 @@
                 var empty = {
                     date_from : "",
                     date_to : "",
-                    age_from : "",
-                    age_to : "",
-                    price : ""
+                    ages : [{
+                        age_from : "",
+                        age_to : "",
+                        price : ""
+                    }]
+
                 };
                 var room = this.hotel.contracts[this.currentIndex].rooms[this.currentRoom];
                 if(!room.hasOwnProperty("extra_children")){
@@ -1535,9 +1555,25 @@
                 room.extra_children.push(empty);
                 this.$forceUpdate();
             },
+            add_extra_children_age_for_room : function(index){
+                var empty = {
+                    age_from : "",
+                    age_to : "",
+                    price : ""
+                };
+                var children = this.hotel.contracts[this.currentIndex].rooms[this.currentRoom].extra_children;
+                children[index].ages.push(empty);
+                this.$forceUpdate();
+            },
             delete_extra_children_for_room : function(index){
                 if(confirm("确定要删除额外人-儿童费用  "+(index+1)+"?")){
                     this.hotel.contracts[this.currentIndex].rooms[this.currentRoom].extra_children.splice(index,1);
+                    this.$forceUpdate();
+                }
+            },
+            delete_extra_children_age_for_room : function(childIndex,index){
+                if(confirm("确定要删除额外人-儿童年龄  "+(index+1)+"?")){
+                    this.hotel.contracts[this.currentIndex].rooms[this.currentRoom].extra_children[childIndex].ages.splice(index,1);
                     this.$forceUpdate();
                 }
             },
@@ -1584,9 +1620,11 @@
                 var empty = {
                     date_from : "",
                     date_to : "",
-                    age_from : "",
-                    age_to : "",
-                    price : ""
+                    ages : [{
+                        age_from : "",
+                        age_to : "",
+                        price : ""
+                    }]
                 };
                 var plus = this.hotel.contracts[this.currentIndex].rooms[this.currentRoom].plus[index];
                 if(!plus.hasOwnProperty("children")){
@@ -1595,9 +1633,26 @@
                 plus.children.push(empty);
                 this.$forceUpdate();
             },
+            add_plus_children_age_for_room : function(index,childIndex){
+                var empty = {
+                    age_from : "",
+                    age_to : "",
+                    price : ""
+                };
+                var children = this.hotel.contracts[this.currentIndex].rooms[this.currentRoom].plus[index].children;
+
+                children[childIndex].ages.push(empty);
+                this.$forceUpdate();
+            },
             delete_plus_children_for_room : function(index,pIndex){
                 if(confirm("确定要删除额外-儿童费用  "+(pIndex+1)+"?")){
                     this.hotel.contracts[this.currentIndex].rooms[this.currentRoom].plus[pIndex].children.splice(index,1);
+                    this.$forceUpdate();
+                }
+            },
+            delete_plus_children_age_for_room : function(index,childIndex,pIndex){
+                if(confirm("确定要删除额外-儿童年龄  "+(pIndex+1)+"?")){
+                    this.hotel.contracts[this.currentIndex].rooms[this.currentRoom].plus[index].children[childIndex].ages.splice(pIndex,1);
                     this.$forceUpdate();
                 }
             },

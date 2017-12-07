@@ -40,6 +40,7 @@ Route::post('/api/search/hotel', 'Backend\IndexController@searchHotel');
 Route::post('/api/magic/link', 'Backend\IndexController@magicLink');
 Route::post('/api/update/contract', 'Backend\IndexController@updateContract');
 Route::post('/api/parse/hotel', 'Backend\IndexController@parseHotel');
+Route::post('/api/price/hotel', 'Backend\IndexController@checkPrice');
 Route::get('/api/parse/get_rate', 'Backend\IndexController@getRate');
 
 Route::post('/chrome/test', 'Backend\IndexController@chromeTest');

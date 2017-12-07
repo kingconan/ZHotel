@@ -12,6 +12,7 @@ use Qiniu\Storage\BucketManager;
 use Qiniu\Storage\UploadManager;
 use GuzzleHttp\Client;
 use Illuminate\Support\Facades\Log;
+use Carbon\Carbon;
 
 class IndexController extends Controller
 {
@@ -150,29 +151,274 @@ class IndexController extends Controller
         );
 
     }
-    public function getRoomPrice($id, Request $request){
-        $res = Hotel::find($id);
-        if(!$res){
+    public function checkPrice(Request $request){
+        $json = $request->json()->all();
+        $id = $json["_id"];
+        $checkin = $json["checkin"];
+        $checkout = $json["checkout"];
+        $adult = $json["adult"];
+        $children = $json["children"];
+        $children_age = $json["children_age"];
+        $age_str = "";
+        foreach($children_age as $age){
+            $age_str = $age_str."-".$age;
+        }
+
+        $hotel = Hotel::find($id);
+        if(!$hotel){
             return response()->json(
                 [
                     "ok"=>1,
-                    "msg"=>"not found",
+                    "msg"=>"not found hotel",
                     "obj"=>null
                 ]
             );
         }
-        $checkin = $request->input("checkin");
-        $checkout = $request->input("checkout");
-        $adult = $request->input("adult");
-        $children = $request->input("children");
 
-        $contracts = $res->contracts;
-        foreach($contracts as $contract){
-            $rooms = $contract["rooms"];
-            foreach($rooms as $room){
+        //#1 select contract
+        //#2 select rooms
+        //#3 calculate price for every room
 
+        //#1 TODO
+        $contract = $hotel->contracts[0];
+
+        //#2
+        $rooms = [];
+        foreach ($hotel->rooms as $room) {
+            if(isset($room["online"]) && $room["online"] == 1){
+                array_push($rooms,$room);
             }
         }
+
+        foreach($rooms as &$room){
+            $room_id = $room["id"];
+
+            foreach($contract["rooms"] as $c){
+                if($c["room_id"] == $room_id){
+                    //#1 basic price
+                    $ans = self::calculateRoomPrice($c,$checkin,$checkout,$adult,$children,$children_age);
+                    if($ans){
+                        $room["price"] = $ans;
+                    }
+                    break;
+                }
+            }
+        }
+
+        return response()->json(
+            [
+                "ok"=>0,
+                "msg"=>"ok",
+                "obj"=>$rooms
+            ]
+        );
+    }
+    private function calculateRoomPrice($plan,$checkin,$checkout,$adult,$children,$ages){
+        Log::info("calculateRoomPrice");
+        $last_night = self::lastNightDate($checkout);
+        $room_prices = $plan["prices"];
+        $plans = $plan["plans"];
+
+        $find = 0;
+        $ans_plans = [];
+        $ans = [];
+        $total_cnt = self::diffDateString($checkin,$checkout);
+        $basic_price = 0;
+        foreach($room_prices as $price){
+            //先找checkin 范围
+            if($find == 0){
+                if($checkin <= $price["date_to"] && $checkin >= $price["date_from"]){
+                    $find++;
+                    if($checkout <= $price["date_to"]){
+                        $find++;
+                        $count = self::diffDateString($checkin,$checkout);
+                        for($i=0;$i<$count;$i++){
+                            $basic_price = $basic_price + $price["price"];
+                            array_push($ans,$price["price"]);
+                        }
+                    }
+                    else{
+                        //算一部分钱
+                        $count = self::diffDateString($checkin,$price["date_to"]) + 1;
+                        for($i=0;$i<$count;$i++){
+                            $basic_price = $basic_price + $price["price"];
+                            array_push($ans,$price["price"]);
+                        }
+                    }
+                }
+            }
+            else if($find == 1){
+                if($checkout <= $price["date_to"]){
+                    $find++;
+                    $count = self::diffDateString($price["date_from"],$checkout);
+                    for($i=0;$i<$count;$i++){
+                        $basic_price = $basic_price + $price["price"];
+                        array_push($ans,$price["price"]);
+                    }
+                }
+                else{//
+                    $count = self::diffDateString($price["date_from"],$price["date_to"]) + 1;
+                    for($i=0;$i<$count;$i++){
+                        $basic_price = $basic_price + $price["price"];
+                        array_push($ans,$price["price"]);
+                    }
+                }
+            }
+        }
+
+
+        //基本价格
+        array_push($ans_plans,[
+            "name"=>"basic",
+            "price"=>$basic_price,
+            "ok"=> true,
+            "reason"=> true
+        ]);
+        //优化价格计划
+        foreach($plans as $plan){
+            //无班期拒绝
+            if($checkin < $plan["date_from"]  || $last_night > $plan["date_to"]) {
+                continue;
+            }
+
+            $ok = true;
+            foreach($plan["dates_not"] as $not){
+                if($checkin >= $not["date_from"] || $checkin <= $not["date_to"]){
+                    $ok = false;
+                    break;
+                }
+                if($checkout >= $not["date_from"] || $checkout <= $not["date_to"]){
+                    $ok = false;
+                    break;
+                }
+            }
+            //特殊日期拒绝
+            if($ok == false){
+                array_push($ans_plans,[
+                    "name"=>$plan["name"],
+                    "price"=>-1,
+                    "ok"=> false,
+                    "reason"=>"date not allowed"
+                ]);
+                continue;
+            }
+            //最低入住晚数拒绝
+            if($total_cnt < (int)$plan["night_min"]){
+                array_push($ans_plans,[
+                    "name"=>$plan["name"],
+                    "price"=>-1,
+                    "ok"=> false,
+                    "reason"=>"min nights ".$plan["night_min"]
+                ]);
+                continue;
+            }
+
+            $all_price = -1;
+            if($plan["type"] == "住X付Y"  ){
+                $x = (int)$plan["obj"]["x"];
+                $y = (int)$plan["obj"]["y"];
+                $left = $total_cnt % $x;
+                $num = ($total_cnt - $left)/$x;
+                $all_price = $num*$y*$ans[0] + $left*$ans[0];
+            }
+            else if($plan["type"] == "日期T之前Z折扣"){
+                if($checkout > $plan["obj"]["date"]){
+                    array_push($ans_plans,[
+                        "name"=>$plan["name"],
+                        "price"=>-1,
+                        "ok"=> false,
+                        "reason"=>"before date  ".$plan["obj"]["date"]
+                    ]);
+                    continue;
+                }
+                $all_price = ceil($basic_price * (int)$plan["obj"]["z"] / 100);
+            }
+            else if($plan["type"] == "提起X天Z折扣"){
+                $now = Carbon::now();
+                $left_day = self::diffDateString($now, $checkin);
+
+                if($left_day <  0 || $left_day < (int)$plan["obj"]["day"]){
+                    array_push($ans_plans,[
+                        "name"=>$plan["name"],
+                        "price"=>-1,
+                        "ok"=> false,
+                        "reason"=>"days  ".$plan["obj"]["day"]
+                    ]);
+                    continue;
+                }
+                $all_price = ceil($basic_price * (int)$plan["obj"]["z"] / 100);
+            }
+
+            //有效优惠
+            array_push($ans_plans,[
+                "name"=>$plan["name"],
+                "price"=>$all_price,
+                "ok"=> true,
+                "reason"=>""
+            ]);
+        }
+
+        //额外 成人费用
+        if($adult > 2 && $plan["extra_adult"]){
+            foreach($plan["extra_adult"] as $item){
+                /**
+                 * date_from date_to price price
+                 * if nights in date_range :
+                 *   extract_adult = nights * price
+                 */
+            }
+        }
+        //额外 儿童费用
+        if($children > 0 && $plan["extra_children"]){
+            /**
+             *  date_from date_to age_from age_to price
+             * foreach children_age as age
+             *   if age in age_range & nights in date_range:
+             *      extract_child[] = nights*1*price
+             *
+             */
+        }
+        //强制费用 plus type=0,
+        if($plan["plus"]){
+            //adult[] date_from date_to price
+            //children[] date_from date_to age_from age_to price
+        }
+        //入住限制 limit
+        if($plan["limit"]){
+            foreach ($plan["limit"] as $item) {
+                /**
+                 * date_from date_to night_max night_min
+                 * if checkin & checkout in limit-date-range
+                 *    nights >= night_min && nights <= night_max
+                 * else
+                 *    return NULL
+                 */
+            }
+        }
+
+
+        Log::info($ans_plans);
+        if($find == 2){
+            return [
+                "basic" => $ans,
+                "plans" => $ans_plans
+            ];
+        }
+        else{
+            return null;
+        }
+    }
+
+    private function diffDateString($date1,$date2){
+        //return $date2 - $date1
+        $d1 = Carbon::parse($date1);
+        $d2 = Carbon::parse($date2);
+        return $d2->diffInDays($d1);
+    }
+    private function lastNightDate($checkout){
+        $c = Carbon::parse($checkout);
+        $d2 = $c->subDay(1);
+        return $d2->toDateString();
     }
     public function updateHotel( Request $request){
         $json = $request->json()->all();
