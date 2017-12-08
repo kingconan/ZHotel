@@ -51,8 +51,13 @@ desired effect
                 <span class="sr-only">Toggle navigation</span>
             </a>
             <!-- Navbar Right Menu -->
-            <div class="navbar-custom-menu">
-            </div>
+            {{--<div class="navbar-custom-menu">--}}
+                {{--<div style="padding: 15px">--}}
+                {{--<em style="color: #F0F0F0">{{Auth::user()->name}} :</em>--}}
+                {{--<span style="cursor: pointer;color: darkred"--}}
+                      {{--onclick="logout()">Sign out</span>--}}
+                {{--</div>--}}
+            {{--</div>--}}
         </nav>
     </header>
     <!-- Left side column. contains the logo and sidebar -->
@@ -123,5 +128,23 @@ desired effect
 <!-- AdminLTE App -->
 <script src="{{asset('js/min.js')}}"></script>
 @yield("script")
+<script>
+    function logout(){
+        $.ajax({
+            url:"/ss/logout",
+            type:'post',
+            data:{},
+            cache:false,
+            dataType:'json',
+            error:function(){
+
+            },
+            success:function(data){
+                console.log(data);
+                window.location = "/zhotel/ss/login";
+            }
+        });
+    }
+</script>
 </body>
 </html>

@@ -222,6 +222,7 @@
                             <div style="height: 1px;background-color: lightgrey;width: 100%"></div>
                         </div>
                         <div style="float: left;width: 800px;" class="room_setting">
+                            {{--编辑模式--}}
                             <div v-if="viewMode == 0">
                                 <div v-if="room_info" style="padding:0 15px">
                                     <div>
@@ -251,6 +252,18 @@
                                         <div>
                                             <label>+zy</label>
                                             <input class="form-control" type="number" placeholder="+zy" v-model="room_info.zy"/>
+                                        </div>
+
+                                        {{--基本价格的费用,退改,备注--}}
+                                        <div style="border: 1px dashed lightgrey;padding: 12px;margin-top: 10px">
+                                            <label>费用包含</label>
+                                            <textarea class="form-control" rows="6" placeholder="费用包含" v-model="room_info.include"></textarea>
+                                            <div style="height: 10px;width: 100%"></div>
+                                            <label>退改规则</label>
+                                            <textarea class="form-control" rows="6" placeholder="退改规则" v-model="room_info.cancellation"></textarea>
+                                            <div style="height: 10px;width: 100%"></div>
+                                            <label>备注</label>
+                                            <textarea class="form-control" rows="6" placeholder="备注"  v-model="room_info.memo"></textarea>
                                         </div>
                                     </div>
 
@@ -347,12 +360,23 @@
                                                     </td>
                                                 </tr>
                                             </table>
+                                            <div style="border: 1px dashed lightgrey;padding: 12px">
+                                                <label>费用包含</label>
+                                                <textarea class="form-control" rows="6" placeholder="费用包含" v-model="plan.include"></textarea>
+                                                <div style="height: 10px;width: 100%"></div>
+                                                <label>退改规则</label>
+                                                <textarea class="form-control" rows="6" placeholder="退改规则" v-model="plan.cancellation"></textarea>
+                                                <div style="height: 10px;width: 100%"></div>
+                                                <label>备注</label>
+                                                <textarea class="form-control" rows="6" placeholder="备注"  v-model="plan.memo"></textarea>
+                                            </div>
                                         </div>
                                         <button type="button" class="btn btn-sm btn-default"  v-on:click="add_plan_for_room">
                                             <span class="glyphicon glyphicon-plus" aria-hidden="true"></span> 优惠计划
                                         </button>
                                     </div>
 
+                                    {{--额外人费用--}}
                                     <div class="box">
                                         <h6 style="color: grey;font-weight: bolder">额外人费用</h6>
                                         <label>成人额外费用</label><button v-on:click="add_extra_adult_for_room" type="button" class="btn btn-default btn-sm">+额外人费用 - 成人</button>
@@ -403,6 +427,7 @@
                                         </table>
                                     </div>
 
+                                    {{--额外费用--}}
                                     <div class="box">
                                         <h6 style="color: grey;font-weight: bolder">额外费用</h6>
                                         <button type="button" v-on:click="add_plus_for_room" class="btn btn-default btn-sm">添加</button>
@@ -467,6 +492,7 @@
                                         </div>
                                     </div>
 
+                                    {{--入住限制--}}
                                     <div class="box">
                                         <h6 style="color: grey;font-weight: bolder">入住限制</h6>
                                         <button type="button" v-on:click="add_limit_for_room" class="btn btn-default btn-sm">添加</button>
@@ -492,19 +518,7 @@
                                         </table>
                                     </div>
 
-                                    <div class="box">
-                                        <h6 style="color: grey;font-weight: bolder">计划说明</h6>
-                                        <label>费用包含</label>
-                                        <textarea class="form-control" rows="6" placeholder="费用包含" v-model="room_info.include"></textarea>
-                                        <div style="height: 10px;width: 100%"></div>
-                                        <label>退改规则</label>
-                                        <textarea class="form-control" rows="6" placeholder="退改规则" v-model="room_info.cancellation"></textarea>
-                                        <div style="height: 10px;width: 100%"></div>
-                                        <label>备注</label>
-                                        <textarea class="form-control" rows="6" placeholder="备注"  v-model="room_info.memo"></textarea>
-                                    </div>
-
-
+                                    {{--复制区域--}}
                                     <div style="border: 1px solid lightblue;padding: 15px">
                                         <div>
                                             <h5><label>当前房型 : </label><%hotel.contracts[currentIndex].rooms[currentRoom].name%></h5>
@@ -570,6 +584,7 @@
                                     </div>
                                 </div>
                             </div>
+                            {{--阅读模式--}}
                             <div v-if="viewMode == 1">
                                 <div v-if="room_info" style="padding:0 15px">
                                     <div>
@@ -629,6 +644,27 @@
                                                 </tbody>
                                             </table>
                                         </div>
+                                        <div style="height: 10px;width: 10px"></div>
+                                        <table class="table">
+                                            <tr>
+                                                <td width="120px">
+                                                    <label>费用包含</label>
+                                                </td>
+                                                <td><p style="font-size:12px;line-height: 24px" v-html="helper_nl2br(room_info.include)"></p></td>
+                                            </tr>
+                                            <tr>
+                                                <td>
+                                                    <label>退改规则</label>
+                                                </td>
+                                                <td><p style="font-size:12px;line-height: 24px" v-html="helper_nl2br(room_info.cancellation)"></p></td>
+                                            </tr>
+                                            <tr>
+                                                <td>
+                                                    <label>备注</label>
+                                                </td>
+                                                <td><p style="font-size:12px;line-height: 24px"v-html="helper_nl2br(room_info.memo)"></p></td>
+                                            </tr>
+                                        </table>
                                     </div>
 
                                     <div class="box">
@@ -690,6 +726,24 @@
                                                         </div>
                                                     </td>
                                                 </tr>
+                                                <tr>
+                                                    <td>
+                                                        <label>费用包含</label>
+                                                    </td>
+                                                    <td><p style="font-size:12px;line-height: 24px" v-html="helper_nl2br(plan.include)"></p></td>
+                                                </tr>
+                                                <tr>
+                                                    <td>
+                                                        <label>退改规则</label>
+                                                    </td>
+                                                    <td><p style="font-size:12px;line-height: 24px" v-html="helper_nl2br(plan.cancellation)"></p></td>
+                                                </tr>
+                                                <tr>
+                                                    <td>
+                                                        <label>备注</label>
+                                                    </td>
+                                                    <td><p style="font-size:12px;line-height: 24px"v-html="helper_nl2br(plan.memo)"></p></td>
+                                                </tr>
                                             </table>
                                         </div>
                                     </div>
@@ -704,8 +758,7 @@
                                                 <td width="220px">
                                                     <%adult.date_from%><span style="padding: 0 12px;color: grey">~</span><%adult.date_to%>
                                                 </td>
-                                                <td width="220px"></td>
-                                                <td><%adult.price%></td>
+                                                <td style="color: indianred"><%adult.price%></td>
                                             </tr>
                                             </tbody>
                                         </table>
@@ -718,9 +771,10 @@
                                                 <td width="220px">
                                                     <%child.date_from%><span style="padding: 0 12px;color: grey">~</span><%child.date_to%>
                                                 </td>
-                                                <td width="300px">
+                                                <td>
                                                     <div v-for="age in child.ages">
-                                                        <%age.age_from%>岁<span style="padding: 0 12px;color: grey">~</span><%age.age_to%>岁 <%age.price%>
+                                                        <%age.age_from%>岁<span style="padding: 0 12px;color: grey">~</span><%age.age_to%>岁
+                                                        <span style="color: indianred"><%age.price%></span>
                                                     </div>
                                                 </td>
                                             </tr>
@@ -742,8 +796,7 @@
                                                     <td width="220px">
                                                         <%adult.date_from%><span style="padding: 0 12px;color: grey">~</span><%adult.date_to%>
                                                     </td>
-                                                    <td width="220px"></td>
-                                                    <td><%adult.price%></td>
+                                                    <td style="color: indianred"><%adult.price%></td>
                                                     </tr>
                                                 </tbody>
                                             </table>
@@ -756,9 +809,10 @@
                                                     <td width="220px">
                                                         <%child.date_from%><span style="padding: 0 12px;color: grey">~</span><%child.date_to%>
                                                     </td>
-                                                    <td width="310px">
+                                                    <td>
                                                         <div v-for="age in child.ages">
-                                                            <%age.age_from%>岁<span style="padding: 0 12px;color: grey">~</span><%age.age_to%>岁 <%age.price%>
+                                                            <%age.age_from%>岁<span style="padding: 0 12px;color: grey">~</span><%age.age_to%>岁
+                                                            <span style="color: indianred"><%age.price%></span>
                                                         </div>
                                                     </td>
                                                 </tr>
@@ -785,22 +839,9 @@
                                         </table>
                                     </div>
 
-                                    <div class="box">
-                                        <h6 style="color: grey;font-weight: bolder">计划说明</h6>
-                                        <label>费用包含</label>
-                                        <p style="padding: 0 12px;line-height: 24px" v-html="helper_nl2br(room_info.include)"></p>
-                                        <div style="height: 10px;width: 100%"></div>
-                                        <label>退改规则</label>
-                                        <p style="padding: 0 12px;line-height: 24px"  v-html="helper_nl2br(room_info.cancellation)"></p>
-                                        <div style="height: 10px;width: 100%"></div>
-                                        <label>备注</label>
-                                        <p style="padding: 0 12px;line-height: 24px"  v-html="helper_nl2br(room_info.memo)"></p>
-                                    </div>
+
                                 </div>
                             </div>
-                            <p v-else style="padding: 30px;color: lightgrey;font-size: 22px;text-align: center">
-                                select room from left sidebar
-                            </p>
                         </div>
                         <div style="clear: both"></div>
                     </div>

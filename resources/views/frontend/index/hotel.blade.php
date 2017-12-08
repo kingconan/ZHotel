@@ -190,6 +190,10 @@
             border-radius: 0;
             width: 160px;
             height: 40px;
+            outline: none;
+        }
+        .btn_book:focus{
+            outline: none;
         }
         .btn_book:hover{
             color: white;

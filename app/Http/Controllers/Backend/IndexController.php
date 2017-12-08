@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Backend;
 
 use App\Models\Hotel;
+use App\Models\Master;
 use Illuminate\Http\Request;
 
 use App\Http\Requests;
@@ -13,6 +14,8 @@ use Qiniu\Storage\UploadManager;
 use GuzzleHttp\Client;
 use Illuminate\Support\Facades\Log;
 use Carbon\Carbon;
+use Illuminate\Support\Facades\Redirect;
+use Illuminate\Support\Facades\Auth as BAuth;
 
 class IndexController extends Controller
 {
@@ -21,6 +24,28 @@ class IndexController extends Controller
     const SK = "odKn-63W8vWvfnNrhqLAyVZLyMwF8kQg2nIh4gUx";
     const Q_DOMAIN = "http://oytstg973.bkt.clouddn.com";
 
+    public function login(Request $request){
+        $email = $request->input("email");
+        $password = $request->input("password");
+        if(BAuth::attempt(['email'=>$email,'password'=>$password],true)){
+            return redirect()->intended('/hotel_list');
+        }
+        else{
+            return Redirect::to('/zhotel/ss/login');
+        }
+    }
+    public function logout(Request $request){
+        BAuth::logout();
+        return response()->json(['ok'=>0,'msg'=>'ok']);
+    }
+    public function createMaster(Request $request){
+        $master = new Master();
+        $master->name = "jingang";
+        $master->email = "jingang@travelid.cn";
+        $master->password = bcrypt("123123");
+        $master->save();
+        dd($master);
+    }
 
     public function createHotel(Request $request){
         $json = $request->json()->all();

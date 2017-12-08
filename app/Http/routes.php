@@ -14,23 +14,32 @@
 Route::get('/', function () {
     return view('frontend.index.welcome');
 });
-Route::get('/create_hotel', function () {
-    return view('frontend.index.hotel_create');
+Route::get('/zhotel/ss/login', function () {
+    return view('frontend.index.login');
 });
-Route::get('/edit_hotel', function () {
-    return view('frontend.index.hotel_create');
-});
-Route::get('/update_hotel', function () {
-    return view('frontend.index.hotel_create');
-});
-Route::get('/hotel_list', function () {
-    return view('frontend.index.hotel_list');
-});
-Route::get('/plan', function () {
-    return view('frontend.index.hotel_plan');
-});
+//Route::group(['middleware' => 'b_auth'],function() {
+    Route::get('/create_hotel', function () {
+        return view('frontend.index.hotel_create');
+    });
+    Route::get('/edit_hotel', function () {
+        return view('frontend.index.hotel_create');
+    });
+    Route::get('/update_hotel', function () {
+        return view('frontend.index.hotel_create');
+    });
+    Route::get('/hotel_list', function () {
+        return view('frontend.index.hotel_list');
+    });
+    Route::get('/plan', function () {
+        return view('frontend.index.hotel_plan');
+    });
+//});
 
+
+Route::post('/ss/login', 'Backend\IndexController@login');
+Route::post('/ss/logout', 'Backend\IndexController@logout');
 Route::post('/api/test', 'Backend\IndexController@test');
+Route::post('/api/logout', 'Backend\IndexController@logout');
 Route::post('/api/hotel/{id}', 'Backend\IndexController@getHotel');
 Route::post('/api/update/hotel', 'Backend\IndexController@updateHotel');
 Route::post('/api/delete/hotel', 'Backend\IndexController@deleteHotel');
@@ -51,6 +60,7 @@ Route::post('/fetcher/image', 'Backend\IndexController@fetchImage');
 Route::get('/qiniu/token', 'Backend\IndexController@qToken');
 Route::get('/api/place', 'Backend\IndexController@getPlaceDetailOfGooglemap');
 Route::get('/hotel/detail1/{id}', 'Backend\IndexController@index');
+Route::get('/uuu', 'Backend\IndexController@createMaster');
 Route::get('/hotel/detail/{id}', function () {
     return view('frontend.index.hotel');
 });

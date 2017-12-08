@@ -17,5 +17,6 @@ class VerifyCsrfToken extends BaseVerifier
         '/api/parse/hotel',
         '/api/hotel/*',
         '/chrome/test',
+        '/ss/logout',
     ];
 }
