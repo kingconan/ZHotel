@@ -78,4 +78,10 @@ elixir(function(mix) {
         '/libs/axios.js',
         '/libs/bootstrap.js',
     ], './public/js/min_2.js', './public/js');
+
+    // Merge all JS  files in one file.
+    mix.scripts([
+        '/libs/jquery.js',
+        '/libs/axios.js',
+    ], './public/js/min_3.js', './public/js');
 });

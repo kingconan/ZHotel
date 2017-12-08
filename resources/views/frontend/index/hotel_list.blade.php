@@ -91,8 +91,9 @@
             </div>
             <div v-else class="box">
                 <div style="float: right;padding: 6px">
-                    <button type="button" class="btn btn-default btn-sm" v-on:click="get_data">reset</button>
-                    <a class="btn btn-default btn-sm" href="/create_hotel" style="margin-left: 10px;color:indianred">create</a>
+                    {{--<button type="button" class="btn btn-default btn-sm" v-on:click="get_data">reset</button>--}}
+                    <a class="btn btn-default btn-sm" href="/create_hotel"
+                       style="margin-left: 10px;color:indianred;font-weight: bolder">创建一个酒店</a>
                 </div>
                 <div style="float: left;padding: 6px;font-size: 10px">
                     找到 <span style="font-weight: bolder;color: #00a65a;font-size: 14px"><% hotels.total %></span> 酒店
@@ -104,6 +105,7 @@
                     <th width="250px">酒店名称</th>
                     <th width="200px">标签</th>
                     <th width="200px">城市</th>
+                    <th width="200px">Zer</th>
                     <th>操作</th>
                     <th></th>
                     </thead>
@@ -127,6 +129,10 @@
                         </td>
                         <td class="hotel_name">
                             <% parse_location(hotel.location) %>
+                        </td>
+                        <td class="hotel_name">
+                            <span><% hotel.author?hotel.author:"Zer" %></span><br/>
+                            <span style="color: grey;font-size: 12px"><%hotel.last_editor?hotel.last_editor:"Zer" %></span>
                         </td>
                         <td>
                             <a :href="'edit_hotel?id='+hotel._id" class="btn btn-default btn-sm">编辑</a>

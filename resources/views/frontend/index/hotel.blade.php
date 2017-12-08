@@ -1,5 +1,6 @@
 @extends("frontend.layout.base")
 @section('style')
+
     <link rel="stylesheet" href="{{asset('css/libs/float-label.css')}}"/>
     <link rel="stylesheet" href="{{asset('css/libs/toastr.min.css')}}"/>
     <link rel="stylesheet" href="{{asset('css/libs/swiper.min.css')}}"/>
@@ -30,6 +31,7 @@
             width: 25%;
             padding-top: 20px;
             height: 60px;
+            padding-top:16px;
             text-align: center;
             color: white;
             font-size: 14px;
@@ -37,14 +39,15 @@
         }
         .hotel_nav_item:hover{
             background-color: #5F6164;
+            width: 25%;
+            height: 60px;
             cursor: pointer;
         }
         .hotel_nav_item_focus{
             float: left;
             width: 25%;
-            /*padding: 20px;*/
             height: 60px;
-            padding-top:18px;
+            padding-top:16px;
             text-align: center;
             background-color: #5F6164;
             font-size: 16px;
@@ -57,18 +60,22 @@
         }
         .hotel_nav{
             width: 100%;
+            height: 60px;
             background-color: #373A3E;
         }
         .hotel_name{
             font-size: 26px;
             font-weight: bolder;
+            line-height: 28px;
         }
         .hotel_name_en{
             font-size: 14px;
+            line-height: 28px;
         }
         .hotel_bread{
             color: grey;
             font-size: 14px;
+            line-height: 28px;
         }
         .hotel_price{
             color: #c99c76;
@@ -89,6 +96,7 @@
             top:0;
             z-index: 10 !important;
             display: block;
+            position: fixed;
         }
         #right_picker.affix{
             top:60px;
@@ -134,6 +142,7 @@
             width: 160px;
             height: 40px;
             outline: none;
+            border: 1px solid #c29c76;
         }
         .btn_book:focus{
             outline: none;
@@ -223,6 +232,17 @@
             line-height: 28px;
         }
 
+        .plan_normal{
+            background-color: #FFF;
+            border: 1px solid lightgrey;
+            cursor: pointer;
+
+        }
+        .plan_active{
+            background-color: whitesmoke;
+            border: 1px solid lightgrey;
+            cursor: pointer;
+        }
     </style>
     <style>
 
@@ -338,6 +358,7 @@
             font-weight: 300;
         }
     </style>
+
 @endsection
 @section('content')
 
@@ -375,7 +396,7 @@
                     <div class="swiper-pagination"></div>
                 </div>
                 <div class="c1" :style="content_width">
-                    <div style="width: 100%;padding-right: 300px;float: left">
+                    <div style="float: left;width: 100%;padding-right: 300px;">
                         <div style="height: 30px"></div>
                         <div class="hotel_name"><% hotel.name %></div>
                         <div class="hotel_name_en"><% hotel.name_en %></div>
@@ -388,7 +409,7 @@
                         </div>
                         <div style="height: 30px"></div>
                     </div>
-                    <div style="width: 250px;float: left;margin-left: -250px">
+                    <div style="float: left;width: 250px;margin-left: -250px">
                         <div style="height: 30px"></div>
                         <div class="hotel_price">??<span style="font-size: 16px;font-weight: normal;margin-left: 6px">起 / 晚</span></div>
                         <div style="padding: 10px 0;text-align: right">
@@ -466,6 +487,7 @@
                             </div>
                         </div>
                         <div v-else-if="section == 'rooms'">
+                            {{--no checkin checkout--}}
                             <div v-if="room_style == 0">
                                 <div v-for="room in hotel.rooms">
                                     <div style="background-color: #FAFAFA">
@@ -494,8 +516,9 @@
                                     <div style="clear: both;height:15px;width: 10px"></div>
                                 </div>
                             </div>
+                            {{--with checkin checkout--}}
                             <div v-else>
-                                    <div v-for="room in hotel.rooms">
+                                    <div v-for="(room,roomIndex) in hotel.rooms">
                                         <div style="display: table;">
                                             <div style="display: table-cell;width: 240px;background-color: #FAFAFA">
                                                 <img v-if="room.images_str" :src="room.images_str.split('\n')[0]" width="100%">
@@ -517,7 +540,10 @@
                                                 {{--<div style="height: 1px;width: 100%;background-color: lightgrey"></div>--}}
                                                 <div v-if="room.price" style="padding:30px">
                                                     <table v-if="room.price.plans">
-                                                        <tr v-for="(plan, index) in room.price.plans" style="border: 1px solid lightgrey;">
+                                                        <tr v-for="(plan, index) in room.price.plans"
+                                                            :class="room.price.price_index == index ? 'plan_active' : 'plan_normal'"
+                                                            v-on:click="room_plan_select(roomIndex,index)"
+                                                        >
                                                             <td style="padding: 12px" width="200px"><%plan.name%></td>
                                                             <td style="padding: 12px" v-if="plan.ok"><%plan.price%> </td>
                                                             <td style="padding: 12px;color:red" v-else><%plan.reason%> </td>
@@ -525,15 +551,28 @@
                                                     </table>
                                                     <div v-else>暂无价格</div>
                                                     <div style="height: 30px;width: 30px"></div>
-                                                    <div style="font-size: 16px;">费用包含</div>
-                                                    <ul class="plan_check">
-                                                       <li v-for="item in str_2_arr(room.price.include)"><%item%></li>
-                                                    </ul>
-                                                    <div style="height: 30px;width: 30px"></div>
-                                                    <div style="font-size: 16px;">退改规则</div>
-                                                    <ul class="plan_check">
-                                                        <li v-for="item in str_2_arr(room.price.cancellation)"><%item%></li>
-                                                    </ul>
+                                                    <template v-if="room.price.price_index == 0">
+                                                        <div style="font-size: 16px;">费用包含</div>
+                                                        <ul class="plan_check">
+                                                           <li v-for="item in str_2_arr(room.price.include)"><%item%></li>
+                                                        </ul>
+                                                        <div style="height: 30px;width: 30px"></div>
+                                                        <div style="font-size: 16px;">退改规则</div>
+                                                        <ul class="plan_check">
+                                                            <li v-for="item in str_2_arr(room.price.cancellation)"><%item%></li>
+                                                        </ul>
+                                                    </template>
+                                                    <template v-else-if="room.price.price_index > 0">
+                                                        <div style="font-size: 16px;">费用包含</div>
+                                                        <ul class="plan_check">
+                                                            <li v-for="item in str_2_arr(room.price.plans[room.price.price_index].include)"><%item%></li>
+                                                        </ul>
+                                                        <div style="height: 30px;width: 30px"></div>
+                                                        <div style="font-size: 16px;">退改规则</div>
+                                                        <ul class="plan_check">
+                                                            <li v-for="item in str_2_arr(room.price.plans[room.price.price_index].cancellation)"><%item%></li>
+                                                        </ul>
+                                                    </template>
                                                 </div>
                                             </div>
                                             <div style="clear: both;"></div>
@@ -597,24 +636,24 @@
                     <div style="clear: both"></div>
                 </div>
                 <div id="footer2">
-                <div id="div_map" v-show="section == 'detail'" class="hotel_map" style="position: relative;width: 100%">
-                    <div id="map" style="width: 100%;height: 360px;"></div>
-                    <div style="position: absolute;width: 60%;margin-left: auto;margin-right: auto;left: 0;top: 0;">
-                        <div style="height: 20px"></div>
-                        <div  style="padding: 15px 6px 15px 15px;background-color: #FFF;margin-left: 20%;width: 340px;height: 320px;">
-                            <div id="div_trans" style="overflow-y: auto;height: 290px;padding-right: 8px">
-                                <div class="hotel_content_title_small">地址</div>
-                                <div class="font_normal"><%hotel.location.address%></div>
-                                <div style="height: 20px"></div>
-                                <div class="hotel_content_title_small">交通指南</div>
-                                <div class="font_normal" v-html="markdown(hotel.location.transportation)"></div>
+                    <div id="div_map" v-show="section == 'detail'" class="hotel_map" style="position: relative;width: 100%">
+                        <div id="map" style="width: 100%;height: 360px;"></div>
+                        <div style="position: absolute;width: 60%;margin-left: auto;margin-right: auto;left: 0;top: 0;">
+                            <div style="height: 20px"></div>
+                            <div  style="padding: 15px 6px 15px 15px;background-color: #FFF;margin-left: 20%;width: 340px;height: 320px;">
+                                <div id="div_trans" style="overflow-y: auto;height: 290px;padding-right: 8px">
+                                    <div class="hotel_content_title_small">地址</div>
+                                    <div class="font_normal"><%hotel.location.address%></div>
+                                    <div style="height: 20px"></div>
+                                    <div class="hotel_content_title_small">交通指南</div>
+                                    <div class="font_normal" v-html="markdown(hotel.location.transportation)"></div>
+                                </div>
                             </div>
+                            <div style="height: 20px"></div>
                         </div>
-                        <div style="height: 20px"></div>
                     </div>
-                </div>
-                <div style="clear: both"></div>
-                <div  :style="content_width+';margin-right: auto;margin-left: auto'">
+                    <div style="clear: both"></div>
+                    <div  :style="content_width+';margin-right: auto;margin-left: auto'">
                     <div style="float: left;width: 33%;padding: 30px">
                         <div class="hotel_content_title">品牌和荣誉</div>
                         <div>
@@ -680,8 +719,7 @@
                     </div>
                     <div style="clear: both"></div>
                 </div>
-
-                <div style="text-align: center;padding: 15px 0;background-color: #1F272B;color: lightgrey">
+                <div style="text-align: center;padding: 15px 0;background-color: #1F272B;color: lightgrey;font-weight: 200">
                     ZHOTEL
                 </div>
             </div>
@@ -1073,6 +1111,7 @@
                                 for(var i= 0,len = thiz.hotel.rooms.length;i<len;i++){
                                     for(var j= 0,jLen = rooms.length;j<jLen;j++){
                                         if(thiz.hotel.rooms[i].id == rooms[j].id){
+                                            rooms[j].price.price_index = 0;
                                             thiz.hotel.rooms[i].price = rooms[j].price;
                                             break;
                                         }
@@ -1196,6 +1235,12 @@
                 var width = document.documentElement.clientWidth;
                 console.log("resize(wxh) = "+width+","+height);
                 this.hack_width = (width - 1028 )/2 + "px";
+            },
+            room_plan_select : function(roomIndex,index){
+                console.log("room plan select")
+                console.log(roomIndex)
+                console.log(index)
+                this.hotel.rooms[roomIndex].price.price_index = index;
             }
         },
         computed : {

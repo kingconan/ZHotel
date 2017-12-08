@@ -33,13 +33,16 @@ Route::get('/zhotel/ss/login', function () {
     Route::get('/plan', function () {
         return view('frontend.index.hotel_plan');
     });
+    Route::get('/zhotel/ss/register', function () {
+    return view('frontend.index.register');
+});
 //});
 
 
 Route::post('/ss/login', 'Backend\IndexController@login');
 Route::post('/ss/logout', 'Backend\IndexController@logout');
-Route::post('/api/test', 'Backend\IndexController@test');
-Route::post('/api/logout', 'Backend\IndexController@logout');
+Route::post('/ss/register', 'Backend\IndexController@register');
+Route::post('/api/test', 'Backend\IndexController@getHotelList');
 Route::post('/api/hotel/{id}', 'Backend\IndexController@getHotel');
 Route::post('/api/update/hotel', 'Backend\IndexController@updateHotel');
 Route::post('/api/delete/hotel', 'Backend\IndexController@deleteHotel');
