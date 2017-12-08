@@ -20,6 +20,25 @@ function zhotel_markdown(str) {//simple markdown parser
         else if(item == ""){
             html = html + '<div style="height: 14px;width: 100px;"></div>';
         }
+        else if(item.indexOf("[") == 0){
+            var dim_start = item.indexOf('[');
+            var dim_end = item.indexOf(']');
+            var start = item.indexOf('(');
+            var end = item.indexOf(')');
+            var word = "";
+            if (dim_end > dim_start + 1) {
+                word = item.substring(dim_start + 1, dim_end)
+            }
+            if (end > start) {
+                var url = item.substring(start + 1, end);
+                if(word == ""){
+                    word = url;
+                }
+                html = html + '<a class="markdown_link" href="'+url+'">'+word+'</a>';
+                html = html + '<br />'
+
+            }
+        }
         else if(item.indexOf("{") == 0){
             //gallery start
             gallery = 1;
