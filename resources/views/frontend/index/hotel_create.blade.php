@@ -1148,7 +1148,7 @@
             get_data : function(_id){
                 const self = this;
                 console.log("created");
-                axios.post('api/hotel/'+_id,{
+                axios.post('/api/hotel/'+_id,{
                         })
                         .then(function(response){
                             console.log(response.data);

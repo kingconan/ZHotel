@@ -31,7 +31,6 @@
             width: 25%;
             padding-top: 20px;
             height: 60px;
-            padding-top:16px;
             text-align: center;
             color: white;
             font-size: 14px;
@@ -47,7 +46,7 @@
             float: left;
             width: 25%;
             height: 60px;
-            padding-top:16px;
+            padding-top:18px;
             text-align: center;
             background-color: #5F6164;
             font-size: 16px;

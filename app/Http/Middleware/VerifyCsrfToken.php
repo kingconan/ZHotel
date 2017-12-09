@@ -15,7 +15,7 @@ class VerifyCsrfToken extends BaseVerifier
         //
         '/uploader/image',
         '/api/parse/hotel',
-        '/api/hotel/*',
+//        '/api/hotel/*',
         '/chrome/test',
         '/ss/logout',
     ];

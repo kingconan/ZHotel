@@ -10,6 +10,21 @@ scratch. This page gets rid of all links and provides the needed markup only.
     <title>ZHotel</title>
     <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
     <link rel="stylesheet" href="{{asset("css/min.css")}}">
+    <style>
+        /*[data-letters]:before {*/
+            /*content:attr(data-letters);*/
+            /*display:inline-block;*/
+            /*font-size:12px;*/
+            /*width:24px;*/
+            /*height:24px;*/
+            /*!*line-height:24px;*!*/
+            /*text-align:center;*/
+            /*border-radius:50%;*/
+            /*background:white;*/
+            /*margin-right:8px;*/
+            /*color:red;*/
+        /*}*/
+    </style>
     @yield("style")
 
 </head>
@@ -51,13 +66,18 @@ desired effect
                 <span class="sr-only">Toggle navigation</span>
             </a>
             <!-- Navbar Right Menu -->
-            {{--<div class="navbar-custom-menu">--}}
-                {{--<div style="padding: 15px">--}}
-                {{--<em style="color: #F0F0F0">{{Auth::user()->name}} :</em>--}}
-                {{--<span style="cursor: pointer;color: darkred"--}}
-                      {{--onclick="logout()">Sign out</span>--}}
-                {{--</div>--}}
-            {{--</div>--}}
+            <div class="navbar-custom-menu">
+                <ul class="nav navbar-nav">
+                    <!-- User Account Menu -->
+                    <li>
+                        <a class="hidden-xs">{{Auth::user()->name}}</a>
+                    </li>
+                    <!-- Control Sidebar Toggle Button -->
+                    <li>
+                        <a onclick="logout()" data-toggle="control-sidebar"><i class="fa fa-sign-out"></i></a>
+                    </li>
+                </ul>
+            </div>
         </nav>
     </header>
     <!-- Left side column. contains the logo and sidebar -->
@@ -70,18 +90,6 @@ desired effect
                 <li class="header">Menu List</li>
                 <!-- Optionally, you can add icons to the links -->
                 <li class="active"><a href="hotel_list"><i class="fa fa-list"></i> <span>酒店</span></a></li>
-                {{--<li><a href="#"><i class="fa fa-plus"></i> <span>Menu 2</span></a></li>--}}
-                {{--<li class="treeview">--}}
-                    {{--<a href="#"><i class="fa fa-safari"></i> <span>Menu 3</span>--}}
-            {{--<span class="pull-right-container">--}}
-                {{--<i class="fa fa-angle-left pull-right"></i>--}}
-              {{--</span>--}}
-                    {{--</a>--}}
-                    {{--<ul class="treeview-menu">--}}
-                        {{--<li><a href="#">Sub-Menu-1</a></li>--}}
-                        {{--<li><a href="#">Sub-Menu-2</a></li>--}}
-                    {{--</ul>--}}
-                {{--</li>--}}
             </ul>
             <!-- /.sidebar-menu -->
         </section>
