@@ -105,7 +105,7 @@
                     <th width="250px">酒店名称</th>
                     <th width="200px">标签</th>
                     <th width="200px">城市</th>
-                    <th width="200px">Zer</th>
+                    <th width="100px">Zer</th>
                     <th>操作</th>
                     <th></th>
                     </thead>
