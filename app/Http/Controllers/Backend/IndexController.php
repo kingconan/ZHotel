@@ -20,10 +20,36 @@ use Illuminate\Support\Facades\Auth as BAuth;
 
 class IndexController extends Controller
 {
-    //
+    //http://laravelacademy.org/post/3502.html
     const AK = "My5kLLe5AW7Tm4RaNivwbjT3jERbWDEKsJLuGn0s";
     const SK = "odKn-63W8vWvfnNrhqLAyVZLyMwF8kQg2nIh4gUx";
     const Q_DOMAIN = "http://oytstg973.bkt.clouddn.com";
+
+
+    /**
+     * json-rpc
+     * request {
+     *  jsonrpc : "2.0"
+     *  method : "get_hotel",
+     *  params : {},
+     *  id : "request_id"
+     * }
+     * batch requests  [{request}, {request}]
+     *
+     * response {
+     *  jsonrpc : "2.0"
+     *  id : "request_id",
+     *  result : {},
+     *  error : {} //result or error
+     * }
+     *
+     * Notification : without id
+     *
+     ******************************************************
+     * Format : thrift(facebook), protobuf(google), or ?
+     * Protocol : tcp or http
+     */
+
 
     /**
      * LOGIN - LOGOUT

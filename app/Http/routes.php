@@ -25,7 +25,7 @@ Route::group(['middleware' => 'web'],function() {
     Route::post('/ss/logout', 'Backend\IndexController@logout');
 });
 
-Route::group(['middleware' => 'b_auth'],function() {
+//Route::group(['middleware' => 'b_auth'],function() {
     Route::get('/create_hotel', function () {
         return view('frontend.index.hotel_create');
     });
@@ -44,7 +44,7 @@ Route::group(['middleware' => 'b_auth'],function() {
     Route::get('/zhotel/ss/register', function () {
     return view('frontend.index.register');
 });
-});
+//});
 
 
 

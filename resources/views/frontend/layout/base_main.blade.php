@@ -70,7 +70,7 @@ desired effect
                 <ul class="nav navbar-nav">
                     <!-- User Account Menu -->
                     <li>
-                        <a class="hidden-xs">{{Auth::user()->name}}</a>
+                        <a class="hidden-xs">{{Auth::user() ? Auth::user()->name : "none"}}</a>
                     </li>
                     <!-- Control Sidebar Toggle Button -->
                     <li>
