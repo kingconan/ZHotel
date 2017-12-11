@@ -75,12 +75,19 @@ class IndexController extends Controller
         $email = $request->input("email");
         $password = $request->input("password");
         ZEvent::log(self::getCurrentMaster(), "cmd",__METHOD__, [$name,$email,$password]);
-        $master = new Master();
-        $master->name = $name;
-        $master->email = $email;
-        $master->password = bcrypt($password);
-        $master->save();
-        return Redirect::to('/zhotel/ss/login');
+        $dup = Master::where("email",$email)->get();
+        if($dup){
+            echo "<h1 style='text-align: center;margin-top: 100px'>User Already Exits</h1>";
+        }
+        else{
+            $master = new Master();
+            $master->name = $name;
+            $master->email = $email;
+            $master->password = bcrypt($password);
+            $master->save();
+            return Redirect::to('/zhotel/ss/login');
+        }
+
     }
 
     /**
