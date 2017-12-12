@@ -80,6 +80,10 @@ class IndexController extends Controller
             echo "<h1 style='text-align: center;margin-top: 100px'>User Already Exits</h1>";
         }
         else{
+            /**
+             * Role
+             *
+             */
             $master = new Master();
             $master->name = $name;
             $master->email = $email;
