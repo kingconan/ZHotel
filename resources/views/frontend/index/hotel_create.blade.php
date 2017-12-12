@@ -1103,7 +1103,7 @@
         },
         updated :  function(){
             console.log("updated")
-            var swiper = new Swiper('.swiper-container', {
+            var swiper = new Swiper('.markdown-gallery', {
                 navigation: {
                     nextEl: '.swiper-button-next2',
                     prevEl: '.swiper-button-prev2',
@@ -1111,8 +1111,6 @@
                 pagination: {
                     el: '.swiper-pagination',
                 },
-                slidesPerView: 'auto',
-                centeredSlides: true,
                 paginationClickable: true,
                 spaceBetween: 0,
                 loop:true

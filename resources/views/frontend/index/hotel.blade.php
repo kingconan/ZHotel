@@ -248,6 +248,15 @@
         .swiper-container {
             width: 100%;
         }
+        .swiper-container1 {
+            width: 100%;
+            margin: 0 auto;
+            position: relative;
+            overflow: hidden;
+            list-style: none;
+            padding: 0;
+            z-index: 1;
+        }
         .swiper-slide {
             text-align: center;
             font-size: 18px;
@@ -377,7 +386,7 @@
         </div>
         <div v-else>
             <div class="hotel_header" id="hotel_header">
-                <div class="swiper-container">
+                <div v-if="sorted_covers" class="swiper-container banner-gallery">
                     <div class="swiper-wrapper">
                         <div v-for="(image, index) in sorted_covers" class="swiper-slide" :style="style_gallery_image">
                             <img :style="style_gallery_image+';object-fit: cover'" :src="image.url" />
@@ -1003,20 +1012,38 @@
             window.removeEventListener('resize', this.handle_resize)
         },
         updated:function(){
-            var swiper = new Swiper('.swiper-container', {
-                navigation: {
-                    nextEl: '.swiper-button-next2',
-                    prevEl: '.swiper-button-prev2',
-                },
-                pagination: {
-                    el: '.swiper-pagination',
-                },
-                slidesPerView: 'auto',
-                centeredSlides: true,
-                paginationClickable: true,
-                spaceBetween: 0,
-                loop:true
-            });
+            try{
+                var swiper = new Swiper('.banner-gallery', {
+                    navigation: {
+                        nextEl: '.swiper-button-next2',
+                        prevEl: '.swiper-button-prev2',
+                    },
+                    pagination: {
+                        el: '.swiper-pagination',
+                    },
+                    slidesPerView: 'auto',
+                    centeredSlides: true,
+                    paginationClickable: true,
+                    spaceBetween: 0,
+                    loop:true
+                });
+            }
+            catch (e){}
+            try {
+                var swiper1 = new Swiper('.markdown-gallery', {
+                    navigation: {
+                        nextEl: '.swiper-button-next2',
+                        prevEl: '.swiper-button-prev2',
+                    },
+                    pagination: {
+                        el: '.swiper-pagination',
+                    },
+                    paginationClickable: true,
+                    spaceBetween: 0,
+                    loop: true
+                });
+            }
+            catch (e){}
             $("#hotel_nav").affix(
                     {
                         offset:{

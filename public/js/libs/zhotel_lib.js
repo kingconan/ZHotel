@@ -5,7 +5,7 @@ function zhotel_markdown(str) {//simple markdown parser
     var item = "";
     var gallery = 0;
     var gallery_str = "";
-    var gallery_pre = '<div class="swiper-container" style="margin:8px 0px;" ><div class="swiper-wrapper" >';
+    var gallery_pre = '<div class="swiper-container markdown-gallery" style="margin:8px 0px;" ><div class="swiper-wrapper" >';
     var gallery_post = '</div>' +
         '<div class="swiper-button-next2"></div>' +
         '<div class="swiper-button-prev2"></div>' +
