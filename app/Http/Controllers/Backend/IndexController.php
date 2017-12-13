@@ -76,7 +76,7 @@ class IndexController extends Controller
         $password = $request->input("password");
         ZEvent::log(self::getCurrentMaster(), "cmd",__METHOD__, [$name,$email,$password]);
         $dup = Master::where("email",$email)->get();
-        if($dup){
+        if(empty($dup)){
             echo "<h1 style='text-align: center;margin-top: 100px'>User Already Exits</h1>";
         }
         else{
