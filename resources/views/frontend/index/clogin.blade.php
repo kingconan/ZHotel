@@ -25,7 +25,7 @@
         <h1>Z<span style="color: lightgrey">Hotel</span></h1>
     </div>
     <div class="form1">
-        <form action="{{URL::to('/ss/login')}}" method="post">
+        <form action="{{URL::to('/customer/login')}}" method="post">
             <input type="hidden" name="_token" value="{{ csrf_token()}}"/>
             <div class="form-group has-feedback">
                 <input type="email" class="form-control" placeholder="Email" name="email" required>

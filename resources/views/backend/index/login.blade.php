@@ -1,4 +1,4 @@
-@extends("frontend.layout.base_empty")
+@extends("backend.layout.base_empty")
 @section('style')
 <style>
     .form1{
@@ -25,11 +25,8 @@
         <h1>Z<span style="color: lightgrey">Hotel</span></h1>
     </div>
     <div class="form1">
-        <form action="{{URL::to('/ss/register')}}" method="post">
+        <form action="{{URL::to('/ss/login')}}" method="post">
             <input type="hidden" name="_token" value="{{ csrf_token()}}"/>
-            <div class="form-group has-feedback">
-                <input class="form-control" placeholder="Name" name="name" required>
-            </div>
             <div class="form-group has-feedback">
                 <input type="email" class="form-control" placeholder="Email" name="email" required>
             </div>
@@ -38,10 +35,15 @@
             </div>
             <div class="row">
                 <div class="col-xs-8">
+                    <div class="checkbox icheck" style="margin-left: 20px">
+                        <label>
+                            <input type="checkbox"> Remember Me
+                        </label>
+                    </div>
                 </div>
                 <!-- /.col -->
                 <div class="col-xs-4">
-                    <button type="submit" class="btn btn_book">Register</button>
+                    <button type="submit" class="btn btn_book">登录</button>
                 </div>
                 <!-- /.col -->
             </div>

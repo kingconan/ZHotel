@@ -1,4 +1,4 @@
-@extends("frontend.layout.base_main")
+@extends("backend.layout.base_main")
 @section('style')
     <link rel="stylesheet" href="{{asset('css/libs/float-label.css')}}"/>
     <link rel="stylesheet" href="{{asset('css/libs/toastr.min.css')}}"/>
@@ -135,8 +135,8 @@
                             <span style="color: grey;font-size: 12px"><%hotel.last_editor?hotel.last_editor:"Zer" %></span>
                         </td>
                         <td>
-                            <a :href="'edit_hotel?id='+hotel._id" class="btn btn-default btn-sm">编辑</a>
-                            <a :href="'plan?id='+hotel._id" class="btn btn-default btn-sm">合同</a>
+                            <a :href="'/edit_hotel?id='+hotel._id" class="btn btn-default btn-sm">编辑</a>
+                            <a :href="'/plan?id='+hotel._id" class="btn btn-default btn-sm">合同</a>
                             <a :href="'/hotel/detail/'+hotel._id" class="btn btn-default btn-sm">预览</a>
                             <button v-on:click="online(hotel._id)" class="btn btn-default btn-sm" style="margin-left: 15px;">
                                 <%hotel.status == 1 ? "下线" : "上线"%>
@@ -208,7 +208,7 @@
             get_data : function(){
                 const self = this;
                 console.log("created");
-                axios.post('api/test/',{
+                axios.post('/api/test/',{
                             k1: "v1"
                         })
                         .then(function(response){
@@ -247,7 +247,7 @@
                 var p = $("#search_form").serialize();
                 const  self = this;
                 self.loading = true;
-                axios.post('api/search/hotel/',p)
+                axios.post('/api/search/hotel/',p)
                         .then(function(response){
                             console.log(response.data);
                             self.hotels = response.data.obj;
@@ -260,7 +260,7 @@
             },
             online : function(hotel_id){
                 const self = this;
-                axios.post('api/online/hotel',{
+                axios.post('/api/online/hotel',{
                             hotel_id: hotel_id
                         })
                         .then(function(response){
@@ -304,7 +304,7 @@
             },
             delete_hotel : function(hotel_id,name){
                 const self = this;
-                axios.post('api/delete/hotel',{
+                axios.post('/api/delete/hotel',{
                             hotel_id: hotel_id
                         })
                         .then(function(response){

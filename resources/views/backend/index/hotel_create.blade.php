@@ -1,4 +1,4 @@
-@extends("frontend.layout.base_main")
+@extends("backend.layout.base_main")
 @section('style')
     <link rel="stylesheet" href="{{asset('css/libs/float-label.css')}}"/>
     <link rel="stylesheet" href="{{asset('css/libs/toastr.min.css')}}"/>

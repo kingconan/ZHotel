@@ -36,10 +36,15 @@ return [
     */
 
     'guards' => [
-        'web' => [
+        'web' => [//default guard
             'driver' => 'session',
             'provider' => 'users',
         ],
+        'customer' => [
+            'driver' => 'session',
+            'provider' => 'customer',
+        ],
+
 
         'api' => [
             'driver' => 'token',
@@ -68,8 +73,11 @@ return [
         'users' => [
             'driver' => 'eloquent',
             'model' => App\Models\Master::class
-//            'model' => App\User::class,
         ],
+        'customer' =>[
+            'driver' => 'eloquent',
+            'model' => App\Models\Customer::class
+        ]
 
         // 'users' => [
         //     'driver' => 'database',

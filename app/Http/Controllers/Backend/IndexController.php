@@ -17,6 +17,7 @@ use Illuminate\Support\Facades\Log;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\Auth as BAuth;
+use App\Models\Order;
 
 class IndexController extends Controller
 {
@@ -138,6 +139,7 @@ class IndexController extends Controller
             ]
         );
     }
+
     public function searchHotel(Request $request){
         $keyword = $request->input("keyword");
         ZEvent::log(self::getCurrentMaster(), "query", __METHOD__, $keyword);
@@ -282,6 +284,40 @@ class IndexController extends Controller
         );
     }
 
+
+    /**
+     *
+     */
+
+    public function getOrderList(Request $request){
+        $res = Order::paginate(20);
+        ZEvent::log(self::getCurrentMaster(), "query", __METHOD__, "");
+        return response()->json(
+            [
+                "ok"=>0,
+                "msg"=>"ok",
+                "obj"=>$res
+            ]
+        );
+    }
+    public function searchOrder(Request $request){
+        $keyword = $request->input("keyword");
+        ZEvent::log(self::getCurrentMaster(), "query", __METHOD__, $keyword);
+        $res = null;
+//        $res = Hotel::where("name",'like', '%'.$keyword."%")
+//            ->orWhere("name_en",'like', '%'.$keyword."%")
+//            ->orWhere("location.country",'like', '%'.$keyword."%")
+//            ->orWhere("location.city",'like', '%'.$keyword."%")
+//            ->paginate(20);
+//        $res->appends(["keyword"=>$keyword]);
+        return response()->json(
+            [
+                "ok"=>0,
+                "msg"=>"ok",
+                "obj"=>$res
+            ]
+        );
+    }
     /**
      * PLAN OPs
      */
@@ -374,6 +410,8 @@ class IndexController extends Controller
     }
 
 
+
+
     /**
      * +++++++
      */
@@ -462,7 +500,10 @@ class IndexController extends Controller
             "name"=>"basic",
             "price"=>$basic_price,
             "ok"=> true,
-            "reason"=> true
+            "reason"=> true,
+            "cancellation"=>isset($plan["cancellation"]) ? $plan["cancellation"] : "",
+            "include"=>isset($plan["include"]) ? $plan["include"] : "",
+            "memo"=>isset($plan["memo"]) ? $plan["memo"] : "",
         ]);
         //优化价格计划
         foreach($plans as $item){

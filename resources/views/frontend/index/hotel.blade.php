@@ -369,7 +369,18 @@
 
 @endsection
 @section('content')
-
+@if(Auth::guard('customer')->guest())
+    <div style="background-color: #0a0a0a;color: lightgrey;padding: 3px;text-align: center">
+        <span>guest</span>
+        <a href="/login">login</a>
+        <a href="/register">register</a>
+    </div>
+@else
+    <div style="background-color: #0a0a0a;color: lightgrey;padding: 3px;text-align: center">
+    <span>{{Auth::guard('customer')->user()->name}}</span>
+        <a href="/logout">logout</a>
+    </div>
+@endif
 <div style="width: 100%;">
     <div id="hotel_detail" v-cloak >
         <div v-if="loading">
@@ -782,6 +793,11 @@
             <div style="clear: both"></div>
             <button onclick="close_people(this)" type="button" class="btn" style="width: 100%;margin-top: 10px;margin-bottom: 10px;background-color: white;border: 1px solid #efefef">关闭</button>
         </div>
+        <form id="form_hidden" method="post" action="/order/booking/step" style="display: none">
+            {{ csrf_field() }}
+            <input type="hidden" value="" id="form_id" name="sid"/>
+            <input type="submit" id="form_btn" >
+        </form>
     </div>
 </div>
     <div id="blueimp-gallery" class="blueimp-gallery">
@@ -793,6 +809,7 @@
         {{--<a class="play-pause"></a>--}}
         <ol class="indicator"></ol>
     </div>
+
 </div>
 @endsection
 @section('script')
@@ -900,8 +917,8 @@
         {
             container.hide();
         }
-
     });
+
 </script>
 <script async defer
         src="http://ditu.google.cn/maps/api/js?key=AIzaSyBJfv6WxdEoTqSgibZDdOL-m-lLWz6UO8E&libraries=geometry,places&callback=mapCallback">
@@ -1267,6 +1284,42 @@
                 console.log(roomIndex)
                 console.log(index)
                 this.hotel.rooms[roomIndex].price.price_index = index;
+
+                var paras = JSON.parse(JSON.stringify(this.$data));
+                var plan = paras.hotel.rooms[roomIndex].price.plans[index];
+                var room = paras.hotel.rooms[roomIndex];
+                room.price = [];
+                var book_para = {
+                    book_info : paras.book,
+                    hotel_info : {
+                        id : paras.hotel._id,
+                        name : paras.hotel.name,
+                        name_en : paras.hotel.name_en,
+                        zy : paras.hotel.zy,
+                        location : paras.hotel.location
+                    },
+                    room_info : room,
+                    plan_info : plan,
+                    hotel_id : paras.hotel._id,
+                    room_id : room.id
+                }
+
+                console.log(book_para);
+
+                var url = "/api/order/create";
+                axios.post(url, book_para)
+                        .then(function(response){
+                            console.log(response.data)
+                            if(response.data.ok == 0){
+                                $("#form_id").val(response.data.obj);
+                                $("#form_btn").click();
+                            }
+
+                        })
+                        .catch(function(error){
+                            console.log(error);
+                        });
+
             }
         },
         computed : {

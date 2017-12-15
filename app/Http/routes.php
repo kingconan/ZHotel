@@ -1,5 +1,5 @@
 <?php
-
+use Illuminate\Support\Facades\Route;
 /*
 |--------------------------------------------------------------------------
 | Application Routes
@@ -11,15 +11,33 @@
 |
 */
 Route::group(['middleware' => 'web'],function() {
+    //frontend
     Route::get('/', function () {
         return view('frontend.index.welcome');
-    });
-    Route::get('/zhotel/ss/login', function () {
-        return view('frontend.index.login');
     });
     Route::get('/hotel/detail/{id}', function () {
         return view('frontend.index.hotel');
     });
+    Route::get('/login', function () {
+        return view('frontend.index.clogin');
+    });
+    Route::get('/register', function () {
+        return view('frontend.index.cregister');
+    });
+
+    //apis
+    Route::post('/customer/login', 'Backend\CustomerController@login');
+    Route::post('/customer/register', 'Backend\CustomerController@register');
+    Route::post('/order/booking/step', 'Backend\OrderController@orderRedirect');
+    Route::get('/logout', 'Backend\CustomerController@logout');
+
+    //backend
+    Route::get('/zhotel/ss/login', function () {
+        return view('backend.index.login');
+    });
+
+
+    //apis
     Route::post('/ss/login', 'Backend\IndexController@login');
     Route::post('/ss/register', 'Backend\IndexController@register');
     Route::post('/ss/logout', 'Backend\IndexController@logout');
@@ -27,28 +45,31 @@ Route::group(['middleware' => 'web'],function() {
 
 //Route::group(['middleware' => 'b_auth'],function() {
     Route::get('/create_hotel', function () {
-        return view('frontend.index.hotel_create');
+        return view('backend.index.hotel_create');
     });
     Route::get('/edit_hotel', function () {
-        return view('frontend.index.hotel_create');
+        return view('backend.index.hotel_create');
     });
     Route::get('/update_hotel', function () {
-        return view('frontend.index.hotel_create');
+        return view('backend.index.hotel_create');
     });
     Route::get('/hotel_list', function () {
-        return view('frontend.index.hotel_list');
+        return view('backend.index.hotel_list');
     });
     Route::get('/plan', function () {
-        return view('frontend.index.hotel_plan');
+        return view('backend.index.hotel_plan');
     });
     Route::get('/zhotel/ss/register', function () {
-    return view('frontend.index.register');
+    return view('backend.index.register');
+    });
+
+    Route::get('zashboard/hotels', function () {
+        return view('backend.index.hotel_list');
+    });
+Route::get('zashboard/orders', function () {
+    return view('backend.index.order_list');
 });
 //});
-
-
-
-
 
 
 
@@ -66,10 +87,16 @@ Route::group(['middleware'=>'api'],function(){
     Route::post('/api/price/hotel', 'Backend\IndexController@checkPrice');
     Route::get('/api/parse/get_rate', 'Backend\IndexController@getRate');
 
+
+    Route::post('/api/order/create', 'Backend\OrderController@createOrder');
+
     Route::post('/uploader/image', 'Backend\IndexController@uploadImage');
     Route::post('/fetcher/image', 'Backend\IndexController@fetchImage');
     Route::get('/qiniu/token', 'Backend\IndexController@qToken');
     Route::get('/api/place', 'Backend\IndexController@getPlaceDetailOfGooglemap');
+
+    Route::post('/api/order/{id}', 'Backend\OrderController@getOrder');
+    Route::post('/api/order_list', 'Backend\IndexController@getOrderList');
 });
 
 

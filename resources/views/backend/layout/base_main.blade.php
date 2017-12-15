@@ -89,7 +89,8 @@ desired effect
             <ul class="sidebar-menu" data-widget="tree">
                 <li class="header">Menu List</li>
                 <!-- Optionally, you can add icons to the links -->
-                <li class="active"><a href="hotel_list"><i class="fa fa-list"></i> <span>酒店</span></a></li>
+                <li class="active"><a href="/zashboard/hotels"><i class="fa fa-list"></i> <span>酒店</span></a></li>
+                <li class="active"><a href="/zashboard/orders"><i class="fa fa-list"></i> <span>订单</span></a></li>
             </ul>
             <!-- /.sidebar-menu -->
         </section>
