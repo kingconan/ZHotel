@@ -106,7 +106,7 @@
                     <th width="120px">酒店名称</th>
                     <th width="200px">预订信息</th>
                     <th width="200px">联系人</th>
-                    <th></th>
+                    <th>操作</th>
                     <th></th>
                     </thead>
                     <tbody>
@@ -118,10 +118,13 @@
                         </td>
                         <td><%order.hotel_info.name%></td>
                         <td style="font-size: 10px">
-                            <%order.plan_info.name%><br/>
-                            <%order.book_info.adult+'成人'%>
-                            <%order.book_info.children+'儿童'%><br/>
-                            <%order.book_info.checkin+' - ' + order.book_info.checkout%>
+                            <span>计划</span> : <%order.plan_info.name%><br/>
+                            <span>人数</span> : <%order.book_info.adult+'成人'%>
+                             <%order.book_info.children+'儿童'%><br/>
+                            <span>日期</span> : <%order.book_info.checkin+' - ' + order.book_info.checkout%>
+                        </td>
+                        <td>
+                            <a type="button" class="btn btn-sm btn-default" :href="'/zashboard/order?id='+order._id">查看</a>
                         </td>
                     </tr>
                     </tbody>

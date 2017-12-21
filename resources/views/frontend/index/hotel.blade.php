@@ -793,7 +793,7 @@
             <div style="clear: both"></div>
             <button onclick="close_people(this)" type="button" class="btn" style="width: 100%;margin-top: 10px;margin-bottom: 10px;background-color: white;border: 1px solid #efefef">关闭</button>
         </div>
-        <form id="form_hidden" method="post" action="/order/booking/step" style="display: none">
+        <form id="form_hidden" method="post" action="/order/booking/step"  style="display: none">
             {{ csrf_field() }}
             <input type="hidden" value="" id="form_id" name="sid"/>
             <input type="submit" id="form_btn" >

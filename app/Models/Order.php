@@ -55,5 +55,11 @@ class Order extends Eloquent
      * checkin
      * checkout
      * status
+     *
+     *
+     * payment = [
+     *  {price, memo},
+     *  {price, memo}
+     * ]
      */
 }

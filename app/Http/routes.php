@@ -28,7 +28,7 @@ Route::group(['middleware' => 'web'],function() {
     //apis
     Route::post('/customer/login', 'Backend\CustomerController@login');
     Route::post('/customer/register', 'Backend\CustomerController@register');
-    Route::post('/order/booking/step', 'Backend\OrderController@orderRedirect');
+    Route::any('/order/booking/step', 'Backend\OrderController@orderRedirect');
     Route::get('/logout', 'Backend\CustomerController@logout');
 
     //backend
@@ -66,9 +66,13 @@ Route::group(['middleware' => 'web'],function() {
     Route::get('zashboard/hotels', function () {
         return view('backend.index.hotel_list');
     });
-Route::get('zashboard/orders', function () {
-    return view('backend.index.order_list');
-});
+    Route::get('zashboard/orders', function () {
+        return view('backend.index.order_list');
+    });
+
+    Route::get('zashboard/order', function () {
+        return view('backend.index.order');
+    });
 //});
 
 
@@ -97,6 +101,7 @@ Route::group(['middleware'=>'api'],function(){
 
     Route::post('/api/order/{id}', 'Backend\OrderController@getOrder');
     Route::post('/api/order_list', 'Backend\IndexController@getOrderList');
+    Route::post('/api/update/order', 'Backend\OrderController@updateOrder');
 });
 
 
