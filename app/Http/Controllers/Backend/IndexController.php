@@ -106,6 +106,12 @@ class IndexController extends Controller
         $hotel->status = 0;//default is not online
         $hotel->name_en = $json["name_en"];
         $hotel->tag = $json["tag"];
+        if(isset($json["brand"])){
+            $hotel->brand = $json["brand"];
+        }
+        else{
+            $hotel->brand = "";
+        }
         $hotel->description = $json["description"];
         $hotel->location = $json["location"];
         $hotel->zy = $json["zy"];
@@ -249,6 +255,9 @@ class IndexController extends Controller
             $hotel->detail = $json["detail"];
             $hotel->facilities = $json["facilities"];
             $hotel->honor = $json["honor"];
+            if(isset($json["brand"])){
+                $hotel->brand = $json["brand"];
+            }
             if(isset($json["honor_img"]))
                 $hotel->honor_img = $json["honor_img"];
             else{

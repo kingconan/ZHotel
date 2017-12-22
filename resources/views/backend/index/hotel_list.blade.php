@@ -125,7 +125,7 @@
                             <span style="color: grey;font-size: 11px"><% hotel.name_en %></span>
                         </td>
                         <td class="hotel_name">
-                            <% hotel.tag %>
+                            <% hotel.brand ? hotel.brand+" " : ""+hotel.tag %>
                         </td>
                         <td class="hotel_name">
                             <% parse_location(hotel.location) %>

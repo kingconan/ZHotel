@@ -102,6 +102,7 @@ Route::group(['middleware'=>'api'],function(){
     Route::post('/api/order/{id}', 'Backend\OrderController@getOrder');
     Route::post('/api/order_list', 'Backend\IndexController@getOrderList');
     Route::post('/api/update/order', 'Backend\OrderController@updateOrder');
+    Route::post('/api/test/order', 'Backend\OrderController@test');
 });
 
 

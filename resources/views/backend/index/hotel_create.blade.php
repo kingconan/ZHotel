@@ -393,7 +393,9 @@
                             <z-float-textarea placeholder="交通方式" v-model="hotel.location.transportation" name="transportation"></z-float-textarea>
                         </div>
                         <div style="clear: both"></div>
-
+                        <select class="form-control" v-model="hotel.brand" style="width: 120px;border-radius: 0px">
+                            <option v-for="o in brands"><%o%></option>
+                        </select>
                         <div style="clear: both;height: 30px"></div>
 
                         <div class="section_title"  id="p2">致游推荐</div>
@@ -1089,7 +1091,10 @@
             current_room : -1,
             loading:true,
             filter_words : "",
-            filter_covers : []
+            filter_covers : [],
+            brands : [
+                    "品牌1","品牌2"
+            ]
         },
         created:function () {
             var _id = this.$route.query.id;

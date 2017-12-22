@@ -8,6 +8,7 @@ use App\Http\Requests;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
 use App\Models\Order;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\URL;
 use App\Models\ZEvent;
@@ -23,10 +24,6 @@ class OrderController extends Controller
      */
     const guard = 'customer';
     public function createTicket(Request $request){
-
-    }
-
-    public function callbackForPayment(Request $request){
 
     }
 
@@ -150,6 +147,45 @@ class OrderController extends Controller
                 ]
             );
         }
+    }
+
+    public function test(Request $request){
+        $json = $request->json()->all();
+        $orderId = $json["_id"];
+        $paymentId = $json["payment_id"];
+        $order = self::callbackPayment($orderId,$paymentId);
+        return response()->json(
+            [
+                "ok"=>0,
+                "msg"=>"ok",
+                "obj"=>$order
+            ]
+        );
+    }
+
+    //支付回调
+    public function callbackPayment($orderId, $paymentId){
+        $order = Order::find($orderId);
+        if($order){
+            if($order->payment_id == $paymentId){
+                $obj = [
+                  "id" => $order->payment_id,
+                  "price" => $order->payment_price,
+                  "memo" => $order->payment_memo,
+                  "created_at" => date('Y-m-d H:i:s')
+                ];
+                $arr = $order->payment_log;
+                array_push($arr, $obj);
+
+                $order->payment_log = $arr;
+                $order->payment_id = 0;
+                $order->payment_price = 0;
+                $order->payment_memo = "";
+                $order->save();
+                return $order;
+            }
+        }
+        return null;
     }
 
     public function updateOrderBookInfo(Request $request){

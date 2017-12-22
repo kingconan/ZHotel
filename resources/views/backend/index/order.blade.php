@@ -249,7 +249,7 @@
                     </table>
 
                     <label>支付信息</label>
-red
+
                     <div style="padding: 15px;background-color: lightgrey">
                         <div style="float: left;width: 300px">
                             <div v-if="order.payment_id > 0" style="font-size: 10px;color: grey">支付流水号#<%order.payment_id%></div>
@@ -262,6 +262,7 @@ red
                             <button type="button" class="btn btn-default btn-sm" v-on:click="create_payment">生成支付信息</button>
                             <button type="button" class="btn btn-default btn-sm" v-on:click="clear_payment">取消当前支付</button>
                             <button type="button" class="btn btn-default btn-sm" v-on:click="confirm_payment">确认已支付</button>
+                            {{--<button type="button" class="btn btn-default btn-sm" v-on:click="test">test</button>--}}
                         </div>
                         <div style="float: right;width: 500px;margin-right: 20px">
                             <table class="table">
@@ -269,7 +270,7 @@ red
                                     <td>#<%item.id%></td>
                                     <td>¥<%item.price%></td>
                                     <td><%item.memo%></td>
-                                    <td style="font-size: 10px;color: dimgrey"><%item.created_at%></td>
+                                    <td style="font-size: 9px;color: dimgrey">c : <%sec2date(item.id)%><br/>u : <%item.created_at%></td>
                                 </tr>
                             </table>
                         </div>
@@ -406,6 +407,25 @@ red
                             console.log(error);
                         });
             },
+            test : function(){
+                const self = this;
+                var paras = JSON.parse(JSON.stringify(this.$data));
+                console.log(paras);
+                axios.post("/api/test/order", paras.order)
+                        .then(function(response){
+                            console.log(response.data);
+                            if(response.data.ok == 0){
+                                self.order = response.data.obj;
+                                toastr["success"](response.data.msg);
+                            }
+                            else{
+                                toastr["error"](response.data.msg);
+                            }
+                        })
+                        .catch(function(error){
+                            console.log(error);
+                        });
+            },
             create_payment : function(){
                 if(this.order.payment_id){
                     toastr["error"]("当前有未支付项目,请先清除");
@@ -441,7 +461,7 @@ red
                                     id : self.order.payment_id,
                                     price : self.order.payment_price,
                                     memo : self.order.payment_memo,
-                                    created_at : moment().format('YYYY-MM-DD h:mm:ss')
+                                    created_at : moment().local().format('YYYY-MM-DD HH:mm:ss')
                                 });
                                 self.clear_payment();
                             },
@@ -452,6 +472,9 @@ red
                     }});
 
 
+            },
+            sec2date : function(sec){
+                return moment(sec).local().format('YYYY-MM-DD HH:mm:ss')
             }
         },
         computed:{
