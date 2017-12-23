@@ -101,6 +101,16 @@
         .status_line{
             height: 23px;width: 30px;border-bottom: 1px solid lightgrey;float: left
         }
+        .card{
+            padding: 15px;
+            background-color: #FFF;
+            float: left;
+            /*border: 1px solid lightgrey;*/
+            -webkit-box-shadow: 0px 0px 3px 0px rgba(0,0,0,0.32);
+            -moz-box-shadow: 0px 0px 3px 0px rgba(0,0,0,0.32);
+            box-shadow: 0px 0px 3px 0px rgba(0,0,0,0.32);
+            margin: 8px;
+        }
     </style>
 @endsection
 @section('content')
@@ -116,57 +126,60 @@
                     <div class="rect5"></div>
                 </div>
             </div>
-            <div v-else class="box">
-                <div style="padding: 0 30px">
-                    <div class="status">
-                        <div :class="order.status == 0 ? 'status_focus' : ''">
-                            未付定金
-                        </div>
+            <div v-else class="box" style="padding: 30px">
+                <div class="card">
+                    <label>订单状态</label>
+                    <div>
+                        <div class="status">
+                            <div :class="order.status == 0 ? 'status_focus' : ''">
+                                未付定金
+                            </div>
                         <span v-if="order.status == 0">
                             <%status_arr[order.status][0]%>
                         </span>
-                    </div>
-                    <div class="status_line"></div>
-                    <div  class="status">
-                        <div :class="order.status > 9 && order.status < 20 ? 'status_focus' : ''">
-                            付款中
                         </div>
+                        <div class="status_line"></div>
+                        <div  class="status">
+                            <div :class="order.status > 9 && order.status < 20 ? 'status_focus' : ''">
+                                付款中
+                            </div>
                         <span v-if="order.status > 9 && order.status < 20">
                             <%status_arr[order.status][0]%>
                         </span>
-                    </div>
-                    <div class="status_line"></div>
-                    <div  class="status">
-                        <div :class="order.status == 20 ? 'status_focus' : ''">
-                            预订成功
                         </div>
+                        <div class="status_line"></div>
+                        <div  class="status">
+                            <div :class="order.status == 20 ? 'status_focus' : ''">
+                                预订成功
+                            </div>
                         <span v-if="order.status == 20">
                             <%status_arr[order.status][0]%>
                         </span>
-                    </div>
-                    <div class="status_line"></div>
-                    <div  class="status">
-                        <div :class="order.status > 99 && order.status < 200 ? 'status_focus' : ''">
-                            已使用
                         </div>
+                        <div class="status_line"></div>
+                        <div  class="status">
+                            <div :class="order.status > 99 && order.status < 200 ? 'status_focus' : ''">
+                                已使用
+                            </div>
                         <span v-if="order.status > 99 && order.status < 200">
                             <%status_arr[order.status][0]%>
                         </span>
+                        </div>
+
+                        <div style="clear: both"></div>
                     </div>
-
-                    <div style="clear: both"></div>
+                    <div style="margin-top: 10px">
+                        <select class="form-control" v-model="order.status" style="width: 200px" >
+                            <option v-for="(value,key) in status_arr" :value="key"><%value[0] + "(" + value[1] + ")"%></option>
+                        </select>
+                    </div>
                 </div>
 
-                <div style="padding: 30px">
-                    <select class="form-control" v-model="order.status">
-                        <option v-for="(value,key) in status_arr" :value="key"><%value[0] + "(" + value[1] + ")"%></option>
-                    </select>
-                </div>
-
-                <div style="padding: 30px">
-                    <label>预订信息</label>
-                    <table class="table">
-                        <tbody>
+                <div style="clear: both">
+                    <div class="card">
+                        <label>预订信息</label>
+                        <table class="table">
+                            <tbody>
                             <tr>
                                 <td width="120px">酒店信息</td>
                                 <td>
@@ -221,9 +234,11 @@
                                     <input id="input_checkout" class="table_input" v-model="order.book_info.checkout"/>
                                 </td>
                             </tr>
-                        </tbody>
-                    </table>
+                            </tbody>
+                        </table>
+                    </div>
 
+                    <div class="card">
                     <label>联系人</label>
                     <table class="table">
                         <tbody>
@@ -247,21 +262,29 @@
                         </tr>
                         </tbody>
                     </table>
+                    </div>
 
+                    <div class="card">
                     <label>支付信息</label>
-
-                    <div style="padding: 15px;background-color: lightgrey">
+                    <div style="padding: 15px;background-color: whitesmoke">
                         <div style="float: left;width: 300px">
-                            <div v-if="order.payment_id > 0" style="font-size: 10px;color: grey">支付流水号#<%order.payment_id%></div>
-                            <div v-else style="font-size: 10px;color: red">当前无支付信息</div>
-                            <div style="height: 8px;width: 1px"></div>
-                            <input type="number" min="1" placeholder="当前需支付金额" v-model="order.payment_price"/>
-                            <div style="height: 8px;width: 1px"></div>
-                            <input placeholder="金额说明" v-model="order.payment_memo"/>
-                            <div style="height: 8px;width: 1px"></div>
-                            <button type="button" class="btn btn-default btn-sm" v-on:click="create_payment">生成支付信息</button>
-                            <button type="button" class="btn btn-default btn-sm" v-on:click="clear_payment">取消当前支付</button>
-                            <button type="button" class="btn btn-default btn-sm" v-on:click="confirm_payment">确认已支付</button>
+                            <template v-if="order.payment_id > 0">
+                                <div style="font-size: 10px;color: grey">支付流水号#<%order.payment_id%></div>
+                                <div style="height: 8px;width: 1px"></div>
+                                <input type="number" min="1" placeholder="当前需支付金额" v-model="order.payment_price"/>
+                                <div style="height: 8px;width: 1px"></div>
+                                <input placeholder="金额说明" v-model="order.payment_memo"/>
+                                <div style="height: 8px;width: 1px"></div>
+                                <button type="button" class="btn btn-default btn-sm" v-on:click="clear_payment">取消当前支付</button>
+                                <button type="button" class="btn btn-default btn-sm" v-on:click="confirm_payment">确认已支付</button>
+                            </template>
+                            <template v-else>
+                                <div style="font-size: 10px;color: red">当前无支付信息</div>
+                                <div style="height: 8px;width: 1px"></div>
+                                <button type="button" class="btn btn-default btn-sm" v-on:click="create_payment">生成支付信息</button>
+                            </template>
+
+
                             {{--<button type="button" class="btn btn-default btn-sm" v-on:click="test">test</button>--}}
                         </div>
                         <div style="float: right;width: 500px;margin-right: 20px">
@@ -276,9 +299,9 @@
                         </div>
                         <div style="clear: both"></div>
                     </div>
-
+                    </div>
                 </div>
-                <div style="padding: 15px">
+                <div style="padding: 15px;clear: both">
                     <button type="button" class="btn btn-default btn-sm" v-on:click="save">保存</button>
                 </div>
 

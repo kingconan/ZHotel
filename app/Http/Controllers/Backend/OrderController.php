@@ -61,9 +61,16 @@ class OrderController extends Controller
             $order->checkin = $json["book_info"]["checkin"];
             $order->checkout = $json["book_info"]["checkout"];
 
+
+            //TODO:bulid prepay info
+            $order->payment_id = time();
+            $order->payment_price = 99;
+            $order->payment_memo = "prepay";
+
             $order->save();
 
             $order_id = $order->_id;
+
 //            $order_id = "sss123";
 
             //TODO:save and return
@@ -74,7 +81,6 @@ class OrderController extends Controller
                     "obj"=>$order_id
                 ]
             );
-//            return view('frontend.index.order_create',["order_id"=>$order_id]);
         }
         return response()->json(
             [

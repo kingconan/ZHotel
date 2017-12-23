@@ -299,7 +299,7 @@ class IndexController extends Controller
      */
 
     public function getOrderList(Request $request){
-        $res = Order::paginate(20);
+        $res = Order::orderBy("created_at","DESC")->paginate(10);
         ZEvent::log(self::getCurrentMaster(), "query", __METHOD__, "");
         return response()->json(
             [
@@ -313,17 +313,48 @@ class IndexController extends Controller
         $keyword = $request->input("keyword");
         ZEvent::log(self::getCurrentMaster(), "query", __METHOD__, $keyword);
         $res = null;
-//        $res = Hotel::where("name",'like', '%'.$keyword."%")
-//            ->orWhere("name_en",'like', '%'.$keyword."%")
-//            ->orWhere("location.country",'like', '%'.$keyword."%")
-//            ->orWhere("location.city",'like', '%'.$keyword."%")
-//            ->paginate(20);
-//        $res->appends(["keyword"=>$keyword]);
+        if(substr($keyword,0,1) == "#"){
+            $order = Order::find(substr($keyword,1));
+            if($order){
+                return response()->json(
+                    [
+                        "ok"=>0,
+                        "msg"=>"ok",
+                        "obj"=>[
+                            "current_page" => 1,
+                            "data" => [$order],
+                            "from" => null,
+                            "last_page" => 1,
+                            "next_page_url" => null,
+                            "per_page" => 20,
+                            "prev_page_url" => null,
+                            "to" => null,
+                            "total" => 1
+                        ]
+                    ]
+                );
+            }
+            else{
+                return response()->json(
+                    [
+                        "ok"=>4,
+                        "msg"=>"not found",
+                        "obj"=>null
+                    ]
+                );
+            }
+        }
+        $res = Order::where("hotel_name_en",'like', '%'.$keyword."%")
+            ->orWhere("hotel_name",'like', '%'.$keyword."%")
+            ->orWhere("user_phone", $keyword)
+            ->paginate(20);
+        $res->appends(["keyword"=>$keyword]);
         return response()->json(
             [
                 "ok"=>0,
-                "msg"=>"ok",
-                "obj"=>$res
+                "msg"=>"ok1",
+                "obj"=>$res,
+                "sub"=>substr($keyword,1),
             ]
         );
     }

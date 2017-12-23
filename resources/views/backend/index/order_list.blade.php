@@ -67,10 +67,15 @@
             /*background-color: whitesmoke;*/
         }
         .order_status{
-            padding: 6px 12px;
-            background-color: lightgrey;
+            padding: 3px 6px;
+            background-color: whitesmoke;
+            border:1px solid lightgrey;
+            color: #3c3c3c;
             font-size: 10px;
-            border-radius: 1px;
+            border-radius: 3px;
+        }
+        tbody{
+            color: #3c3c3c;
         }
     </style>
 @endsection
@@ -99,13 +104,14 @@
                 <div style="float: left;padding: 6px;font-size: 10px">
                     找到 <span style="font-weight: bolder;color: #00a65a;font-size: 14px"><% orders.total %></span> 订单
                 </div>
-                <table class="table">
+                <table class="table table-striped">
                     <thead>
                     <th width="60px">#</th>
                     <th width="120px">订单状态</th>
                     <th width="120px">酒店名称</th>
                     <th width="200px">预订信息</th>
                     <th width="200px">联系人</th>
+                    <th width="120px">时间</th>
                     <th>操作</th>
                     <th></th>
                     </thead>
@@ -113,6 +119,7 @@
                     <tr v-for="(order,index) in orders.data">
                         <td><%index+1%></td>
                         <td>
+                            <span style="font-size: 9px;color: grey"><%order._id%></span><br/>
                             <span v-if="order.status == 0" class="order_status">未付定金</span>
                             <span v-else-if="order.status == 1">其他</span>
                         </td>
@@ -123,6 +130,13 @@
                              <%order.book_info.children+'儿童'%><br/>
                             <span>日期</span> : <%order.book_info.checkin+' - ' + order.book_info.checkout%>
                         </td>
+                        <td style="font-size: 10px">
+                            <span>名称 : <%order.user_info.name%></span><br/>
+                            <span>邮箱 : <%order.user_info.email%></span><br/>
+                            <span>电话 : <%order.user_info.phone%></span><br/>
+                            <span>备注 : <%order.user_info.memo%></span>
+                        </td>
+                        <td><span style="font-size: 10px;color: grey"><%moment.utc(order.created_at).local().format('YYYY-MM-DD HH:mm:ss')%></span></td>
                         <td>
                             <a type="button" class="btn btn-sm btn-default" :href="'/zashboard/order?id='+order._id">查看</a>
                         </td>
@@ -130,6 +144,14 @@
                     </tbody>
                 </table>
                 <div style="clear: both"></div>
+
+                <div style="float: right;padding: 15px">
+                    <button :disabled="orders.prev_page_url == null" type="button" class="btn btn-default btn-sm" v-on:click="next_page(orders.prev_page_url)">prev</button>
+                    <span style="font-size: 12px;"><% orders.current_page + " / " + orders.last_page %></span>
+                    <button :disabled="orders.next_page_url == null" type="button" class="btn btn-default btn-sm" v-on:click="next_page(orders.next_page_url)">next</button>
+                </div>
+                <div style="clear: both"></div>
+
             </div>
 
         </div>
@@ -143,6 +165,7 @@
 <script src="{{asset('js/libs/jquery.ajaxupload.js')}}"></script>
 <script src="{{asset('js/libs/toastr.min.js')}}"></script>
 <script src="{{asset('js/libs/jquery-confirm.min.js')}}"></script>
+<script src="{{asset('js/libs/moment.min.js')}}"></script>
 <script>
     toastr.options = {
         "closeButton": false,
@@ -221,10 +244,11 @@
                 var p = $("#search_form").serialize();
                 const  self = this;
                 self.loading = true;
-                axios.post('api/search/hotel/',p)
+                console.log(p);
+                axios.post('/api/search/order',p)
                         .then(function(response){
                             console.log(response.data);
-                            self.hotels = response.data.obj;
+                            self.orders = response.data.obj;
                             self.loading = false;
 
                         })
