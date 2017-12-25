@@ -354,7 +354,6 @@ class IndexController extends Controller
                 "ok"=>0,
                 "msg"=>"ok1",
                 "obj"=>$res,
-                "sub"=>substr($keyword,1),
             ]
         );
     }
