@@ -82,9 +82,16 @@
             margin: 0;
         }
         #markdown_wrapper a{
-            margin-left: -15px;
             padding: 0 15px;
             margin: 0;
+        }
+        body{
+            background-color: #f9f9f9;
+        }
+        .border_shadow{
+            -webkit-box-shadow: 0px 1px 2px 1px rgba(0,0,0,0.1);
+            -moz-box-shadow: 0px 1px 2px 1px rgba(0,0,0,0.1);
+            box-shadow: 0px 1px 2px 1px rgba(0,0,0,0.1);
         }
     </style>
 
@@ -127,7 +134,7 @@
                     <div class="swiper-pagination"></div>
                 </div>
             </div>
-            <div class="header" id="hotel_header" style="padding: 15px;font-weight: 200">
+            <div class="header" id="hotel_header" style="padding: 15px;font-weight: 200;background-color: #FFF">
                 <div style="font-weight: 300;font-size: 20px"><%hotel.name%></div>
                 <div><%hotel.name_en%></div>
                 <div style="margin-top: 10px">
@@ -151,6 +158,7 @@
             </div>
             <div style="clear: both"></div>
             <template v-if="section == 'detail'">
+                <div style="background-color: #FFF">
                 <div style="padding: 15px">
                     <div class="m_title">酒店详情</div>
                     <p class="font_normal" v-html="hotel.description"></p>
@@ -219,16 +227,16 @@
                         <span>4001-567-165</span>
                     </div>
                 </div>
-
+                </div>
             </template>
             <template v-else-if="section == 'room'">
                 <div v-for="room in hotel.rooms">
-                    <div style="background-color: #FFF">
+                    <div style="background-color: #FFF;margin: 15px 15px 0 15px;" class="border_shadow">
                         <div style="width: 100%;">
-                            <img style="width: 100%;object-fit: cover;height: 222px" v-if="room.images_str" :src="room.images_str.split('\n')[0]"  v-on:click="view_room_images(room.images_str)">
+                            <img style="width: 100%;object-fit: cover;height: 222px" v-if="room.images_str" :src="room.images_str.split('\n')[0]">
                             <div v-else style="width: 100%;padding:60px 0;background-color: whitesmoke;text-align: center;color: lightgrey">暂无图片</div>
                         </div>
-                        <div style="padding: 15px">
+                        <div style="padding: 15px;">
                             <div class="m_title"><% room.name %></div>
                             <div style="height: 8px"></div>
                             <ul class="font_normal" style="padding:0 15px;color: #C19B76">
@@ -242,10 +250,11 @@
                             <p class="font_normal" v-html="markdown(room.facilities)"></p>
                         </div>
                     </div>
-                    <div style="clear: both;height:15px;width: 10px"></div>
                 </div>
+                <div style="height: 15px;width: 100%"></div>
             </template>
             <template v-else-if="section == 'facilities'">
+                <div style="background-color: #FFF">
                 <div style="padding: 15px">
                     <div class="m_title">酒店设施</div>
                     <template v-for="(item,index) in arr_facilities" >
@@ -279,6 +288,7 @@
                     <div style="height: 30px;width: 100px"></div>
                 </div>
                 <div class="line"></div>
+                </div>
             </template>
             <div class="footer">
                 &copy; 2018致游旅游咨询有限公司(上海)
@@ -325,7 +335,16 @@
     }
     $(document).ready(function(){
     });
+    $(document).click(function(e) {
 
+        var container = $("#dialog");
+
+        // if the target of the click isn't the container nor a descendant of the container
+        if (!container.is(e.target) && container.has(e.target).length === 0)
+        {
+            container.hide();
+        }
+    });
 </script>
 {{--<script async defer--}}
         {{--src="http://ditu.google.cn/maps/api/js?key=AIzaSyBJfv6WxdEoTqSgibZDdOL-m-lLWz6UO8E&libraries=geometry,places&callback=mapCallback">--}}
@@ -540,6 +559,11 @@
                 var left = $(self).offset().left;
                 var top = $(self).offset().top;
                 var h = $(self).outerHeight();
+                if($("#dialog").is(":visible")){
+                    this.close_dialog();
+                    return;
+                }
+
                 $("#dialog").css("left", (left)+"px");
                 $("#dialog").css("top", (top+h)+"px");
                 $("#dialog").slideDown(200);
