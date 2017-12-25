@@ -10,7 +10,8 @@
         "almasaeed2010/adminlte": "~2.4",
         "qiniu/php-sdk": "^7.2",
         "jenssegers/mongodb": "3.0.x",
-        "guzzlehttp/guzzle": "^6.3"
+        "guzzlehttp/guzzle": "^6.3",
+        "jenssegers/agent": "^2.6"
     },
     "require-dev": {
         "fzaninotto/faker": "~1.4",

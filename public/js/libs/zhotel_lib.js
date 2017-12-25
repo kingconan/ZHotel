@@ -1,5 +1,7 @@
-function zhotel_markdown(str) {//simple markdown parser
+function zhotel_markdown(str, mobile) {//simple markdown parser
+    mobile = mobile || false;
     if(!str || str == "" ) return "";
+
     var arr = str.split("\n");
     var html = "";
     var item = "";
@@ -11,6 +13,11 @@ function zhotel_markdown(str) {//simple markdown parser
         '<div class="swiper-button-prev2"></div>' +
         '<div class="swiper-pagination"></div>' +
         '</div>';
+    if(mobile){
+        gallery_post = '</div>' +
+            '<div class="swiper-pagination"></div>' +
+            '</div>';
+    }
     for (var i = 0, len = arr.length; i < len; i++) {
         item = (arr[i]);
         //console.log(item);
@@ -114,7 +121,7 @@ function zhotel_markdown(str) {//simple markdown parser
             }
         }
         else {
-            html = html + item;
+            html = html + "<span>" + item + "</span>";
             html = html + '<br />';
         }
     }

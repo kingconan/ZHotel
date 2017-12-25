@@ -25,8 +25,6 @@
         }
         .cover{
             width: 100%;
-            padding-bottom: 60%;
-            background-color: lightblue;
         }
         .m_title{
             font-size: 16px;
@@ -39,8 +37,11 @@
         .markdown-image{
             width: 100%;
             margin: 8px 0;
-            max-height: 360px;
+            height: 222px;
             object-fit: cover;
+        }
+        .markdown-gallery{
+            height: 222px;
         }
         .affix {
             top:0;
@@ -54,6 +55,36 @@
             background-color: #1f272a;
             padding: 15px;
             color: #505050;
+        }
+        .custom_p{
+            float: right;
+            padding: 3px 12px;
+            color: white;
+            background-color: rgba(0,0,0,.5);
+            border-radius: 10px;
+            font-size: 10px;
+            margin-right: 10px;
+            /*height: 20px;*/
+        }
+        .custom_p1{
+            float: right;
+            padding: 0px 12px;
+            color: white;
+            background-color: rgba(0,0,0,.5);
+            border-radius: 10px;
+            font-size: 10px;
+            margin-right: 10px;
+            /*height: 20px;*/
+        }
+        #markdown_wrapper span{
+            display: block;
+            padding: 0 15px;
+            margin: 0;
+        }
+        #markdown_wrapper a{
+            margin-left: -15px;
+            padding: 0 15px;
+            margin: 0;
         }
     </style>
 
@@ -86,20 +117,27 @@
             </div>
         </div>
         <div v-else>
-            <div class="cover">
-                <div>
-
+            <div :style="style_cover">
+                <div v-if="sorted_covers" class="swiper-container banner-gallery">
+                    <div class="swiper-wrapper">
+                        <div v-for="(image, index) in sorted_covers" class="swiper-slide">
+                            <img  :src="image.url" style="width: 100%"/>
+                        </div>
+                    </div>
+                    <div class="swiper-pagination"></div>
                 </div>
             </div>
-            <div class="header" id="hotel_header">
-                <div><%hotel.name%></div>
+            <div class="header" id="hotel_header" style="padding: 15px;font-weight: 200">
+                <div style="font-weight: 300;font-size: 20px"><%hotel.name%></div>
                 <div><%hotel.name_en%></div>
-                <span><% hotel.location.continent %></span> >
-                <span><% hotel.location.country %></span> >
-                <span><% hotel.location.city %></span> >
-                <span>酒店</span>
+                <div style="margin-top: 10px">
+                    <span><% hotel.location.continent %></span> >
+                    <span><% hotel.location.country %></span> >
+                    <span><% hotel.location.city %></span> >
+                    <span>酒店</span>
+                </div>
             </div>
-            <div style="color: white;font-size: 12px;font-weight: 200">
+            <div style="color: white;font-size: 12px;font-weight: 200;min-height: 41px">
                 <div id="hotel_nav" style="width: 100%">
                     <div style="float: left;width: 100%;padding-right: 120px;position: relative">
                         <div style="text-align: center;background-color: #29353e;padding: 12px 0" v-on:click="show_nav"><%section_str%></div>
@@ -134,10 +172,10 @@
                     </ul>
                 </div>
                 <div class="line"></div>
-                <div style="padding: 15px" v-if="hotel.detail.extend">
+                <div style="padding: 15px 0" v-if="hotel.detail.extend">
                     <div v-for="section in detail_extend">
-                        <div class="m_title"><%section.title%></div>
-                        <div class="font_normal" v-html="markdown(section.content)"></div>
+                        <div class="m_title" style="padding: 0 15px"><%section.title%></div>
+                        <div id="markdown_wrapper" class="font_normal" v-html="markdown(section.content)"></div>
                     </div>
                 </div>
                 <div class="line"></div>
@@ -184,10 +222,63 @@
 
             </template>
             <template v-else-if="section == 'room'">
-                房型介绍
+                <div v-for="room in hotel.rooms">
+                    <div style="background-color: #FFF">
+                        <div style="width: 100%;">
+                            <img style="width: 100%;object-fit: cover;height: 222px" v-if="room.images_str" :src="room.images_str.split('\n')[0]"  v-on:click="view_room_images(room.images_str)">
+                            <div v-else style="width: 100%;padding:60px 0;background-color: whitesmoke;text-align: center;color: lightgrey">暂无图片</div>
+                        </div>
+                        <div style="padding: 15px">
+                            <div class="m_title"><% room.name %></div>
+                            <div style="height: 8px"></div>
+                            <ul class="font_normal" style="padding:0 15px;color: #C19B76">
+                                <li v-for="h in str_2_arr(room.highlight)">
+                                    <span style="color: #3c3c3c;font-size: 14px;line-height: 22px"><% h %></span>
+                                </li>
+                            </ul>
+                            <div style="height: 8px"></div>
+                            <p class="font_normal" v-html="markdown(room.description)"></p>
+                            <div style="height: 8px"></div>
+                            <p class="font_normal" v-html="markdown(room.facilities)"></p>
+                        </div>
+                    </div>
+                    <div style="clear: both;height:15px;width: 10px"></div>
+                </div>
             </template>
             <template v-else-if="section == 'facilities'">
-                酒店设施
+                <div style="padding: 15px">
+                    <div class="m_title">酒店设施</div>
+                    <template v-for="(item,index) in arr_facilities" >
+                        <div style="width: 50%;float: left;margin-bottom: 10px"><% item %></div>
+                    </template>
+                    <div style="clear: both"></div>
+                </div>
+                <div class="line"></div>
+                <div style="padding: 15px">
+                    <div class="m_title">订前必读</div>
+                    <div class="font_normal">入住时间：<% hotel.policy.checkin %></div>
+                    <div class="font_normal">退房时间：<% hotel.policy.checkout %></div>
+                    <div class="font_normal">取消政策：<% hotel.policy.cancellation %></div>
+                    <div style="height: 20px;width: 1px"></div>
+                    <div class="font_normal">儿童政策</div>
+                    <div v-for="item in str_2_arr(hotel.policy.children)" class="font_normal">
+                        <% item %>
+                    </div>
+                    <div style="height: 20px;width: 1px"></div>
+                    <div class="font_normal">加床</div>
+                    <div v-for="item in str_2_arr(hotel.policy.extra_bed)" class="font_normal">
+                        <% item %>
+                    </div>
+                    <div style="height: 20px;width: 1px"></div>
+                    <div class="font_normal">宠物</div>
+                    <div v-for="item in str_2_arr(hotel.policy.pet)" class="font_normal">
+                        <% item %>
+                    </div>
+                    <div style="height: 20px;width: 1px"></div>
+                    <div class="font_normal">酒店接受的银行卡类型：<% hotel.policy.payment %></div>
+                    <div style="height: 30px;width: 100px"></div>
+                </div>
+                <div class="line"></div>
             </template>
             <div class="footer">
                 &copy; 2018致游旅游咨询有限公司(上海)
@@ -305,9 +396,7 @@
                 ]
             },
             room_style:0, //0 def, 1 with price
-            hack_width : "100px",
-            style_gallery_image : "width:1028px;height:580px",
-            content_width : "width:1028px"
+            style_cover : "width:100%;height:120px"
         },
         created:function () {
             var _id = this.$route.params.id;
@@ -343,6 +432,33 @@
                         }
                     }
             );
+
+            try{
+                var swiper = new Swiper('.banner-gallery', {
+                    pagination: {
+                        el: '.swiper-pagination',
+                        type : "custom",
+                        renderCustom: function (swiper, current, total) {
+                            return "<div class='custom_p'>"+current + ' / ' + total+"</div>"
+                        }
+                    },
+                    loop:true
+                });
+            }
+            catch (e){}
+            try {
+                var swiper1 = new Swiper('.markdown-gallery', {
+                    pagination: {
+                        el: '.swiper-pagination',
+                        type : "custom",
+                        renderCustom: function (swiper, current, total) {
+                            return "<div class='custom_p1'>"+current + ' / ' + total+"</div>"
+                        }
+                    },
+                    loop: true
+                });
+            }
+            catch (e){}
         },
         methods:{
             get_data : function(_id){
@@ -371,7 +487,7 @@
             },
             markdown : function(str){
 //                console.log(str);
-                return zhotel_markdown(str);
+                return zhotel_markdown(str,true);
             },
             str_2_arr : function(str){
                 if(!str){
@@ -417,7 +533,7 @@
                 var height = document.documentElement.clientHeight;
                 var width = document.documentElement.clientWidth;
                 console.log("resize(wxh) = "+width+","+height);
-                this.hack_width = (width - 1028 )/2 + "px";
+                this.style_cover = "width:100%;height:"+width*0.6+"px";
             },
             show_nav : function(e){
                 var self = e.target;
