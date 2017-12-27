@@ -135,9 +135,9 @@
                             <span style="color: grey;font-size: 12px"><%hotel.last_editor?hotel.last_editor:"Zer" %></span>
                         </td>
                         <td>
-                            <a :href="'/edit_hotel?id='+hotel._id" class="btn btn-default btn-sm">编辑</a>
-                            <a :href="'/plan?id='+hotel._id" class="btn btn-default btn-sm">合同</a>
-                            <a :href="'/hotel/detail/'+hotel._id" class="btn btn-default btn-sm">预览</a>
+                            <a :href="'/edit_hotel?id='+hotel._id" target="_blank" class="btn btn-default btn-sm">编辑</a>
+                            <a :href="'/plan?id='+hotel._id" target="_blank" class="btn btn-default btn-sm">合同</a>
+                            <a :href="'/hotel/detail/'+hotel._id" target="_blank" class="btn btn-default btn-sm">预览</a>
                             <button v-on:click="online(hotel._id)" class="btn btn-default btn-sm" style="margin-left: 15px;">
                                 <%hotel.status == 1 ? "下线" : "上线"%>
                             </button>
@@ -162,6 +162,7 @@
 @endsection
 @section('script')
 <script src="{{asset('js/libs/vue.min.js')}}"></script>
+<script src="{{asset('js/libs/vue-router.min.js')}}"></script>
 <script src="{{asset('js/libs/jquery.ajaxupload.js')}}"></script>
 <script src="{{asset('js/libs/toastr.min.js')}}"></script>
 <script src="{{asset('js/libs/jquery-confirm.min.js')}}"></script>
@@ -185,7 +186,12 @@
     }
 </script>
 <script>
+    var router = new VueRouter({
+        mode: 'history',
+        routes: []
+    });
     var hotelList = new Vue({
+        router,
         el: '#hotel_list',
         delimiters: ["<%","%>"],
         components: {
@@ -208,7 +214,12 @@
             get_data : function(){
                 const self = this;
                 console.log("created");
-                axios.post('/api/test/',{
+                var url = '/api/hotels/';
+                var page = this.$route.query.page;
+                if(page){
+                    url = url + "?page="+page;
+                }
+                axios.post(url,{
                             k1: "v1"
                         })
                         .then(function(response){

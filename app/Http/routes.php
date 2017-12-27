@@ -33,6 +33,7 @@ Route::group(['middleware' => 'web'],function() {
     //apis
     Route::post('/customer/login', 'Backend\CustomerController@login');
     Route::post('/customer/register', 'Backend\CustomerController@register');
+    Route::post('/customer/alogin', 'Backend\CustomerController@ajaxLogin');
     Route::any('/order/booking/step', 'Backend\OrderController@orderRedirect');
     Route::get('/logout', 'Backend\CustomerController@logout');
 
@@ -83,7 +84,7 @@ Route::group(['middleware' => 'web'],function() {
 
 
 Route::group(['middleware'=>'api'],function(){
-    Route::post('/api/test', 'Backend\IndexController@getHotelList');
+    Route::post('/api/hotels', 'Backend\IndexController@getHotelList');
     Route::post('/api/hotel/{id}', 'Backend\IndexController@getHotel');
     Route::post('/api/update/hotel', 'Backend\IndexController@updateHotel');
     Route::post('/api/delete/hotel', 'Backend\IndexController@deleteHotel');

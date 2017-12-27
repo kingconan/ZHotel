@@ -66,6 +66,8 @@ class IndexController extends Controller
             return Redirect::to('/zhotel/ss/login');
         }
     }
+
+
     public function logout(Request $request){
         ZEvent::log(self::getCurrentMaster(), "cmd",__METHOD__, "");
         BAuth::logout();

@@ -12,6 +12,7 @@ use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\URL;
 use App\Models\ZEvent;
+use Illuminate\Support\Facades\Redis;
 class OrderController extends Controller
 {
     /**
@@ -29,6 +30,13 @@ class OrderController extends Controller
 
     public function createPayment(Request $request){
 
+    }
+
+    public function testRedis(){
+        $zhotel_1 = Redis::get("zhotel.hotel.123");
+        Redis::set("zhotel.hotel.123","set_value");
+        Redis::set("zhotel.hotel.456","ex-value");
+        Redis::expire("zhotel.hotel.456", 10);
     }
 
 
@@ -96,6 +104,7 @@ class OrderController extends Controller
     }
 
     public function getOrder($id,Request $request){
+        self::testRedis();
         $order = Order::find($id);
         if($order){
             return response()->json(

@@ -29,6 +29,17 @@ class CustomerController extends Controller
             return Redirect::to('/login');
         }
     }
+    public function ajaxLogin(Request $request){
+        $email = $request->input("email");
+        $password = $request->input("password");
+        ZEvent::log(self::getCurrentEr(), "cmd",__METHOD__, [$email,$password]);
+        if(Auth::guard(self::guard)->attempt(['email'=>$email,'password'=>$password],true)){
+            return response()->json(['ok'=>0,'msg'=>' login ok']);
+        }
+        else{
+            return response()->json(['ok'=>4,'msg'=>'wrong username or password']);
+        }
+    }
     public function logout(Request $request){
         ZEvent::log(self::getCurrentEr(), "cmd",__METHOD__, "");
         Auth::guard(self::guard)->logout();
