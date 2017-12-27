@@ -1,6 +1,6 @@
 <?php
 use Illuminate\Support\Facades\Route;
-use Jenssegers\Agent\Agent;
+//use Jenssegers\Agent\Agent;
 /*
 |--------------------------------------------------------------------------
 | Application Routes
@@ -18,10 +18,10 @@ Route::group(['middleware' => 'web'],function() {
 //        return view('frontend.index.welcome');
     });
     Route::get('/hotel/detail/{id}', function () {
-        $agent = new Agent();
-        if($agent->isMobile()){
-            return view('mobile.index.hotel');
-        }
+//        $agent = new Agent();
+//        if($agent->isMobile()){
+//            return view('mobile.index.hotel');
+//        }
         return view('frontend.index.hotel');
     });
     Route::get('/login', function () {
