@@ -115,6 +115,17 @@
         .fade-enter, .fade-leave-to /* .fade-leave-active in below version 2.1.8 */ {
             transition: opacity .2s
         }
+        .slide-fade-enter-active {
+            transition: all .3s ease;
+        }
+        .slide-fade-leave-active {
+            transition: all .8s cubic-bezier(1.0, 0.5, 0.8, 1.0);
+        }
+        .slide-fade-enter, .slide-fade-leave-to
+            /* .slide-fade-leave-active for below version 2.1.8 */ {
+            transform: translateX(10px);
+            opacity: 0;
+        }
     </style>
 
 @endsection
@@ -316,6 +327,7 @@
                 </templatediv>
             </template>
             <div v-else-if="state == 2" style="padding: 15px;min-height: 600px;background-color: white">
+
                 <div>
                     <div style="float: left;width: 100%;text-align: center">选择日期,人数</div>
                     <div style="float: left;width: 60px;margin-left: -100%" v-on:click="close_cc"><i class="fa fa-times" aria-hidden="true"></i></div>
@@ -426,6 +438,10 @@
                     </div>
                     <div style="clear: both"></div>
                 </div>
+                <div style="text-align: center;margin-top: 30px">
+                    <button v-on:click="close_cc" type="button" class="btn btn-default btn-sm">确定</button>
+                </div>
+
             </div>
 
 
@@ -936,7 +952,7 @@
                     const self = this;
                     this.timer = setTimeout(function(){
                         self.date_picker.show = false;
-                    },1000);
+                    },250);
                 }
                 console.log(this.date_picker);
             },
