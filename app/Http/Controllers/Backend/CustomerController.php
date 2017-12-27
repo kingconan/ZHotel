@@ -46,7 +46,12 @@ class CustomerController extends Controller
         $password = $request->input("password");
         ZEvent::log(self::getCurrentEr(), "cmd",__METHOD__, [$email,$password]);
         if(Auth::guard(self::guard)->attempt(['email'=>$email,'password'=>$password],true)){
-            return response()->json(['ok'=>0,'msg'=>' login ok']);
+            $user =  Auth::guard(self::guard)->user();
+            $obj = [
+                "id"=>$user->_id,
+                "name"=>$user->name
+            ];
+            return response()->json(['ok'=>0,'msg'=>'ok', 'user'=>$obj]);
         }
         else{
             return response()->json(['ok'=>4,'msg'=>'wrong username or password']);

@@ -147,21 +147,31 @@
         </div>
         <div v-else>
             <template v-if="state == 1">
-                <template v-if="">
-
-                </template>
-                @if(Auth::guard('customer')->guest())
+                <template v-if="user">
                     <div style="background-color: #0a0a0a;color: lightgrey;padding: 3px;text-align: center">
-                        <span>guest</span>
-                       <button type="button" class="btn btn-default btn-sm" v-on:click="show_login">login</button>
-                        <a href="/register">register</a>
-                    </div>
-                @else
-                    <div style="background-color: #0a0a0a;color: lightgrey;padding: 3px;text-align: center">
-                        <span>{{Auth::guard('customer')->user()->name}}</span>
+                        <span><%user.name%></span>
                         <a href="/logout">logout</a>
                     </div>
-                @endif
+                </template>
+                <template v-else>
+                    <div style="background-color: #0a0a0a;color: lightgrey;padding: 3px;text-align: center">
+                        <span>guest</span>
+                        <button type="button" class="btn btn-default btn-sm" v-on:click="show_login">login</button>
+                        <a href="/register">register</a>
+                    </div>
+                </template>
+                {{--@if(Auth::guard('customer')->guest())--}}
+                    {{--<div style="background-color: #0a0a0a;color: lightgrey;padding: 3px;text-align: center">--}}
+                        {{--<span>guest</span>--}}
+                       {{--<button type="button" class="btn btn-default btn-sm" v-on:click="show_login">login</button>--}}
+                        {{--<a href="/register">register</a>--}}
+                    {{--</div>--}}
+                {{--@else--}}
+                    {{--<div style="background-color: #0a0a0a;color: lightgrey;padding: 3px;text-align: center">--}}
+                        {{--<span>{{Auth::guard('customer')->user()->name}}</span>--}}
+                        {{--<a href="/logout">logout</a>--}}
+                    {{--</div>--}}
+                {{--@endif--}}
                 <div :style="style_cover">
                     <div v-if="sorted_covers" class="swiper-container banner-gallery">
                         <div class="swiper-wrapper">
@@ -457,24 +467,24 @@
             <div class="d_nav" v-on:click="select_nav('facilities')">酒店设施</div><div class="line"></div>
             <div class="d_nav" v-on:click="select_nav('room')">房型介绍</div>
         </div>
-
+        <div id="dialog_login" class="modal fade" tabindex="-1" role="dialog">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-body">
+                        <form id="dialog_form">
+                            <input name="email" placeholder="email" />
+                            <input name="password" placeholder="password" />
+                        </form>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-primary" v-on:click="login()">登录</button>
+                    </div>
+                </div><!-- /.modal-content -->
+            </div><!-- /.modal-dialog -->
+        </div><!-- /.modal -->
     </div>
 </div>
-<div id="dialog_login" class="modal fade" tabindex="-1" role="dialog">
-    <div class="modal-dialog" role="document">
-        <div class="modal-content">
-            <div class="modal-body">
-            <form id="dialog_form">
-                <input name="email" placeholder="email" />
-                <input name="password" placeholder="password" />
-            </form>
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-primary" onclick="login()">登录</button>
-            </div>
-        </div><!-- /.modal-content -->
-    </div><!-- /.modal-dialog -->
-</div><!-- /.modal -->
+
 @endsection
 @section('script')
 <script src="{{asset('js/libs/vue.min.js')}}"></script>
@@ -698,7 +708,9 @@
                     loop:true
                 });
             }
-            catch (e){}
+            catch (e){
+
+            }
             try {
                 var swiper1 = new Swiper('.markdown-gallery', {
                     pagination: {
@@ -825,6 +837,24 @@
             },
             show_login : function(e){
                 $("#dialog_login").modal("show");
+            },
+            login : function(){
+                var p = $("#dialog_form").serialize();
+                var self = this;
+                axios.post('/customer/alogin',p)
+                        .then(function(response){
+                            console.log(response.data);
+                            if(response.data.ok == 0){
+                                $("#dialog_login").modal("hide");
+                                self.user = response.data.user;
+                            }
+                            else{
+                                alert(response.data.msg);
+                            }
+                        })
+                        .catch(function(error){
+                            console.log(error);
+                        });
             },
             add_adult : function(){
                 this.book.adult = this.book.adult + 1
@@ -1049,25 +1079,5 @@
         }
     })
 
-</script>
-<script>
-    function login(){
-        var p = $("#dialog_form").serialize();
-        axios.post('/customer/alogin',p)
-                .then(function(response){
-                    console.log(response.data);
-                    if(response.data.ok == 0){
-                        $("#dialog_login").modal("hide");
-                        hotelList.$forceUpdate();
-//                        window.location.reload();
-                    }
-                    else{
-                        alert(response.data.msg);
-                    }
-                })
-                .catch(function(error){
-                    console.log(error);
-                });
-    }
 </script>
 @endsection
