@@ -14,7 +14,8 @@ use Jenssegers\Agent\Agent;
 Route::group(['middleware' => 'web'],function() {
     //frontend
     Route::get('/', function () {
-        return view('frontend.index.welcome');
+        echo phpinfo();
+//        return view('frontend.index.welcome');
     });
     Route::get('/hotel/detail/{id}', function () {
         $agent = new Agent();
