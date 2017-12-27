@@ -10,6 +10,7 @@ use App\Models\ZEvent;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\Auth;
 use App\Models\Customer;
+use Illuminate\Support\Facades\URL;
 
 class CustomerController extends Controller
 {
@@ -18,12 +19,23 @@ class CustomerController extends Controller
      * LOGIN - LOGOUT
      */
     const guard = 'customer';
+    public static function user(){
+        if(Auth::guard(self::guard)->user()){
+            $user =  Auth::guard(self::guard)->user();
+            return [
+              "id"=>$user->_id,
+                "name"=>$user->name
+            ];
+
+        }
+        return null;
+    }
     public function login(Request $request){
         $email = $request->input("email");
         $password = $request->input("password");
         ZEvent::log(self::getCurrentEr(), "cmd",__METHOD__, [$email,$password]);
         if(Auth::guard(self::guard)->attempt(['email'=>$email,'password'=>$password],true)){
-            return redirect()->intended('/');
+            return redirect()->intented("/");
         }
         else{
             return Redirect::to('/login');
@@ -43,7 +55,8 @@ class CustomerController extends Controller
     public function logout(Request $request){
         ZEvent::log(self::getCurrentEr(), "cmd",__METHOD__, "");
         Auth::guard(self::guard)->logout();
-        return redirect()->intended('/');
+        return redirect()->to(URL::previous());
+//        return redirect()->intended('/');
     }
     public function register(Request $request){
         $name = $request->input("name");

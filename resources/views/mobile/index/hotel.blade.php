@@ -147,6 +147,9 @@
         </div>
         <div v-else>
             <template v-if="state == 1">
+                <template v-if="">
+
+                </template>
                 @if(Auth::guard('customer')->guest())
                     <div style="background-color: #0a0a0a;color: lightgrey;padding: 3px;text-align: center">
                         <span>guest</span>
@@ -643,7 +646,8 @@
                 checkout : null,
                 show : false
             },
-            timer : null
+            timer : null,
+            user : null
         },
         created:function () {
             var _id = this.$route.params.id;
@@ -725,6 +729,9 @@
                             }
 
                             self.hotel = response.data.obj;
+                            if(response.date.user){
+                                self.user = user;
+                            }
 
                             self.loading = false;
                             hotel_lat = parseFloat(self.hotel.location.lat);
@@ -1050,7 +1057,9 @@
                 .then(function(response){
                     console.log(response.data);
                     if(response.data.ok == 0){
-                        window.location.reload();
+                        $("#dialog_login").modal("hide");
+                        hotelList.$forceUpdate();
+//                        window.location.reload();
                     }
                     else{
                         alert(response.data.msg);

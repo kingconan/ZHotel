@@ -237,7 +237,8 @@ class IndexController extends Controller
             [
                 "ok"=>0,
                 "msg"=>"ok",
-                "obj"=>$res
+                "obj"=>$res,
+                "user"=>CustomerController::user()
             ]
         );
 

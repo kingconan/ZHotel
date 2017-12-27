@@ -888,7 +888,16 @@
             }
         })
     });
+    var hash_back = "";
 
+    window.addEventListener("beforeunload", function (e) {
+        if(hash_back != hotelList.helper_json()){
+            var confirmationMessage = '离开之前请确认保存,否则更改信息会丢失的!!!';
+
+            (e || window.event).returnValue = confirmationMessage; //Gecko + IE
+            return confirmationMessage; //Gecko + Webkit, Safari, Chrome etc.
+        }
+    });
 </script>
 
 <script>
@@ -1349,11 +1358,13 @@
                 console.log("save");
                 var paras = JSON.parse(JSON.stringify(this.$data));
                 console.log(paras);
+                const self = this;
                 axios.post('api/update/contract/',paras.hotel)
                         .then(function(response){
                             console.log(response.data);
                             if(response.data.ok == 0){
                                 toastr["success"](response.data.msg)
+                                hash_back = self.helper_json();
                             }
                             else{
                                 toastr["error"](response.data.msg)
@@ -1370,36 +1381,43 @@
                         })
                         .then(function(response){
                             console.log(response.data);
-                            var obj = response.data.obj;
-                            if(obj.hasOwnProperty("contracts")){
+                            if(response.data.ok == 0){
+                                var obj = response.data.obj;
+                                if(obj.hasOwnProperty("contracts")){
 
+                                }
+                                else{
+                                    obj.contracts = []
+                                }
+
+                                self.hotel = obj;
+
+                                for(var j= 0,jLen = self.hotel.contracts.length;j<jLen;j++){
+                                    var rooms = self.hotel.contracts[j].rooms;
+                                    //update room state
+                                    for(var k= 0,kLen = rooms.length;k<kLen;k++){
+                                        if(self.has_room(rooms[k].room_id)){
+                                            //has room
+                                        }
+                                        else{
+                                            //deleted room
+                                            rooms[k].state = "deleted";
+                                        }
+                                    }
+                                    var new_rooms = self.append_new_rooms(self.hotel.rooms,rooms);
+                                    if(new_rooms){
+                                        console.log("add new room to contracts")
+                                        Array.prototype.push.apply(self.hotel.contracts[j].rooms,new_rooms);
+                                    }
+                                }
+
+                                self.loading = false;
+                                hash_back = self.helper_json();
                             }
                             else{
-                                obj.contracts = []
+                                toastr["error"](response.data.msg)
                             }
 
-                            self.hotel = obj;
-
-                            for(var j= 0,jLen = self.hotel.contracts.length;j<jLen;j++){
-                                var rooms = self.hotel.contracts[j].rooms;
-                                //update room state
-                                for(var k= 0,kLen = rooms.length;k<kLen;k++){
-                                    if(self.has_room(rooms[k].room_id)){
-                                        //has room
-                                    }
-                                    else{
-                                        //deleted room
-                                        rooms[k].state = "deleted";
-                                    }
-                                }
-                                var new_rooms = self.append_new_rooms(self.hotel.rooms,rooms);
-                                if(new_rooms){
-                                    console.log("add new room to contracts")
-                                    Array.prototype.push.apply(self.hotel.contracts[j].rooms,new_rooms);
-                                }
-                            }
-
-                            self.loading = false;
                         })
                         .catch(function(error){
                             console.log(error);
@@ -1901,6 +1919,9 @@
                 if(!str) return "";
                 var breakTag = (is_xhtml || typeof is_xhtml === 'undefined') ? '<br />' : '<br>';
                 return (str + '').replace(/([^>\r\n]?)(\r\n|\n\r|\r|\n)/g, '$1' + breakTag + '$2');
+            },
+            helper_json :function(){
+                return JSON.stringify(this.$data.hotel);
             }
         },
         computed : {
