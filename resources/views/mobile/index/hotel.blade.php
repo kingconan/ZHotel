@@ -729,7 +729,7 @@
                             }
 
                             self.hotel = response.data.obj;
-                            if(response.date.user){
+                            if(response.data.user){
                                 self.user = user;
                             }
 
