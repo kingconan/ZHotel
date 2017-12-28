@@ -50,7 +50,7 @@ Route::group(['middleware' => 'web'],function() {
     Route::post('/ss/logout', 'Backend\IndexController@logout');
 });
 
-//Route::group(['middleware' => 'b_auth'],function() {
+Route::group(['middleware' => 'b_auth'],function() {
     Route::get('/create_hotel', function () {
         return view('backend.index.hotel_create');
     });
@@ -80,7 +80,7 @@ Route::group(['middleware' => 'web'],function() {
     Route::get('zashboard/order', function () {
         return view('backend.index.order');
     });
-//});
+});
 
 
 

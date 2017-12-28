@@ -9,6 +9,7 @@ use Illuminate\Http\Request;
 
 use App\Http\Requests;
 use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Session;
 use Qiniu\Auth;
 use Qiniu\Storage\BucketManager;
 use Qiniu\Storage\UploadManager;
@@ -60,7 +61,7 @@ class IndexController extends Controller
         $password = $request->input("password");
         ZEvent::log(self::getCurrentMaster(), "cmd",__METHOD__, [$email,$password]);
         if(BAuth::attempt(['email'=>$email,'password'=>$password],true)){
-            return redirect()->intended('/hotel_list');
+            return redirect()->intended('/zashboard/hotels');
         }
         else{
             return Redirect::to('/zhotel/ss/login');

@@ -4,7 +4,6 @@ namespace App\Http\Middleware;
 
 use Closure;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Redirect;
 class BAuth
 {
     /**
@@ -16,11 +15,10 @@ class BAuth
      */
     public function handle($request, Closure $next)
     {
-        if(Auth::check()){
-            return $next($request);
+        if(Auth::guest()){
+            return redirect()->guest('/zhotel/ss/login');
+
         }
-        else{
-            return Redirect::to('/zhotel/ss/login');
-        }
+        return $next($request);
     }
 }
