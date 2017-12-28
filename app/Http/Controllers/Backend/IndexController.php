@@ -410,6 +410,7 @@ class IndexController extends Controller
             foreach($contract["rooms"] as $c){
                 if($c["room_id"] == $room_id){
                     //#1 basic price
+                    //$c 该合同对房型room_id的价格计划
                     $ans = self::calculateRoomPrice($c,$checkin,$checkout,$adult,$children,$children_age
                         ,$contract["price_rate"],$contract["price_unit"]);
                     if($ans){
@@ -487,7 +488,7 @@ class IndexController extends Controller
     private function calculateRoomPrice($plan,$checkin,$checkout,$adult,$children,$ages,$price_rate,$price_unit){
         Log::info("calculateRoomPrice");
         $last_night = self::lastNightDate($checkout);
-        $room_prices = $plan["prices"];
+        $room_prices = $plan["prices"];//普通班期价格 arr of {date_from,date_to,price}
         $plans = $plan["plans"];
 
         $find = 0;
@@ -495,6 +496,8 @@ class IndexController extends Controller
         $ans = [];
         $total_cnt = self::diffDateString($checkin,$checkout);
         $basic_price = 0;
+
+        //将基础班期的每天价格放到$ans里
         foreach($room_prices as $price){
             //先找checkin 范围
             if($find == 0){
@@ -507,6 +510,7 @@ class IndexController extends Controller
                             $basic_price = $basic_price + $price["price"];
                             array_push($ans,$price["price"]);
                         }
+                        break;//一次找到全部班期
                     }
                     else{
                         //算一部分钱
@@ -526,8 +530,11 @@ class IndexController extends Controller
                         $basic_price = $basic_price + $price["price"];
                         array_push($ans,$price["price"]);
                     }
+                    //找到第二部分
+                    break;
                 }
                 else{//
+                    //说明checkin checkout跨多个时间段了,本时间段全部加进去
                     $count = self::diffDateString($price["date_from"],$price["date_to"]) + 1;
                     for($i=0;$i<$count;$i++){
                         $basic_price = $basic_price + $price["price"];
@@ -535,6 +542,14 @@ class IndexController extends Controller
                     }
                 }
             }
+        }
+
+        if($total_cnt != count($ans)){//晚数相等
+            //该计划不能给出答案
+            return [
+                "ok" => 1,
+                "msg" => "班期不满足ci-co"
+            ];
         }
 
 
@@ -548,6 +563,54 @@ class IndexController extends Controller
             "include"=>isset($plan["include"]) ? $plan["include"] : "",
             "memo"=>isset($plan["memo"]) ? $plan["memo"] : "",
         ]);
+
+
+        //入住限制 limit
+        if(isset($plan["limit"]) && $plan["limit"]){
+            foreach ($plan["limit"] as $item) {
+                /**
+                 * date_from date_to night_max night_min
+                 * if checkin & checkout in limit-date-range
+                 *    nights >= night_min && nights <= night_max
+                 * else
+                 *    return NULL
+                 */
+                $night_in = -1;
+                 if($checkin < $item["date_from"]){
+                     if($checkout <= $item["date_from"]){
+                         //不在时间范围内
+                     }
+                     else if($checkout <= $item["date_to"]){
+                         $night_in = self::diffDateString($item["date_from"],$checkout);
+                     }
+                     else{
+                         $night_in = self::diffDateString($item["date_from"],$item["date_to"]) + 1;
+                     }
+                 }
+                else if($checkin >= $item["date_from"] && $checkin <= $item["date_to"]){
+                    if($checkout <= $item["date_to"]){
+                        $night_in = self::diffDateString($checkin,$checkout);
+                    }
+                    else{
+                        $night_in = self::diffDateString($checkin,$item["date_to"]) + 1;
+                    }
+                }
+                else{
+                    //不在时间限制内
+                }
+                if($night_in == -1 || ($night_in >= $item["night_min"] && $night_in <= $item["night_max"])){
+                    //有效
+                }
+                else{
+                    return [
+                        "ok" => 1,
+                        "msg" => $item
+                    ];
+                }
+            }
+        }
+
+
         //优化价格计划
         foreach($plans as $item){
             //无班期拒绝
@@ -672,31 +735,15 @@ class IndexController extends Controller
             //adult[] date_from date_to price
             //children[] date_from date_to age_from age_to price
         }
-        //入住限制 limit
-        if(isset($plan["limit"]) && $plan["limit"]){
-            foreach ($plan["limit"] as $item) {
-                /**
-                 * date_from date_to night_max night_min
-                 * if checkin & checkout in limit-date-range
-                 *    nights >= night_min && nights <= night_max
-                 * else
-                 *    return NULL
-                 */
-            }
-        }
 
-        if($find == 2){
-            return [
-                "basic" => $ans,
-                "plans" => $ans_plans,
-                "cancellation" => isset($plan["cancellation"]) ? $plan["cancellation"] : "",
-                "include" => isset($plan["include"]) ? $plan["include"] : "",
-                "memo" => isset($plan["memo"]) ? $plan["memo"] : "",
-            ];
-        }
-        else{
-            return null;
-        }
+
+
+        return [
+            "ok" => 0,
+            "basic" => $ans,
+            "plans" => $ans_plans,
+            "options" => []
+        ];
     }
     //for log
     private function getCurrentUser(){

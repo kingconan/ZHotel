@@ -244,6 +244,10 @@
                                                 <td width="100px"><input class="form-control" type="number" placeholder="价格"  v-model="price.price" /></td>
                                                 <td><button v-on:click="delete_price_for_room(priceIndex)" type="button" class="btn btn-sm btn-default" style="color: indianred"><i class="fa fa-times" aria-hidden="true"></i></button></td>
                                             </tr>
+                                            <tr>
+                                                <td></td>
+                                                <td><%arr_min(room_info.prices)%> - <%arr_max(room_info.prices)%></td>
+                                            </tr>
                                             </tbody>
                                         </table>
                                         <button type="button" class="btn btn-sm btn-default"  v-on:click="add_price_for_room">
@@ -1357,7 +1361,8 @@
             save:function(){
                 console.log("save");
                 var paras = JSON.parse(JSON.stringify(this.$data));
-                console.log(paras);
+                console.log(paras.hotel);
+
                 const self = this;
                 axios.post('api/update/contract/',paras.hotel)
                         .then(function(response){
@@ -1506,6 +1511,26 @@
                 this.currentIndex = s;
                 console.log("add contract");
                 console.log(this.hotel.contracts);
+            },
+            arr_min : function(prices){
+                var min = "2222-22-22";
+                for(var i= 0,len = prices.length;i<len;i++){
+                    if(prices[i].date_from < min){
+                        min = prices[i].date_from;
+                    }
+                }
+                this.hotel.contracts[this.currentIndex].rooms[this.currentRoom].min = min;
+                return min;
+            },
+            arr_max : function(prices){
+                var max = "1111-11-11";
+                for(var i= 0,len = prices.length;i<len;i++){
+                    if(prices[i].date_to > max){
+                        max = prices[i].date_to;
+                    }
+                }
+                this.hotel.contracts[this.currentIndex].rooms[this.currentRoom].max = max;
+                return max;
             },
             add_price_for_room : function(){
                 console.log("add_price_for_room")
