@@ -730,6 +730,9 @@ class IndexController extends Controller
              *
              */
         }
+
+
+        $options = [];
         //强制费用 plus type=0,
         if(isset($plan["plus"]) && $plan["plus"]){
             //adult[] date_from date_to price
@@ -742,7 +745,7 @@ class IndexController extends Controller
             "ok" => 0,
             "basic" => $ans,
             "plans" => $ans_plans,
-            "options" => []
+            "options" => $options
         ];
     }
     //for log
