@@ -66,9 +66,7 @@ Route::group(['middleware' => 'b_auth'],function() {
     Route::get('/plan', function () {
         return view('backend.index.hotel_plan');
     });
-    Route::get('/zhotel/ss/register', function () {
-    return view('backend.index.register');
-    });
+
 
     Route::get('zashboard/hotels', function () {
         return view('backend.index.hotel_list');
@@ -82,7 +80,9 @@ Route::group(['middleware' => 'b_auth'],function() {
     });
 });
 
-
+Route::get('/zhotel/ss/register', function () {
+    return view('backend.index.register');
+});
 
 Route::group(['middleware'=>'api'],function(){
     Route::post('/api/hotels', 'Backend\IndexController@getHotelList');
