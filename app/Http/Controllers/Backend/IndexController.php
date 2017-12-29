@@ -64,7 +64,8 @@ class IndexController extends Controller
             return redirect()->intended('/zashboard/hotels');
         }
         else{
-            return Redirect::to('/zhotel/ss/login');
+            echo "Failed Login ";
+//            return Redirect::to('/zhotel/ss/login');
         }
     }
 
