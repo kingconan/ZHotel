@@ -214,7 +214,7 @@
             get_data : function(){
 
                 const self = this;
-                self.loading = true;
+
                 console.log("created");
                 var url = '/api/hotels/';
                 var page = this.$route.query.page;
@@ -235,6 +235,7 @@
             },
             next_page : function(url){
                 const self = this;
+                self.loading = true;
                 console.log("created");
                 axios.post(url,{
                         })
