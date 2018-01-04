@@ -112,7 +112,7 @@
                     <tbody>
                     <tr v-for="(hotel,index) in hotels.data">
                         <td>
-                            <% index+1 %>
+                            <% hotels.from + index %>
                         </td>
                         <td v-if="hotel.status == 1">
                             <span style="font-size: 10px;background-color: lightgreen;padding: 3px 6px">已上线</span>
@@ -212,7 +212,9 @@
         },
         methods:{
             get_data : function(){
+
                 const self = this;
+                self.loading = true;
                 console.log("created");
                 var url = '/api/hotels/';
                 var page = this.$route.query.page;
@@ -340,8 +342,8 @@
                         });
             },
             parse_location : function(location){
-                console.log("parse_location");
-                console.log(location);
+//                console.log("parse_location");
+//                console.log(location);
                 if(location){
                     return location.country+ " " +location.city;
                 }
