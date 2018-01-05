@@ -162,6 +162,12 @@ class PaymentController extends Controller
             if($message->result_code == 'SUCCESS'){
                 $attach = (string)$message->attach;
                 //TODO parse here
+                $ids = explode("_", $attach);
+                if(count($ids) == 2){
+                    $orderId = $ids[0];
+                    $paymentId = $ids[1];
+                    //queue to execute
+                }
             }
         }
         return '<xml>
