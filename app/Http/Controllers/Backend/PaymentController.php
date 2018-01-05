@@ -7,17 +7,169 @@ use Illuminate\Http\Request;
 
 use App\Http\Requests;
 use App\Http\Controllers\Controller;
+use GuzzleHttp\Client;
 
 require_once ('alipay-sdk/aop/AopClient.php');
 require_once ('alipay-sdk/aop/request/AlipayTradeAppPayRequest.php');
 require_once ('alipay-sdk/aop/request/AlipayTradePagePayRequest.php');
 require_once ('alipay-sdk/aop/request/AlipayTradeWapPayRequest.php');
 
+require_once ('wechat-sdk/WxPay.Data.php');
+require_once ('wechat-sdk/WxPay.Api.php');
+
 /**
     https://openhome.alipay.com/platform/appManage.htm 创建应用
+    zyoutrip.com
  */
 class PaymentController extends Controller
 {
+
+    /**
+     * Wechat Pay
+     * Web :
+     * trade type = NATIVE
+     */
+
+    public function createOpenIdUrl(){
+        $format = 'https://open.weixin.qq.com/connect/oauth2/authorize?appid=%s&redirect_uri=%s&response_type=code&scope=%s&state=%s#wechat_redirect';
+        $orderId = "order123";
+        $paymentId = "payment999";
+
+        $appId = "";
+        $scope = "snsapi_base";
+        $state = $orderId."_".$orderId;
+        $redirectUrl = "http://zyoutrip.com/wechat/redirect";
+
+        $url = sprintf($format, $appId, urlencode($redirectUrl), $scope, $state);
+
+        return $url;
+    }
+
+    public function parseOpenIdRedirect(Request $request){
+        $code = $request->input("code");
+        $state = $request->input("state");
+
+        $format = 'https://api.weixin.qq.com/sns/oauth2/access_token?appid=%s&secret=%s&code=%s&grant_type=authorization_code';
+        $appId = "";
+        $appSecret = "";
+        $url = sprintf($format, $appId, $appSecret, $code);
+
+        $client = new Client();
+        $res = $client->get($url);
+
+        if($res->getStatusCode() == 200){
+            $json_str = $res->getBody();
+            $json = json_decode($json_str);
+            if(isset($json->openid)){
+                $open_id = $json->openid;
+
+                //TODO: create WxPayUnifiedOrder
+                //TODO: get js config
+                //TODO: return View
+            }
+            else{
+                abort(404);
+            }
+
+        }
+    }
+
+    public function weChatWebConfig($payment){
+        $price = $payment["price"] * 100;//covert to FEN
+        $title = $payment["title"];
+        $description = $payment["description"];
+        $goodTag = "";
+        $notifyUrl = "";
+        $orderId = $payment["order_id"];
+        $paymentId = $payment["payment_id"];
+        $hour = 60*60;
+        $expire = $hour;
+
+        $input = new \WxPayUnifiedOrder();
+        $input->SetBody($title);
+        $input->SetAttach($orderId."_".$paymentId);//附件数据
+        $input->SetOut_trade_no(\WxPayConfig::MCHID.date("YmdHis"));
+        $input->SetTotal_fee($price);
+        $input->SetTime_start(date("YmdHis"));
+        $input->SetTime_expire(date("YmdHis", time() + $expire));
+        $input->SetGoods_tag($goodTag);
+        $input->SetNotify_url($notifyUrl);
+        $input->SetTrade_type("NATIVE");
+        $input->SetProduct_id($orderId);
+
+        $order = \WxPayApi::unifiedOrder($input);
+
+        //将$order["code_url"]变成二维码让用户扫描
+
+        return $order;
+    }
+
+    public function weChatJsConfig($payment){
+        $price = $payment["price"] * 100;//covert to FEN
+        $openId = $payment["openId"];
+        $title = $payment["title"];
+        $description = $payment["description"];
+        $goodTag = "";
+        $notifyUrl = "";
+        $orderId = $payment["order_id"];
+        $paymentId = $payment["payment_id"];
+        $hour = 60*60;
+        $expire = $hour;
+
+        $input = new \WxPayUnifiedOrder();
+        $input->SetBody($title);//商品描述
+        $input->SetAttach($orderId."_".$paymentId);//附件数据
+        $input->SetOut_trade_no(\WxPayConfig::MCHID.date("YmdHis"));//商户订单号
+        $input->SetTotal_fee($price);
+        $input->SetTime_start(date("YmdHis"));//交易开始时间
+        $input->SetTime_expire(date("YmdHis", time() + $expire));//交易结束时间
+        $input->SetGoods_tag($goodTag);//商品标记
+        $input->SetNotify_url($notifyUrl);//回调地址
+        $input->SetTrade_type("JSAPI");
+        $input->SetOpenid($openId);
+
+
+        $order = \WxPayApi::unifiedOrder($input);
+        $config = self::_getJsConfig($order);
+
+
+        return $config;
+    }
+
+    private function _getJsConfig($order){
+        if(!array_key_exists("appid", $order)
+            || !array_key_exists("prepay_id", $order)
+            || $order['prepay_id'] == ""){
+            throw new \WxPayException("parameter wrong, wechat");
+        }
+        $jsapi = new \WxPayJsApiPay();
+        $jsapi->SetAppid($order["appid"]);
+        $timeStamp = strval(time());//必须转成string
+        $jsapi->SetTimeStamp($timeStamp);
+        $jsapi->SetNonceStr(\WxPayApi::getNonceStr());
+        $jsapi->SetPackage("prepay_id=" . $order['prepay_id']);
+        $jsapi->SetSignType("MD5");
+        $jsapi->SetPaySign($jsapi->MakeSign());
+        $parameters = json_encode($jsapi->GetValues());
+        return $parameters;
+    }
+
+
+    public function weChatNotify(Request $request){
+        $raw = file_get_contents('php://input');
+        $message = simplexml_load_string($raw, 'SimpleXMLElement', LIBXML_NOCDATA);
+        if($message->return_code == 'SUCCESS'){
+            if($message->result_code == 'SUCCESS'){
+                $attach = (string)$message->attach;
+                //TODO parse here
+            }
+        }
+        return '<xml>
+                <return_code><![CDATA[SUCCESS]]></return_code>
+                <return_msg><![CDATA[OK]]></return_msg>
+                </xml>';
+    }
+
 
     /**
      * Ali Payment
