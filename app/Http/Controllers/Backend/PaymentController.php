@@ -8,6 +8,7 @@ use Illuminate\Http\Request;
 use App\Http\Requests;
 use App\Http\Controllers\Controller;
 use GuzzleHttp\Client;
+use Illuminate\Support\Facades\View;
 use SimpleSoftwareIO\QrCode\Facades\QrCode;
 use Illuminate\Support\Facades\URL;
 
@@ -18,6 +19,7 @@ require_once ('alipay-sdk/aop/request/AlipayTradeWapPayRequest.php');
 
 require_once ('wechat-sdk/WxPay.Data.php');
 require_once ('wechat-sdk/WxPay.Api.php');
+require_once ('wechat-sdk/WxPay.Config.php');
 
 /**
     https://openhome.alipay.com/platform/appManage.htm 创建应用
@@ -39,7 +41,7 @@ class PaymentController extends Controller
         $appId = "";
         $scope = "snsapi_base";
         $state = $orderId."_".$orderId;
-        $redirectUrl = "http://zyoutrip.com/wechat/redirect";
+        $redirectUrl = "http://zyoutrip.com/wechat/payment/redirect";
 
         $url = sprintf($format, $appId, urlencode($redirectUrl), $scope, $state);
 
@@ -52,8 +54,8 @@ class PaymentController extends Controller
         $state = $request->input("state");
 
         $format = 'https://api.weixin.qq.com/sns/oauth2/access_token?appid=%s&secret=%s&code=%s&grant_type=authorization_code';
-        $appId = "";
-        $appSecret = "";
+        $appId = \WxPayConfig::APPID;
+        $appSecret = \WxPayConfig::APPSECRET;
         $url = sprintf($format, $appId, $appSecret, $code);
 
         $client = new Client();
@@ -64,10 +66,20 @@ class PaymentController extends Controller
             $json = json_decode($json_str);
             if(isset($json->openid)){
                 $open_id = $json->openid;
+                $payment = [
+                    'title' => "test",
+                    'price' => 0.01,
+                    'order_id' => "oid",
+                    'payment_id' => "pid-js",
+                    'description' => 'test',
+                    'open_id' => $open_id
+                ];
 
-                //TODO: create WxPayUnifiedOrder
-                //TODO: get js config
-                //TODO: return View
+
+                $config = self::weChatJsConfig($payment);
+
+                return view('mobile.index.payment',['config' => $config]);
+
             }
             else{
                 abort(404);
@@ -156,6 +168,9 @@ class PaymentController extends Controller
             return;
         }
     }
+    public function getWechatJsPay(Request $request){
+        return redirect(self::createOpenIdUrl());
+    }
 
     public function weChatWebConfig($payment){
         $price = $payment["price"] * 100;//covert to FEN
@@ -189,7 +204,7 @@ class PaymentController extends Controller
 
     public function weChatJsConfig($payment){
         $price = $payment["price"] * 100;//covert to FEN
-        $openId = $payment["openId"];
+        $openId = $payment["open_id"];
         $title = $payment["title"];
         $description = $payment["description"];
         $goodTag = "";
@@ -259,18 +274,19 @@ class PaymentController extends Controller
 
         $order = \WxPayApi::unifiedOrder($input);
         /**
-         * <xml>
-        <return_code><![CDATA[SUCCESS]]></return_code>
-        <return_msg><![CDATA[OK]]></return_msg>
-        <appid><![CDATA[wx2421b1c4370ec43b]]></appid>
-        <mch_id><![CDATA[10000100]]></mch_id>
-        <nonce_str><![CDATA[IITRi8Iabbblz1Jc]]></nonce_str>
-        <sign><![CDATA[7921E432F65EB8ED0CE9755F0E86D72F]]></sign>
-        <result_code><![CDATA[SUCCESS]]></result_code>
-        <prepay_id><![CDATA[wx201411101639507cbf6ffd8b0779950874]]></prepay_id>
-        <trade_type><![CDATA[MWEB]]></trade_type>
-        <mweb_url><![CDATA[https://wx.tenpay.com/cgi-bin/mmpayweb-bin/checkmweb?prepay_id=wx2016121516420242444321ca0631331346&package=1405458241]]></mweb_url>
-        </xml>
+         *
+            <xml>
+            <return_code><![CDATA[SUCCESS]]></return_code>
+            <return_msg><![CDATA[OK]]></return_msg>
+            <appid><![CDATA[wx2421b1c4370ec43b]]></appid>
+            <mch_id><![CDATA[10000100]]></mch_id>
+            <nonce_str><![CDATA[IITRi8Iabbblz1Jc]]></nonce_str>
+            <sign><![CDATA[7921E432F65EB8ED0CE9755F0E86D72F]]></sign>
+            <result_code><![CDATA[SUCCESS]]></result_code>
+            <prepay_id><![CDATA[wx201411101639507cbf6ffd8b0779950874]]></prepay_id>
+            <trade_type><![CDATA[MWEB]]></trade_type>
+            <mweb_url><![CDATA[https://wx.tenpay.com/cgi-bin/mmpayweb-bin/checkmweb?prepay_id=wx2016121516420242444321ca0631331346&package=1405458241]]></mweb_url>
+            </xml>
          */
 
         //if order["return_code"] == "SUCCESS": <a href=order["mweb_url"]>Pay</a>
