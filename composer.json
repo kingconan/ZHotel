@@ -12,7 +12,8 @@
         "jenssegers/mongodb": "3.0.x",
         "guzzlehttp/guzzle": "^6.3",
         "jenssegers/agent": "^2.6",
-        "predis/predis": "^1.1"
+        "predis/predis": "^1.1",
+        "simplesoftwareio/simple-qrcode": "~2"
     },
     "require-dev": {
         "fzaninotto/faker": "~1.4",

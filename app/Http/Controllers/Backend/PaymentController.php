@@ -8,6 +8,7 @@ use Illuminate\Http\Request;
 use App\Http\Requests;
 use App\Http\Controllers\Controller;
 use GuzzleHttp\Client;
+use SimpleSoftwareIO\QrCode\Facades\QrCode;
 
 require_once ('alipay-sdk/aop/AopClient.php');
 require_once ('alipay-sdk/aop/request/AlipayTradeAppPayRequest.php');
@@ -72,6 +73,53 @@ class PaymentController extends Controller
             }
 
         }
+    }
+
+    public function getWechatWebPay(Request $request){
+        $debug = true;
+        if($debug){
+            $payment = [
+                'title' => "test",
+                'price' => 0.01,
+                'order_id' => "oid",
+                'payment_id' => "pid",
+                'description' => 'test'
+            ];
+
+            $config = self::weChatWebConfig($payment);
+            echo $config;
+            return;
+        }
+        $orderId = $request->input("order_id");
+        $order = Order::find($orderId);
+        if(!$order){
+            abort(404);
+        }
+        $orderId = $order->_id;
+        $paymentId = $order->payment_id;
+
+        if($paymentId < 1){
+            echo "没有找到支付账单,请联系客服~";
+        }
+
+        $title = $order->payment_memo;
+        $price = $order->payment_price;
+
+        $payment = [
+            'title' => $title,
+            'price' => $price,
+            'order_id' => $orderId,
+            'payment_id' => $paymentId,
+            'description' => ''
+        ];
+
+        $config = self::aliWebConfig($payment);
+
+
+
+        echo $config["code_url"];
+        echo "<br />";
+        echo QrCode::generate($config["code_url"]);
     }
 
     public function weChatWebConfig($payment){

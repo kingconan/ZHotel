@@ -157,6 +157,7 @@ return [
         App\Providers\RouteServiceProvider::class,
         Jenssegers\Mongodb\MongodbServiceProvider::class,
         Jenssegers\Agent\AgentServiceProvider::class,
+        SimpleSoftwareIO\QrCode\QrCodeServiceProvider::class
     ],
 
     /*
@@ -203,6 +204,7 @@ return [
         'Validator' => Illuminate\Support\Facades\Validator::class,
         'View' => Illuminate\Support\Facades\View::class,
         'Agent' => Jenssegers\Agent\Facades\Agent::class,
+        'QrCode' => SimpleSoftwareIO\QrCode\Facades\QrCode::class
 //        'Moloquent' => 'Moloquent\Eloquent\Model',
     ],
 

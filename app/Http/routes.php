@@ -128,3 +128,4 @@ Route::group(['middleware'=>'api'],function(){
 Route::post('/chrome/test', 'Backend\IndexController@chromeTest');
 Route::get('/uuu', 'Backend\IndexController@createMaster');
 Route::get('/test/payment/ali', 'Backend\PaymentController@getAliWebPay');
+Route::get('/test/payment/wechat', 'Backend\PaymentController@getAliWebPay');
