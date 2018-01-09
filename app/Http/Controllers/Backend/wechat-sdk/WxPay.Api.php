@@ -42,6 +42,9 @@ class WxPayApi
 		if($inputObj->GetTrade_type() == "NATIVE" && !$inputObj->IsProduct_idSet()){
 			throw new WxPayException("统一支付接口中，缺少必填参数product_id！trade_type为JSAPI时，product_id为必填参数！");
 		}
+		if($inputObj->GetTrade_type() == "MWEB" && !$inputObj->IsScene_infoSet()){
+			throw new WxPayException("统一支付接口中，缺少必填参数scene info！trade_type为MWEB时，scene info为必填参数！");
+		}
 		
 		//异步通知url未设置，则使用配置文件中的url
 		if(!$inputObj->IsNotify_urlSet()){

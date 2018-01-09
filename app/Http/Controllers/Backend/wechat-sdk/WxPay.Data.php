@@ -745,6 +745,19 @@ class WxPayUnifiedOrder extends WxPayDataBase
 	{
 		return array_key_exists('openid', $this->values);
 	}
+
+	/**
+	 * Scene Info for HWEB
+	 */
+	public function SetScene_info($value){
+		$this->values['scene_info'] = $value;
+	}
+	public function GetScene_info(){
+		return $this->values['scene_info'];
+	}
+	public function IsScene_infoSet(){
+		return array_key_exists('scene_info', $this->values);
+	}
 }
 
 /**

@@ -23,7 +23,6 @@ require_once ('wechat-sdk/WxPay.Api.php');
  */
 class PaymentController extends Controller
 {
-
     /**
      * Wechat Pay
      * Web :
@@ -46,6 +45,7 @@ class PaymentController extends Controller
     }
 
     public function parseOpenIdRedirect(Request $request){
+        $ip = $request->getClientIp();
         $code = $request->input("code");
         $state = $request->input("state");
 
@@ -136,6 +136,68 @@ class PaymentController extends Controller
         return $config;
     }
 
+    public function weChatWapConfig($payment){
+        $price = $payment["price"] * 100;//covert to FEN
+        $title = $payment["title"];
+        $description = $payment["description"];
+        $goodTag = "";
+        $notifyUrl = "";
+        $orderId = $payment["order_id"];
+        $paymentId = $payment["payment_id"];
+        $hour = 60*60;
+        $expire = $hour;
+
+        $ip = $payment["ip"];
+
+        $hType = "Wap";
+        $hUrl = "http://zyoutrip.com";
+        $hName = "zhotel";
+
+        $sceneInfo = [
+            'h5_info' => [
+                'type' => $hType,
+                'wap_url' => $hType,
+                'wap_name' => $hName,
+            ]
+        ];
+
+        $input = new \WxPayUnifiedOrder();
+        $input->SetBody($title);
+        $input->SetAttach($orderId."_".$paymentId);//附件数据
+        $input->SetOut_trade_no(\WxPayConfig::MCHID.date("YmdHis"));
+        $input->SetTotal_fee($price);
+        $input->SetTime_start(date("YmdHis"));
+        $input->SetTime_expire(date("YmdHis", time() + $expire));
+        $input->SetGoods_tag($goodTag);
+        $input->SetNotify_url($notifyUrl);
+        $input->SetTrade_type("MWEB");
+        $input->SetProduct_id($orderId);
+        $input->SetSpbill_create_ip($ip);
+        $input->SetScene_info(json_encode($sceneInfo));
+
+
+        $order = \WxPayApi::unifiedOrder($input);
+        /**
+         * <xml>
+        <return_code><![CDATA[SUCCESS]]></return_code>
+        <return_msg><![CDATA[OK]]></return_msg>
+        <appid><![CDATA[wx2421b1c4370ec43b]]></appid>
+        <mch_id><![CDATA[10000100]]></mch_id>
+        <nonce_str><![CDATA[IITRi8Iabbblz1Jc]]></nonce_str>
+        <sign><![CDATA[7921E432F65EB8ED0CE9755F0E86D72F]]></sign>
+        <result_code><![CDATA[SUCCESS]]></result_code>
+        <prepay_id><![CDATA[wx201411101639507cbf6ffd8b0779950874]]></prepay_id>
+        <trade_type><![CDATA[MWEB]]></trade_type>
+        <mweb_url><![CDATA[https://wx.tenpay.com/cgi-bin/mmpayweb-bin/checkmweb?prepay_id=wx2016121516420242444321ca0631331346&package=1405458241]]></mweb_url>
+        </xml>
+         */
+
+        //if order["return_code"] == "SUCCESS": <a href=order["mweb_url"]>Pay</a>
+        //将$order["mweb_url"]可以拉起微信支付,有效期5分钟
+
+        return $order;
+    }
+
     private function _getJsConfig($order){
         if(!array_key_exists("appid", $order)
             || !array_key_exists("prepay_id", $order)
@@ -153,6 +215,8 @@ class PaymentController extends Controller
         $parameters = json_encode($jsapi->GetValues());
         return $parameters;
     }
+
+
 
 
     public function weChatNotify(Request $request){
@@ -176,6 +240,7 @@ class PaymentController extends Controller
                 </xml>';
     }
 
+    //=================== END =====================
 
     /**
      * Ali Payment

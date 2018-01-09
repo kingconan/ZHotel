@@ -9,6 +9,8 @@ scratch. This page gets rid of all links and provides the needed markup only.
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <title>ZHotel</title>
     <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
+    <meta name="keywords" content="{{\App\Http\Controllers\Backend\Constant::meta_keywords}}" >
+    <meta name="description" content="{{\App\Http\Controllers\Backend\Constant::meta_description}}" >
     <link rel="stylesheet" href="{{asset("css/min.css")}}">
     <style>
         /*[data-letters]:before {*/
