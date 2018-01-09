@@ -91,7 +91,7 @@ class PaymentController extends Controller
             if($config["return_code"] == "SUCCESS"){
                 echo $config["code_url"];
                 echo "<br />";
-                echo QrCode::generate($config["code_url"]);
+                echo QrCode::size(100)->generate($config["code_url"]);
             }
             else{
                 echo $config["return_msg"];
