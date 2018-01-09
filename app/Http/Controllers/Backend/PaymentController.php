@@ -88,9 +88,17 @@ class PaymentController extends Controller
             ];
 
             $config = self::weChatWebConfig($payment);
-            echo $config["code_url"];
-            echo "<br />";
-            echo QrCode::generate($config["code_url"]);
+            if($config["return_code"] == "SUCCESS"){
+                echo $config["code_url"];
+                echo "<br />";
+                echo QrCode::generate($config["code_url"]);
+            }
+            else{
+                echo $config["return_msg"];
+                echo date("YmdHis");
+                echo "<br />";
+                echo date("YmdHis", time() + 3600);
+            }
             return;
         }
         $orderId = $request->input("order_id");
