@@ -95,6 +95,7 @@ class PaymentController extends Controller
             }
             else{
                 echo $config["return_msg"];
+                echo "<br />";
                 echo date("YmdHis");
                 echo "<br />";
                 echo date("YmdHis", time() + 3600);
