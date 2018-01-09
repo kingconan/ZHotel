@@ -38,7 +38,7 @@ class PaymentController extends Controller
         $orderId = "order123";
         $paymentId = "payment999";
 
-        $appId = "";
+        $appId = \WxPayConfig::APPID;
         $scope = "snsapi_base";
         $state = $orderId."_".$orderId;
         $redirectUrl = "http://zyoutrip.com/wechat/payment/redirect";
