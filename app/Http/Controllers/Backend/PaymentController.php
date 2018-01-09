@@ -142,7 +142,7 @@ class PaymentController extends Controller
                 'description' => 'test'
             ];
 
-            $config = self::weChatWebConfig($payment);
+            $config = self::weChatWapConfig($payment);
             if($config["return_code"] == "SUCCESS"){
                 echo $config["mweb_url"];
 
