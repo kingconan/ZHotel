@@ -230,7 +230,7 @@ class PaymentController extends Controller
         $hour = 60*60;
         $expire = $hour;
 
-        $ip = $payment["ip"];
+//        $ip = $payment["ip"];
 
         $hType = "Wap";
         $hUrl = "http://zyoutrip.com";
@@ -255,7 +255,7 @@ class PaymentController extends Controller
         $input->SetNotify_url($notifyUrl);
         $input->SetTrade_type("MWEB");
         $input->SetProduct_id($orderId);
-        $input->SetSpbill_create_ip($ip);
+//        $input->SetSpbill_create_ip($ip);
         $input->SetScene_info(json_encode($sceneInfo));
 
 
