@@ -18,15 +18,7 @@ Route::group(['middleware' => 'web'],function() {
         return view('frontend.index.welcome');
     });
     Route::get('/test', function(){
-        $sceneInfo = [
-            'h5_info' => [
-                'type' => "Wap",
-                'wap_url' => "http://zyoutrip.com",
-                'wap_name' => "zhotel",
-            ]
-        ];
-        $t =  json_encode($sceneInfo);
-        echo $t;
+        echo urlencode("http://zyoutrip.com/test/test");
     });
     Route::get('/hotel/detail/{id}', function () {
         $agent = new Agent();
