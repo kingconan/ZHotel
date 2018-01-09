@@ -9,6 +9,7 @@ use App\Http\Requests;
 use App\Http\Controllers\Controller;
 use GuzzleHttp\Client;
 use SimpleSoftwareIO\QrCode\Facades\QrCode;
+use Illuminate\Support\Facades\URL;
 
 require_once ('alipay-sdk/aop/AopClient.php');
 require_once ('alipay-sdk/aop/request/AlipayTradeAppPayRequest.php');
@@ -87,7 +88,9 @@ class PaymentController extends Controller
             ];
 
             $config = self::weChatWebConfig($payment);
-            echo $config;
+            echo $config["code_url"];
+            echo "<br />";
+            echo QrCode::generate($config["code_url"]);
             return;
         }
         $orderId = $request->input("order_id");
@@ -117,9 +120,7 @@ class PaymentController extends Controller
 
 
 
-        echo $config["code_url"];
-        echo "<br />";
-        echo QrCode::generate($config["code_url"]);
+
     }
 
     public function weChatWebConfig($payment){
@@ -127,7 +128,7 @@ class PaymentController extends Controller
         $title = $payment["title"];
         $description = $payment["description"];
         $goodTag = "";
-        $notifyUrl = "";
+        $notifyUrl = URL::to("/wechat/payment/notify");
         $orderId = $payment["order_id"];
         $paymentId = $payment["payment_id"];
         $hour = 60*60;
