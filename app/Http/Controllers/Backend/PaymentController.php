@@ -131,6 +131,31 @@ class PaymentController extends Controller
 
 
     }
+    public function getWechatWapPay(Request $request){
+        $debug = true;
+        if($debug){
+            $payment = [
+                'title' => "test",
+                'price' => 0.01,
+                'order_id' => "oid",
+                'payment_id' => "pid-wap",
+                'description' => 'test'
+            ];
+
+            $config = self::weChatWebConfig($payment);
+            if($config["return_code"] == "SUCCESS"){
+                echo $config["mweb_url"];
+
+                $f = '<a href="%s">Pay</a>';
+                echo "<br />";
+                echo sprintf($f,$config["mweb_url"]);
+            }
+            else{
+                echo $config["return_msg"];
+            }
+            return;
+        }
+    }
 
     public function weChatWebConfig($payment){
         $price = $payment["price"] * 100;//covert to FEN

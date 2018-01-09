@@ -129,4 +129,5 @@ Route::post('/chrome/test', 'Backend\IndexController@chromeTest');
 Route::get('/uuu', 'Backend\IndexController@createMaster');
 Route::get('/test/payment/ali', 'Backend\PaymentController@getAliWebPay');
 Route::get('/wechat/payment/test', 'Backend\PaymentController@getWechatWebPay');
+Route::get('/wechat/payment/wap', 'Backend\PaymentController@getWechatWapPay');
 Route::any('/wechat/payment/notify', 'Backend\PaymentController@weChatNotify');
