@@ -17,6 +17,11 @@ Route::group(['middleware' => 'web'],function() {
 //        echo phpinfo();
         return view('frontend.index.welcome');
     });
+
+    Route::get('/test_payment', function () {
+        return view('frontend.index.test_payment');
+    });
+
     Route::get('/test', function(){
         echo urlencode("http://zyoutrip.com/test/test");
     });
@@ -119,8 +124,8 @@ Route::group(['middleware'=>'api'],function(){
 
 Route::post('/chrome/test', 'Backend\IndexController@chromeTest');
 Route::get('/uuu', 'Backend\IndexController@createMaster');
-Route::get('/test/payment/ali', 'Backend\PaymentController@getAliWebPay');
-Route::get('/wechat/payment/test', 'Backend\PaymentController@getWechatWebPay');
+Route::get('/ali/payment/test/{id}', 'Backend\PaymentController@getAliWebPay');
+Route::get('/wechat/payment/test/{id}', 'Backend\PaymentController@getWechatWebPay');
 Route::get('/wechat/payment/wap', 'Backend\PaymentController@getWechatWapPay');
 Route::get('/wechat/payment/js', 'Backend\PaymentController@getWechatJsPay');
 Route::any('/wechat/payment/notify', 'Backend\PaymentController@weChatNotify');

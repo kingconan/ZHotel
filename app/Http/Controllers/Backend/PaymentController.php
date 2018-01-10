@@ -48,6 +48,7 @@ class PaymentController extends Controller
         return $url;
     }
 
+    //Q1 回调域名必须在微信公众平台-功能下设置过,否则会出现10003不匹配的问题
     public function parseOpenIdRedirect(Request $request){
         $ip = $request->getClientIp();
         $code = $request->input("code");
