@@ -35,7 +35,7 @@ class CustomerController extends Controller
         $password = $request->input("password");
         ZEvent::log(self::getCurrentEr(), "cmd",__METHOD__, [$email,$password]);
         if(Auth::guard(self::guard)->attempt(['email'=>$email,'password'=>$password],true)){
-            return redirect()->intented("/");
+            return Redirect::intended("/");
         }
         else{
             return Redirect::to('/login');

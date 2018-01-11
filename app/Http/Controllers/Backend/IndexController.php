@@ -138,6 +138,8 @@ class IndexController extends Controller
             ]
         );
     }
+
+    //hotel list should projection first
     public function getHotelList(Request $request){
         $projections = ['_id', 'status', 'name', 'name_en', 'tag', 'brand', 'author', 'last_editor', 'location'];
         $res = Hotel::paginate(20, $projections);
@@ -150,7 +152,6 @@ class IndexController extends Controller
             ]
         );
     }
-
     public function searchHotel(Request $request){
         $keyword = $request->input("keyword");
         ZEvent::log(self::getCurrentMaster(), "query", __METHOD__, $keyword);
@@ -169,6 +170,8 @@ class IndexController extends Controller
             ]
         );
     }
+    //end hotel list
+
     public function deleteHotel(Request $request){
         $hotel_id = $request->input("hotel_id");
         $hotel = Hotel::find($hotel_id);

@@ -276,6 +276,14 @@
             align-items: center;
             min-height: 300px;
         }
+        .swiper-pagination-fraction{
+            color:white;
+            background: rgba(0,0,0,.5);
+            width: 64px;
+            border-radius: 24px;
+            left:50%;
+            margin-left: -60px;
+        }
         .swiper-pagination .swiper-pagination-bullet-active {
             background: white;
         }
@@ -1029,7 +1037,10 @@
             window.removeEventListener('resize', this.handle_resize)
         },
         updated:function(){
+            console.log("updated");
             try{
+                var number = this.hotel.images.length;
+                console.log("image number = "+number);
                 var swiper = new Swiper('.banner-gallery', {
                     navigation: {
                         nextEl: '.swiper-button-next2',
@@ -1037,6 +1048,7 @@
                     },
                     pagination: {
                         el: '.swiper-pagination',
+                        type : number > 5 ? "fraction" : 'bullets'
                     },
                     slidesPerView: 'auto',
                     centeredSlides: true,
