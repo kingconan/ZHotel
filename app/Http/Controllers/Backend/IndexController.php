@@ -139,7 +139,8 @@ class IndexController extends Controller
         );
     }
     public function getHotelList(Request $request){
-        $res = Hotel::paginate(20);
+        $projections = ['_id', 'status', 'name', 'name_en', 'tag', 'brand', 'author', 'last_editor', 'location'];
+        $res = Hotel::paginate(20, $projections);
         ZEvent::log(self::getCurrentMaster(), "query", __METHOD__, "");
         return response()->json(
             [
@@ -153,11 +154,12 @@ class IndexController extends Controller
     public function searchHotel(Request $request){
         $keyword = $request->input("keyword");
         ZEvent::log(self::getCurrentMaster(), "query", __METHOD__, $keyword);
+        $projections = ['_id', 'status', 'name', 'name_en', 'tag', 'brand', 'author', 'last_editor', 'location'];
         $res = Hotel::where("name",'like', '%'.$keyword."%")
                     ->orWhere("name_en",'like', '%'.$keyword."%")
                     ->orWhere("location.country",'like', '%'.$keyword."%")
                     ->orWhere("location.city",'like', '%'.$keyword."%")
-                    ->paginate(20);
+                    ->paginate(20, $projections);
         $res->appends(["keyword"=>$keyword]);
         return response()->json(
             [
