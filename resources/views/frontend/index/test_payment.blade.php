@@ -1,11 +1,32 @@
 @extends("frontend.layout.base")
 @section('style')
     <link rel="stylesheet" href="{{asset('css/libs/zhotel_lib.css')}}"/>
+    <style>
+        .payment_ali{
+            background-image: url("/images/pay_ali.png");
+            background-position: 6px 50%;
+            background-size: 20px;
+            background-repeat: no-repeat;
+            padding-left: 32px !important;
+            width: 120px;
+            margin: 10px;
+        }
+        .payment_wechat{
+            background-image: url("/images/pay_wx.png");
+            background-position: 6px 50%;
+            background-size: 20px;
+            background-repeat: no-repeat;
+            padding-left: 32px !important;
+            width: 120px;
+            margin: 10px;
+        }
+    </style>
 @endsection
 @section('content')
     <div style="text-align: center;">
         <h1>支付测试</h1>
-        <form style="width: 200px;margin-right: auto;margin-left: auto" id="form">
+        <form style="width: 500px;margin-right: auto;margin-left: auto" id="form" method="post" action="/payment/test">
+            <input type="hidden" name="_token" value="{{ csrf_token() }}" />
             <div >
                 <input class="form-control" type="number" name="price" placeholder="price"  value="0.01"/>
             </div>
@@ -26,8 +47,8 @@
                 <input class="form-control" type="text" name="description" placeholder="description"  value="支付描述"/>
             </div>
             <div style="height: 10px;width: 100%"></div>
-            <a href="/ali/payment/test/123_456" class="btn btn-default">支付-支付宝</a>
-            <a href="/wechat/payment/test/123_456" class="btn btn-default">支付-微信</a>
+            <input type="submit" class="btn btn-default payment_ali" name="action" value="支付宝" />
+            <input type="submit" class="btn btn-default payment_wechat" name="action" value="微信" />
         </form>
     </div>
 @endsection

@@ -27,6 +27,33 @@ require_once ('wechat-sdk/WxPay.Config.php');
  */
 class PaymentController extends Controller
 {
+
+
+    public function testPayment(Request $request){
+        $action = $request->input("action");
+        $payment = [
+            'title' => "test",
+            'price' => 0.01,
+            'order_id' => "oid",
+            'payment_id' => "pid",
+            'description' => 'test'
+        ];
+        if($action == "微信"){
+            $config = self::weChatWebConfig($payment);
+            if($config["return_code"] == "SUCCESS"){
+                echo $config["code_url"];
+                echo "<br />";
+                echo QrCode::size(100)->generate($config["code_url"]);
+            }
+            else{
+                echo $config["return_msg"];
+            }
+        }
+        else if($action == "支付宝"){
+            $config = self::aliWebConfig($payment);
+            echo $config;
+        }
+    }
     /**
      * Wechat Pay
      * Web :
@@ -90,31 +117,6 @@ class PaymentController extends Controller
     }
 
     public function getWechatWebPay(Request $request){
-        $debug = true;
-        if($debug){
-            $payment = [
-                'title' => "test",
-                'price' => 0.01,
-                'order_id' => "oid",
-                'payment_id' => "pid",
-                'description' => 'test'
-            ];
-
-            $config = self::weChatWebConfig($payment);
-            if($config["return_code"] == "SUCCESS"){
-                echo $config["code_url"];
-                echo "<br />";
-                echo QrCode::size(100)->generate($config["code_url"]);
-            }
-            else{
-                echo $config["return_msg"];
-                echo "<br />";
-                echo date("YmdHis");
-                echo "<br />";
-                echo date("YmdHis", time() + 3600);
-            }
-            return;
-        }
         $orderId = $request->input("order_id");
         $order = Order::find($orderId);
         if(!$order){

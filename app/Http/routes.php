@@ -125,6 +125,7 @@ Route::group(['middleware'=>'api'],function(){
 Route::post('/chrome/test', 'Backend\IndexController@chromeTest');
 Route::get('/uuu', 'Backend\IndexController@createMaster');
 Route::get('/ali/payment/test/{id}', 'Backend\PaymentController@getAliWebPay');
+Route::post('/payment/test', 'Backend\PaymentController@testPayment');
 Route::get('/wechat/payment/test/{id}', 'Backend\PaymentController@getWechatWebPay');
 Route::get('/wechat/payment/wap', 'Backend\PaymentController@getWechatWapPay');
 Route::get('/wechat/payment/js', 'Backend\PaymentController@getWechatJsPay');
