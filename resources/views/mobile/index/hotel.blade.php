@@ -64,6 +64,7 @@
             border-radius: 10px;
             font-size: 10px;
             margin-right: 10px;
+            line-height: 16px;
             /*height: 20px;*/
         }
         .custom_p1{
@@ -74,7 +75,7 @@
             border-radius: 10px;
             font-size: 10px;
             margin-right: 10px;
-            line-height: 10px;
+            line-height: 16px;
         }
         #markdown_wrapper span{
             display: block;
