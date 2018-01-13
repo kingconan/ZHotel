@@ -68,13 +68,13 @@
         }
         .custom_p1{
             float: right;
-            padding: 0px 12px;
+            padding: 3px 12px;
             color: white;
             background-color: rgba(0,0,0,.5);
             border-radius: 10px;
             font-size: 10px;
             margin-right: 10px;
-            /*height: 20px;*/
+            line-height: 10px;
         }
         #markdown_wrapper span{
             display: block;
