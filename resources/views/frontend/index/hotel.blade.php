@@ -1415,6 +1415,8 @@
     }
 
     function initMap() {
+        hotel_lat = 0;
+        hotel_lng = 0;
         if(!mapLoaded){
             console.log("map js is not loaded");
             return;
