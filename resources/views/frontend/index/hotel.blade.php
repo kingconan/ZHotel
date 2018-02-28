@@ -664,7 +664,7 @@
                 </div>
                 <div id="footer2">
                     <div id="div_map" v-show="section == 'detail'" class="hotel_map" style="position: relative;width: 100%">
-                        <div id="map" style="width: 100%;height: 360px;"></div>
+                        <div id="map" style="width: 100%;height: 360px;background-color: whitesmoke"></div>
                         <div style="position: absolute;width: 60%;margin-left: auto;margin-right: auto;left: 0;top: 0;">
                             <div style="height: 20px"></div>
                             <div  style="padding: 15px 6px 15px 15px;background-color: #FFF;margin-left: 20%;width: 340px;height: 320px;">
