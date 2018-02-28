@@ -1113,17 +1113,17 @@
                         .then(function(response){
                             console.log(response.data);
 
-                            var obj = response.data.obj;
-                            for(var i= 0,len = obj.rooms.length;i<len;i++){
-                                obj.rooms[i].is_show = false;
-                                obj.rooms[i].price = null;
-                            }
-
-                            self.hotel = response.data.obj;
-
-                            self.loading = false;
-                            hotel_lat = parseFloat(self.hotel.location.lat);
-                            hotel_lng = parseFloat(self.hotel.location.lng);
+//                            var obj = response.data.obj;
+//                            for(var i= 0,len = obj.rooms.length;i<len;i++){
+//                                obj.rooms[i].is_show = false;
+//                                obj.rooms[i].price = null;
+//                            }
+//
+//                            self.hotel = response.data.obj;
+//
+//                            self.loading = false;
+//                            hotel_lat = parseFloat(self.hotel.location.lat);
+//                            hotel_lng = parseFloat(self.hotel.location.lng);
                         })
                         .catch(function(error){
                             console.log(error);
