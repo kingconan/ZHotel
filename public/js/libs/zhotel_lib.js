@@ -168,3 +168,7 @@ function clone(obj) {
 
     throw new Error("Unable to copy obj! Its type isn't supported.");
 }
+
+function is_number(num){
+    return !isNaN(parseFloat(num)) && !isNaN(num - 0);
+}

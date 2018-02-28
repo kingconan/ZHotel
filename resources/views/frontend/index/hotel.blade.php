@@ -1425,7 +1425,7 @@
             console.log("map already init");
             return;
         }
-        if(isNaN(hotel_lng)){
+        if(!is_number(hotel_lng)){
             console.log("hotel lat lng not ready");
             return;
         }
