@@ -928,9 +928,7 @@
     });
 
 </script>
-{{--<script async defer--}}
-        {{--src="http://ditu.google.cn/maps/api/js?key=AIzaSyBJfv6WxdEoTqSgibZDdOL-m-lLWz6UO8E&libraries=geometry,places&callback=mapCallback">--}}
-{{--</script>--}}
+
 <script>
 
     Vue.component('z-float-input',{
@@ -1392,6 +1390,8 @@
 
 
 </script>
+
+
 <script>
     /**
      * Created by jingang on 17/1/5.
@@ -1686,5 +1686,9 @@
         });
     }
 
+</script>
+
+<script async defer
+        src="http://ditu.google.cn/maps/api/js?key=AIzaSyBJfv6WxdEoTqSgibZDdOL-m-lLWz6UO8E&libraries=geometry,places&callback=mapCallback">
 </script>
 @endsection
