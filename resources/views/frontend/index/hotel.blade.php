@@ -406,21 +406,21 @@
         <div v-else>
             <div class="hotel_header" id="hotel_header">
                 <div v-if="sorted_covers" class="swiper-container banner-gallery">
-                    <div class="swiper-wrapper">
-                        <div v-for="(image, index) in sorted_covers" class="swiper-slide" :style="style_gallery_image">
-                            <img :style="style_gallery_image+';object-fit: cover'" :src="image.url" />
-                        </div>
-                    </div>
+                    {{--<div class="swiper-wrapper">--}}
+                        {{--<div v-for="(image, index) in sorted_covers" class="swiper-slide" :style="style_gallery_image">--}}
+                            {{--<img :style="style_gallery_image+';object-fit: cover'" :src="image.url" />--}}
+                        {{--</div>--}}
+                    {{--</div>--}}
 
-                    <div style="position: absolute;left: 0;top: 0;width: 100%">
-                        <div class="shadow_gallery" :style="'width:'+ hack_width">
-                        </div>
-                        <div class="shadow_gallery_r" :style="'width:'+ hack_width">
-                        </div>
-                    </div>
-                    <div class="swiper-button-next2"></div>
-                    <div class="swiper-button-prev2"></div>
-                    <div class="swiper-pagination"></div>
+                    {{--<div style="position: absolute;left: 0;top: 0;width: 100%">--}}
+                        {{--<div class="shadow_gallery" :style="'width:'+ hack_width">--}}
+                        {{--</div>--}}
+                        {{--<div class="shadow_gallery_r" :style="'width:'+ hack_width">--}}
+                        {{--</div>--}}
+                    {{--</div>--}}
+                    {{--<div class="swiper-button-next2"></div>--}}
+                    {{--<div class="swiper-button-prev2"></div>--}}
+                    {{--<div class="swiper-pagination"></div>--}}
                 </div>
                 <div class="c1" :style="content_width">
                     <div style="float: left;width: 100%;padding-right: 300px;">
