@@ -1689,6 +1689,6 @@
 </script>
 
 <script async defer
-        src="http://ditu.google.cn/maps/api/js?key=AIzaSyBJfv6WxdEoTqSgibZDdOL-m-lLWz6UO8E&libraries=geometry,places&callback=mapCallback">
+        src="http://ditu.google.cn/maps/api/js?key=AIzaSyBJfv6WxdEoTqSgibZDdOL-m-lLWz6UO8E&libraries=geometry&callback=mapCallback">
 </script>
 @endsection
