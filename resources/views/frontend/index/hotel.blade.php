@@ -1415,8 +1415,8 @@
     }
 
     function initMap() {
-        hotel_lat = 0;
-        hotel_lng = 0;
+        console.log(hotel_lat);
+        console.log(hotel_lng);
         if(!mapLoaded){
             console.log("map js is not loaded");
             return;
@@ -1432,9 +1432,9 @@
         }
 
         console.log("init map here");
+        hotel_lat = 0;
+        hotel_lng = 0;
 
-        console.log(hotel_lat);
-        console.log(hotel_lng);
 
         //define map
         var Map = google.maps.Map,
