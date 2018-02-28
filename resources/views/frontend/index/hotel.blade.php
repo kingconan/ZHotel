@@ -1424,7 +1424,7 @@
             console.log("map already init");
             return;
         }
-        if(hotel_lng == undefined || hotel_lat == null){
+        if(hotel_lng == undefined || hotel_lng == null || hotel_lng == ""){
             console.log("hotel lat lng not ready");
             return;
         }
