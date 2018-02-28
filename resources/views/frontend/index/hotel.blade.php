@@ -476,7 +476,7 @@
                 <div id="hotel_content_container" class="c1" :style="content_width">
                     <div style="width: 100%;padding-right:260px;float: left">
                         <div style="height: 30px;width:100px"></div>
-                        <div v-if="section == 'detail'">
+                        <div v-if="section == 'detail1'">
                             <div style="height: 30px"></div>
                             <div class="font_normal">
                                 <img style="float: left" width="24px" src="/images/hotel_quote_left.png"/>
@@ -1113,17 +1113,17 @@
                         .then(function(response){
                             console.log(response.data);
 
-//                            var obj = response.data.obj;
-//                            for(var i= 0,len = obj.rooms.length;i<len;i++){
-//                                obj.rooms[i].is_show = false;
-//                                obj.rooms[i].price = null;
-//                            }
-//
-//                            self.hotel = response.data.obj;
-//
-//                            self.loading = false;
-//                            hotel_lat = parseFloat(self.hotel.location.lat);
-//                            hotel_lng = parseFloat(self.hotel.location.lng);
+                            var obj = response.data.obj;
+                            for(var i= 0,len = obj.rooms.length;i<len;i++){
+                                obj.rooms[i].is_show = false;
+                                obj.rooms[i].price = null;
+                            }
+
+                            self.hotel = response.data.obj;
+
+                            self.loading = false;
+                            hotel_lat = parseFloat(self.hotel.location.lat);
+                            hotel_lng = parseFloat(self.hotel.location.lng);
                         })
                         .catch(function(error){
                             console.log(error);
