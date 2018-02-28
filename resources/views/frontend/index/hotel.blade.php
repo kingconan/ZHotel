@@ -1415,8 +1415,7 @@
     }
 
     function initMap() {
-        console.log(hotel_lat);
-        console.log(hotel_lng);
+
         if(!mapLoaded){
             console.log("map js is not loaded");
             return;
@@ -1426,15 +1425,14 @@
             console.log("map already init");
             return;
         }
-        if(hotel_lng == undefined || hotel_lng == null || hotel_lng == ""){
+        if(hotel_lng == undefined || hotel_lng == false || hotel_lng == ""){
             console.log("hotel lat lng not ready");
             return;
         }
 
         console.log("init map here");
-        hotel_lat = 0;
-        hotel_lng = 0;
-
+        console.log(hotel_lat);
+        console.log(hotel_lng);
 
         //define map
         var Map = google.maps.Map,
