@@ -6,7 +6,7 @@ function zhotel_markdown(str, mobile) {//simple markdown parser
 
     var imageHack = "";
     if(!mobile){
-        imageHack = "?imageView2/2/w/800";
+        imageHack = "?imageView2/2/w/1000";
         //https://developer.qiniu.com/dora/manual/1270/the-advanced-treatment-of-images-imagemogr2 图片处理参考
     }
 
