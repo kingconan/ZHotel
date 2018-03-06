@@ -408,7 +408,7 @@
                 <div v-if="sorted_covers" class="swiper-container banner-gallery">
                     <div class="swiper-wrapper">
                         <div v-for="(image, index) in sorted_covers" class="swiper-slide" :style="style_gallery_image">
-                            <img :style="style_gallery_image+';object-fit: cover'" :src="image.url" />
+                            <img :style="style_gallery_image+';object-fit: cover'" :src="image.url + '?imageView2/2/w/800'" />
                         </div>
                     </div>
 
@@ -1375,11 +1375,10 @@
             },
             sorted_covers : function(){
                 var arr = [];
-                var imageHack = "?imageView2/2/w/800";
                 console.log("sorted covers");
                 for(var i= 0,len = this.hotel.images.length;i<len;i++){
                     if(this.hotel.images[i].status > 0){
-                        arr.push(this.hotel.images[i] + imageHack);
+                        arr.push(this.hotel.images[i]);
                     }
                 }
                 arr.sort(this.compare_image);
