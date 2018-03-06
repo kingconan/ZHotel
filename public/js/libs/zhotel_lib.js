@@ -92,7 +92,7 @@ function zhotel_markdown(str, mobile) {//simple markdown parser
                     gallery_str = gallery_str + '</div>';
                 }
                 else{
-                    html = html + '<img class="markdown-image" src="' + url + '"/>'
+                    html = html + '<img class="markdown-image" src="' + url + imageHack + '"/>'
                     html = html + '<br />'
                 }
 
