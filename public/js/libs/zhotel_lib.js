@@ -1,6 +1,13 @@
 function zhotel_markdown(str, mobile) {//simple markdown parser
     mobile = mobile || false;
+
     if(!str || str == "" ) return "";
+
+
+    var imageHack = "";
+    if(!mobile){
+        imageHack = "?imageView2/2/w/800";
+    }
 
     var arr = str.split("\n");
     var html = "";
@@ -81,7 +88,7 @@ function zhotel_markdown(str, mobile) {//simple markdown parser
                 var url = item.substring(start + 1, end);
                 if(gallery == 1){
                     gallery_str = gallery_str + '<div class="swiper-slide">';
-                    gallery_str = gallery_str + '<img class="markdown-image" src="' + url + '"/>';
+                    gallery_str = gallery_str + '<img class="markdown-image" src="' + url + imageHack + '"/>';
                     gallery_str = gallery_str + '</div>';
                 }
                 else{
@@ -106,11 +113,11 @@ function zhotel_markdown(str, mobile) {//simple markdown parser
                     || ext == "png") {
                     if(gallery == 1){
                         gallery_str = gallery_str + '<div class="swiper-slide">';
-                        gallery_str = gallery_str + '<img class="markdown-image" src="' + item + '"/>';
+                        gallery_str = gallery_str + '<img class="markdown-image" src="' + item + imageHack + '"/>';
                         gallery_str = gallery_str + '</div>';
                     }
                     else{
-                        html = html + '<img class="markdown-image" src="' + item + '"/>'
+                        html = html + '<img class="markdown-image" src="' + item + imageHack + '"/>'
                         html = html + '<br />'
                     }
                 }
