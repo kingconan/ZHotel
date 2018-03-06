@@ -324,7 +324,7 @@
         }
 
         .markdown-image{
-            width: 100%;
+            /*width: 100%;*/
             margin: 8px 0;
             max-height: 360px;
             object-fit: cover;
