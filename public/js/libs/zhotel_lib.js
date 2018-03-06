@@ -6,7 +6,7 @@ function zhotel_markdown(str, mobile) {//simple markdown parser
 
     var imageHack = "";
     if(!mobile){
-        //imageHack = "?imageView2/2/w/800";
+        imageHack = "?imageView2/2/w/800";
     }
 
     var arr = str.split("\n");

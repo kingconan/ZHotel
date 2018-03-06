@@ -1375,10 +1375,11 @@
             },
             sorted_covers : function(){
                 var arr = [];
+                var imageHack = "?imageView2/2/w/800";
                 console.log("sorted covers");
                 for(var i= 0,len = this.hotel.images.length;i<len;i++){
                     if(this.hotel.images[i].status > 0){
-                        arr.push(this.hotel.images[i]);
+                        arr.push(this.hotel.images[i] + imageHack);
                     }
                 }
                 arr.sort(this.compare_image);
