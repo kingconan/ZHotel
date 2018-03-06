@@ -7,6 +7,7 @@ function zhotel_markdown(str, mobile) {//simple markdown parser
     var imageHack = "";
     if(!mobile){
         imageHack = "?imageView2/2/w/800";
+        //https://developer.qiniu.com/dora/manual/1270/the-advanced-treatment-of-images-imagemogr2 图片处理参考
     }
 
     var arr = str.split("\n");
@@ -93,6 +94,38 @@ function zhotel_markdown(str, mobile) {//simple markdown parser
                 }
                 else{
                     html = html + '<img class="markdown-image" src="' + url + imageHack + '"/>'
+                    html = html + '<br />'
+                }
+
+            }
+        }
+        else if (item.indexOf('!![') == 0) {
+            var start = item.indexOf('(');
+            var end = item.indexOf(')');
+            var dim_start = item.indexOf('[');
+            var dim_end = item.indexOf(']');
+            var width = '';
+            var height = '';
+            if (dim_end > dim_start + 1) {
+                var size = item.substring(dim_start + 1, dim_end).split(' ');
+                if (size.length == 2) {
+                    width = size[0];
+                    height = size[1];
+                }
+                else if (size.length == 1) {
+                    width = size[0]
+                }
+            }
+
+            if (end > start) {
+                var url = item.substring(start + 1, end);
+                if(gallery == 1){
+                    gallery_str = gallery_str + '<div class="swiper-slide">';
+                    gallery_str = gallery_str + '<img class="markdown-image-none" src="' + url + '"/>';
+                    gallery_str = gallery_str + '</div>';
+                }
+                else{
+                    html = html + '<img class="markdown-image-none" src="' + url + '"/>'
                     html = html + '<br />'
                 }
 
