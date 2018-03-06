@@ -408,7 +408,7 @@
                 <div v-if="sorted_covers" class="swiper-container banner-gallery">
                     <div class="swiper-wrapper">
                         <div v-for="(image, index) in sorted_covers" class="swiper-slide" :style="style_gallery_image">
-                            <img :style="style_gallery_image+';object-fit: cover'" :src="image.url + '?imageView2/2/w/1400'" />
+                            <img :style="style_gallery_image+';object-fit: cover'" :src="image.url + ''" />
                         </div>
                     </div>
 
