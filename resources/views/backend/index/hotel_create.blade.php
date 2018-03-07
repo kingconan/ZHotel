@@ -455,7 +455,7 @@
                         </div>
                         <div style="height: 15px;width: 100%"></div>
                         <div style="height: 15px;width: 100%"></div>
-                        <div class="width_big">
+                        <div class="">
 
                             <div v-if="current_room >= 0" class="div_room">
                                 {{--<div>--}}
@@ -488,9 +488,40 @@
                                     </div>
                                     <div style="clear: both"></div>
                                 </div>
-                                <z-float-textarea placeholder="描述" v-model="hotel.rooms[current_room].description" name="description"></z-float-textarea>
-                                <z-float-textarea placeholder="面积,床,入住人数" v-model="hotel.rooms[current_room].highlight" name="highlight"></z-float-textarea>
-                                <z-float-textarea placeholder="酒店设施" v-model="hotel.rooms[current_room].facilities" name="facilities"></z-float-textarea>
+                                <div>
+                                    <div style="float:left;width: 400px">
+                                        <z-float-textarea placeholder="描述" v-model="hotel.rooms[current_room].description" name="description"></z-float-textarea>
+                                    </div>
+                                    <div class="example" style="float: left;width: 300px;margin-left: 15px;font-size: 12px;color: lightgrey">
+                                        样例 : <br/>
+                                        错层别墅，卧室位于上层，阳光平台位于下层，阳光平台配备躺椅和私人用餐区，别墅分布在整个度假酒店内，享有部分泰国湾海景，宽大的空调浴室，另设室外淋浴。
+                                    </div>
+                                    <div style="clear: both"></div>
+                                </div>
+
+                                <div>
+                                    <div style="float:left;width: 400px">
+                                        <z-float-textarea placeholder="面积,床,入住人数" v-model="hotel.rooms[current_room].highlight" name="highlight"></z-float-textarea>
+                                    </div>
+                                    <div class="example" style="float: left;width: 300px;margin-left: 15px;font-size: 12px;color: lightgrey">
+                                        样例, 3行 : <br/>
+                                        1,400平方英尺（130平方米）<br/>
+                                        一张大床或者2张单人床<br/>
+                                        可入住2位成人
+                                    </div>
+                                    <div style="clear: both"></div>
+                                </div>
+                                <div>
+                                    <div style="float:left;width: 400px">
+                                        <z-float-textarea placeholder="酒店设施" v-model="hotel.rooms[current_room].facilities" name="facilities"></z-float-textarea>
+                                    </div>
+                                    <div class="example" style="float: left;width: 300px;margin-left: 15px;font-size: 12px;color: lightgrey">
+                                        样例 : <br/>
+                                        独立控制式空调和吸顶式风扇、宽大沙发床 、宽大的空调浴室，一个浴缸和双盥洗盆、室外淋浴、六善浴室设施 、电吹风 、迷你吧、咖啡机、茶设施 、六善瓶装水
+                                    </div>
+                                    <div style="clear: both"></div>
+                                </div>
+
                                 <div>
                                     <div class="sub_title">选封面
                                         <a v-on:click="show_covers" data-image="dir" class="btn_action">图库</a>
