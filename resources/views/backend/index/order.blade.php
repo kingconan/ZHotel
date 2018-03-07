@@ -389,7 +389,7 @@
             get_data : function(id){
                 const self = this;
                 console.log("created");
-                axios.post('/api/order/'+id,{
+                axios.post('/api/order/detail/'+id,{
                             k1: "v1"
                         })
                         .then(function(response){

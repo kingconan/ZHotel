@@ -276,7 +276,7 @@
         methods:{
             get_data : function(){
                 var thiz = this;
-                axios.post('/api/order/'+this.book._id,{
+                axios.post('/api/order/detail/'+this.book._id,{
                         })
                         .then(function(response){
                             console.log(response.data);

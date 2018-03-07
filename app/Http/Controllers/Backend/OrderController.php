@@ -104,7 +104,7 @@ class OrderController extends Controller
     }
 
     public function getOrder($id,Request $request){
-        self::testRedis();
+        //self::testRedis();
         $order = Order::find($id);
         if($order){
             return response()->json(
