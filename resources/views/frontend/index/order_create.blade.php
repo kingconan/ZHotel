@@ -7,12 +7,12 @@
         }
         .div_block{
             margin-bottom: 15px;
-            border: 1px solid lightgrey;
+            /*border: 1px solid lightgrey;*/
             padding: 15px;
-            background-color: #FFF;
+            /*background-color: #FFF;*/
         }
         body{
-            background-color: #fafafa
+            background-color: #f0f0f0
         }
         .form-control{
             border-radius: 1px;
@@ -51,6 +51,18 @@
             font-weight: bolder;
             color: #3c3c3c;
         }
+        .table-borderless > tbody > tr > td,
+        .table-borderless > tbody > tr > th,
+        .table-borderless > tfoot > tr > td,
+        .table-borderless > tfoot > tr > th,
+        .table-borderless > thead > tr > td,
+        .table-borderless > thead > tr > th {
+            border: none;
+        }
+        .table-hint{
+            color : #999999;
+            font-size: 14px;
+        }
     </style>
 
 @endsection
@@ -83,118 +95,117 @@
             </div>
         </div>
         <div v-else style="max-width: 1024px;min-width:630px ;margin-left: auto;margin-right: auto;padding-top: 30px;">
-            <div style="float: left;width: 100%;padding-left:320px;border: 1px solid lightgrey;">
-                <div class="div_block">
-                    <div style="font-size: 22px;font-weight: bold"><%book.info.hotel_info.name%></div>
-                    <div style="font-size: 16px;"><%book.info.hotel_info.name_en%></div>
-                    {{--<div style="color: grey;font-size: 14px"><%book.info.hotel_info.location.address%></div>--}}
-                    <img :src="book.info.hotel_info.image.url" style="width: 100%;object-fit: cover" />
-                </div>
-                <div>
+            <div style="float: left;width: 100%;padding-left:320px;">
+                <div style="background-color: white">
                     <div class="div_block">
-                        <div>输入个人信息</div>
-                        <div style="margin-top: 15px">
-                            <div style="float: left;width: 120px;margin-right: 15px">
-                                <z-input placeholder="姓 Last Name"  type="text" v-model="book.user.last_name"></z-input>
-                            </div>
-                            <div style="float: left;width: 120px;">
-                                <z-input placeholder="名 First Name" type="text"  v-model="book.user.first_name"></z-input>
-                            </div>
-                            <div style="clear: both"></div>
-                        </div>
-
-                        <div style="width: 255px">
-                            <z-input placeholder="居住国" type="text"  v-model="book.user.country"></z-input>
-                        </div>
-                        <div style="width: 255px">
-                            <z-input placeholder="电子邮箱" type="email"  v-model="book.user.email"></z-input>
-                        </div>
-                    </div>
-                    <div class="div_block">
-                        <div>为他人预定,并非自己亲自入住</div>
-                        <div style="margin-top: 15px">
-                            <div style="float: left;width: 120px;margin-right: 15px">
-                                <z-input placeholder="姓 Last Name"  type="text" v-model="book.user2.last_name"></z-input>
-                            </div>
-                            <div style="float: left;width: 120px;">
-                                <z-input placeholder="名 First Name" type="text"  v-model="book.user2.first_name"></z-input>
-                            </div>
-                            <div style="clear: both"></div>
-                        </div>
-                        <div style="width: 255px">
-                            <z-input placeholder="居住国" type="text"  v-model="book.user2.country"></z-input>
-                        </div>
-                    </div>
-
-                    <div class="div_block">
-                        <div>备注特殊需求</div>
-                        <div style="height: 15px;width: 15px"></div>
-                        <z-textarea placeholder="备注" v-model="book.user.memo"></z-textarea>
-                        <div>*特殊需求能否满足要求,取决于各酒店住宿的实际情况,如产生额外费用于酒店前台支付</div>
-                    </div>
-
-                    <div class="div_block">
-                        <div>支付定金并提交订单</div>
-
-                        <div>总价格 : <%book.info.plan_info.price%></div>
-                        <div>预付 : 99</div>
-
-                    </div>
-
-                    <div style="margin-top: 15px">
-                        <label style="color:#3c3c3c">
-                            <input type="checkbox" value="ok" v-model="book.user.is_read"> 我已阅读并同意<a href="">xxx</a>.
-                        </label>
+                        <div style="font-size: 22px;font-weight: bold"><%book.info.hotel_info.name%></div>
+                        <div style="font-size: 16px;"><%book.info.hotel_info.name_en%></div>
+                        {{--<div style="color: grey;font-size: 14px"><%book.info.hotel_info.location.address%></div>--}}
+                        <img :src="book.info.hotel_info.image.url" style="width: 100%;object-fit: cover" />
                     </div>
                     <div>
-                        <button type="button" class="btn btn_book" v-on:click="pay">确认支付</button>
+                        <div class="div_block">
+                            <div>输入个人信息</div>
+                            <div style="margin-top: 15px">
+                                <div style="float: left;width: 120px;margin-right: 15px">
+                                    <z-input placeholder="姓 Last Name"  type="text" v-model="book.user.last_name"></z-input>
+                                </div>
+                                <div style="float: left;width: 120px;">
+                                    <z-input placeholder="名 First Name" type="text"  v-model="book.user.first_name"></z-input>
+                                </div>
+                                <div style="clear: both"></div>
+                            </div>
+
+                            <div style="width: 255px">
+                                <z-input placeholder="居住国" type="text"  v-model="book.user.country"></z-input>
+                            </div>
+                            <div style="width: 255px">
+                                <z-input placeholder="电子邮箱" type="email"  v-model="book.user.email"></z-input>
+                            </div>
+                        </div>
+                        <div class="div_block">
+                            <div>为他人预定,并非自己亲自入住</div>
+                            <div style="margin-top: 15px">
+                                <div style="float: left;width: 120px;margin-right: 15px">
+                                    <z-input placeholder="姓 Last Name"  type="text" v-model="book.user2.last_name"></z-input>
+                                </div>
+                                <div style="float: left;width: 120px;">
+                                    <z-input placeholder="名 First Name" type="text"  v-model="book.user2.first_name"></z-input>
+                                </div>
+                                <div style="clear: both"></div>
+                            </div>
+                            <div style="width: 255px">
+                                <z-input placeholder="居住国" type="text"  v-model="book.user2.country"></z-input>
+                            </div>
+                        </div>
+
+                        <div class="div_block">
+                            <div>备注特殊需求</div>
+                            <div style="height: 15px;width: 15px"></div>
+                            <z-textarea placeholder="备注" v-model="book.user.memo"></z-textarea>
+                            <div>*特殊需求能否满足要求,取决于各酒店住宿的实际情况,如产生额外费用于酒店前台支付</div>
+                        </div>
+
+                        <div class="div_block">
+                            <div>支付定金并提交订单</div>
+
+                            <div>总价格 : <%book.info.plan_info.price%></div>
+                            <div>预付 : 99</div>
+
+                        </div>
+
+                        <div style="margin-top: 15px">
+                            <label style="color:#3c3c3c">
+                                <input type="checkbox" value="ok" v-model="book.user.is_read"> 我已阅读并同意<a href="">xxx</a>.
+                            </label>
+                        </div>
+                        <div>
+                            <button type="button" class="btn btn_book" v-on:click="pay">确认支付</button>
+                        </div>
+
                     </div>
 
+                    <div style="clear: both;height: 60px"></div>
                 </div>
-
-                <div style="clear: both;height: 60px"></div>
             </div>
-            <div style="float: left;width: 300px;margin-left: -100%;padding: 12px">
+            <div style="float: left;width: 300px;margin-left: -100%;padding: 12px;background: white">
                 <div>
                     <div class="div_title">预订信息</div>
                     <div>
-                        <table class="table">
+                        <table class="table table-borderless">
                             <tr>
-                                <td width="80px">日期</td>
+                                <td width="80px" class="table-hint">日<span style="color:rgba(0,0,0,0) ">口口</span>期</td>
                                 <td><%book.info.book_info.checkin + " - " + book.info.book_info.checkout%></td>
                             </tr>
                             <tr>
-                                <td>房型</td>
+                                <td class="table-hint">房<span style="color:rgba(0,0,0,0) ">口口</span>型</td>
                                 <td><%book.info.room_info.name%></td>
                             </tr>
                             <tr>
-                                <td>价格计划</td>
+                                <td class="table-hint">价格计划</td>
                                 <td><%book.info.plan_info.name%></td>
                             </tr>
                             <tr>
-                                <td>人数</td>
+                                <td class="table-hint">人<span style="color:rgba(0,0,0,0) ">口口</span>数</td>
                                 <td><%book.info.book_info.adult + "成人"%><%book.info.book_info.children + "儿童"%></td>
                             </tr>
                             <tr>
-                                <td>包含</td>
+                                <td class="table-hint">包<span style="color:rgba(0,0,0,0) ">口口</span>含</td>
                                 <td>
                                     <li v-for="item in str_2_arr(book.info.plan_info.include)"><%item%></li>
                                 </td>
                             </tr>
                             <tr>
-                                <td>致游福利</td>
+                                <td class="table-hint">致游福利</td>
                                 <td></td>
                             </tr>
                         </table>
                     </div>
                 </div>
-                {{--<div>--}}
-                    {{--<div class="div_title">可选项目</div>--}}
-                {{--</div>--}}
                 <div>
                     <div class="div_title">价格详情</div>
                     <div>
-                        <table class="table">
+                        <table class="table table-borderless">
                             <tr v-for="item in book.info.plan_info.details">
                                 <td width="160px"><%item[1]%></td>
                                 <td style="text-align: right"><%item[2]%></td>
