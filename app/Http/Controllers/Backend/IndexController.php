@@ -484,6 +484,11 @@ class IndexController extends Controller
         $d2 = Carbon::parse($date2);
         return $d2->diffInDays($d1);
     }
+    private function getDateString($date, $index){
+        $d = Carbon::parse($date);
+        $dt = $d->addDay($index);
+        return $dt->format('Y年m月d日');
+    }
     //minus checkout-date one day
     private function lastNightDate($checkout){
         $c = Carbon::parse($checkout);
@@ -504,6 +509,7 @@ class IndexController extends Controller
         $basic_price = 0;
 
         //将基础班期的每天价格放到$ans里
+        $price_details = [];//type name price
         foreach($room_prices as $price){
             //先找checkin 范围
             if($find == 0){
@@ -515,6 +521,9 @@ class IndexController extends Controller
                         for($i=0;$i<$count;$i++){
                             $basic_price = $basic_price + $price["price"];
                             array_push($ans,$price["price"]);
+                            //$chekcin + $i =>
+                            $date_string = self::getDateString($checkin, $i);
+                            array_push($price_details,["BASIC", $date_string, $price["price"]]);
                         }
                         break;//一次找到全部班期
                     }
@@ -524,6 +533,9 @@ class IndexController extends Controller
                         for($i=0;$i<$count;$i++){
                             $basic_price = $basic_price + $price["price"];
                             array_push($ans,$price["price"]);
+                            //$chekcin + $i =>
+                            $date_string = self::getDateString($checkin, $i);
+                            array_push($price_details,["BASIC", $date_string, $price["price"]]);
                         }
                     }
                 }
@@ -535,6 +547,10 @@ class IndexController extends Controller
                     for($i=0;$i<$count;$i++){
                         $basic_price = $basic_price + $price["price"];
                         array_push($ans,$price["price"]);
+
+                        // + $i =>
+                        $date_string = self::getDateString($price["date_from"], $i);
+                        array_push($price_details,["BASIC", $date_string, $price["price"]]);
                     }
                     //找到第二部分
                     break;
@@ -545,6 +561,10 @@ class IndexController extends Controller
                     for($i=0;$i<$count;$i++){
                         $basic_price = $basic_price + $price["price"];
                         array_push($ans,$price["price"]);
+
+                        // + $i =>
+                        $date_string = self::getDateString($price["date_from"], $i);
+                        array_push($price_details,["BASIC", $date_string, $price["price"]]);
                     }
                 }
             }
@@ -568,6 +588,8 @@ class IndexController extends Controller
             "cancellation"=>isset($plan["cancellation"]) ? $plan["cancellation"] : "",
             "include"=>isset($plan["include"]) ? $plan["include"] : "",
             "memo"=>isset($plan["memo"]) ? $plan["memo"] : "",
+            "details"=>$price_details
+
         ]);
 
 
@@ -704,10 +726,15 @@ class IndexController extends Controller
                 $all_price = ceil($basic_price * (int)$item["obj"]["z"] / 100);
             }
 
+
+            $detais = self::copyArray($price_details);
+            array_push($detais, ["PLAN", $item["name"],  $all_price - $basic_price]);
+
             //有效优惠
             array_push($ans_plans,[
                 "name"=>$item["name"],
                 "price"=>$all_price,
+                "details"=>$detais,
                 "ok"=> true,
                 "reason"=>"",
                 "cancellation"=>isset($item["cancellation"]) ? $item["cancellation"] : "",
@@ -763,6 +790,13 @@ class IndexController extends Controller
             return BAuth::user()->name;
         }
         return "null";
+    }
+    private function copyArray($arr){
+        $toArr = [];
+        foreach($arr as $item){
+            array_push($toArr, $item);
+        }
+        return $toArr;
     }
 
     /**

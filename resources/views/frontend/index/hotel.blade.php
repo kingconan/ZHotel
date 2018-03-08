@@ -1306,7 +1306,8 @@
                         name : paras.hotel.name,
                         name_en : paras.hotel.name_en,
                         zy : paras.hotel.zy,
-                        location : paras.hotel.location
+                        location : paras.hotel.location,
+                        image : paras.hotel.images[0]
                     },
                     room_info : room,
                     plan_info : plan,
