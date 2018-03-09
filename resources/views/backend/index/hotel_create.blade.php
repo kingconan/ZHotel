@@ -478,6 +478,9 @@
                                 </div>
                                 <div>
                                     <div class="width_small" style="float: left">
+                                        <z-float-input placeholder="最大人数" v-model="hotel.rooms[current_room].max_persons" type="number"></z-float-input>
+                                    </div>
+                                    <div class="width_small" style="float: left;margin-left: 10px">
                                         <z-float-input placeholder="成人数" v-model="hotel.rooms[current_room].adult" type="number"></z-float-input>
                                     </div>
                                     <div class="width_small" style="float: left;margin-left: 10px">
@@ -1240,6 +1243,7 @@
                     zy : "",
                     info : "",
                     facilities : "",
+                    max_persons : "2",
                     adult : "2",
                     children : "0",
                     children_age : "12",
@@ -1564,6 +1568,7 @@
                                                 zy : "",
                                                 info : "",
                                                 facilities : "",
+                                                max_person : d.room[i].max_persons,
                                                 adult : d.room[i].adult,
                                                 children : d.room[i].children,
                                                 children_age : "12",
