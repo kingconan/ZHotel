@@ -241,7 +241,7 @@
                                                         <input class="form-control checkout" placeholder="结束日期" v-model="price.date_to"/>
                                                     </div>
                                                 </td>
-                                                <td width="100px"><input class="form-control" type="number" placeholder="价格"  v-model="price.price" /></td>
+                                                <td width="200px"><input class="form-control" type="number" placeholder="价格"  v-model="price.price" /></td>
                                                 <td><button v-on:click="delete_price_for_room(priceIndex)" type="button" class="btn btn-sm btn-default" style="color: indianred"><i class="fa fa-times" aria-hidden="true"></i></button></td>
                                             </tr>
                                             <tr>
@@ -1862,6 +1862,7 @@
                                                 self.dom_event(ele_out[0]);
 
                                             },
+//                                            startDate:'2018-04-04',
                                             stickyMonths: true,
                                             language: "cn",
                                             format: "YYYY-MM-DD"
