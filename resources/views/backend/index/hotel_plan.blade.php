@@ -217,7 +217,7 @@
                                  v-for="(room,roomIndex) in hotel.contracts[currentIndex].rooms"
                                  :class="roomIndex == currentRoom ? 'room_selected' : 'room_normal'"
                                  >
-                                <% room.name %>
+                                <% room.name %><br/><span style="font-size:12px;color: grey;"><% room.name_en %></span>
                             </div>
                             <div style="height: 1px;background-color: lightgrey;width: 100%"></div>
                         </div>
@@ -1399,10 +1399,16 @@
 
                                 for(var j= 0,jLen = self.hotel.contracts.length;j<jLen;j++){
                                     var rooms = self.hotel.contracts[j].rooms;
+                                    console.log("contract rooms");
+                                    console.log(rooms);
                                     //update room state
                                     for(var k= 0,kLen = rooms.length;k<kLen;k++){
-                                        if(self.has_room(rooms[k].room_id)){
-                                            //has room
+                                        var found_room = self.has_room(rooms[k].room_id);
+
+                                        if( found_room != null){
+                                            //has room, update room info
+                                            self.hotel.contracts[j].rooms[k].name_en = found_room.name_en;
+                                            self.hotel.contracts[j].rooms[k].name = found_room.name;
                                         }
                                         else{
                                             //deleted room
@@ -1431,20 +1437,19 @@
             has_room : function(room_id){
                 if(this.hotel.rooms) {
                     for(var i= 0,len = this.hotel.rooms.length;i<len;i++){
-                        if(this.hotel.rooms[i].room_id == room_id){
-                            console.log("has room "+room_id);
-                            return true;
+                        if(this.hotel.rooms[i].id == room_id){
+                            return this.hotel.rooms[i];
                         }
                     }
                 }
-                console.log("has room - not found "+room_id);
-                return false;
+                return null;
             },
             append_new_rooms : function(room_hotel,room_contract){
                 console.log("append_new_rooms");
                 var res = [];
                 for(var i= 0,len = room_hotel.length;i<len;i++){
                     var name = room_hotel[i].name;
+                    var name_en = room_hotel[i].name_en;
                     var room_id = room_hotel[i].id;
                     var found = false;
                     for(var j=0,jLen = room_contract.length;j<jLen;j++){
@@ -1456,6 +1461,7 @@
                     if(!found){
                         var empty_room = {
                             name : name,
+                            name_en : name_en,
                             room_id : room_id,
                             state : "none",//ok,deleted,none
                             prices : [],//班期
@@ -1488,6 +1494,7 @@
                 for(var i= 0,len = rooms.length;i<len;i++){
                     var empty_room = {
                         name : rooms[i].name,
+                        name_en : rooms[i].name_en,
                         room_id : rooms[i].id,
                         price_unit:"¥",
                         price_rate:1,
