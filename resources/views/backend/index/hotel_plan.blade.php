@@ -2,6 +2,7 @@
 @section('style')
     <link rel="stylesheet" href="{{asset('css/libs/float-label.css')}}"/>
     <link rel="stylesheet" href="{{asset('css/libs/toastr.min.css')}}"/>
+    {{--<link rel="stylesheet" href="{{asset('css/libs/daterangepicker.min.css')}}"/>--}}
     <link rel="stylesheet" href="{{asset('css/libs/daterangepicker_ihotel.min.css')}}"/>
     <style>
         [v-cloak] {
@@ -237,7 +238,7 @@
                                                 <td width="30px" height="34px" style="padding: 15px;color: lightgrey"><%priceIndex+1%></td>
                                                 <td width="280px">
                                                     <div class="tr_date">
-                                                        <input class="form-control checkin" placeholder="开始日期" v-model="price.date_from"/>
+                                                        <input class="form-control checkin" :data-default-time="pre_price(room_info.prices,priceIndex)" placeholder="开始日期" v-model="price.date_from"/>
                                                         <input class="form-control checkout" placeholder="结束日期" v-model="price.date_to"/>
                                                     </div>
                                                 </td>
@@ -867,6 +868,7 @@
 <script src="{{asset('js/libs/bootstrap3-typeahead.min.js')}}"></script>
 <script src="{{asset('js/libs/moment.min.js')}}"></script>
 <script src="{{asset('js/libs/jquery.daterangepicker.min.js')}}"></script>
+{{--<script src="{{asset('js/libs/jquery.daterangepicker.js')}}"></script>--}}
 <script>
     toastr.options = {
         "closeButton": false,
@@ -1519,6 +1521,12 @@
                 console.log("add contract");
                 console.log(this.hotel.contracts);
             },
+            pre_price : function(prices, index){
+              if(index > 0){
+                  return prices[index-1].date_to;
+              }
+              return "";
+            },
             arr_min : function(prices){
                 var min = "2222-22-22";
                 for(var i= 0,len = prices.length;i<len;i++){
@@ -1862,7 +1870,7 @@
                                                 self.dom_event(ele_out[0]);
 
                                             },
-//                                            startDate:'2018-04-04',
+                                            defaultTime:$(this).find(".checkin").attr("data-default-time"),
                                             stickyMonths: true,
                                             language: "cn",
                                             format: "YYYY-MM-DD"
