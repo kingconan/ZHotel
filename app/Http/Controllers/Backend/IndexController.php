@@ -143,12 +143,15 @@ class IndexController extends Controller
     public function getHotelList(Request $request){
         $projections = ['_id', 'status', 'name', 'name_en', 'tag', 'brand', 'author', 'last_editor', 'location'];
         $res = Hotel::paginate(20, $projections);
+
+        $last_url = $res->url(1);
         ZEvent::log(self::getCurrentMaster(), "query", __METHOD__, "");
         return response()->json(
             [
                 "ok"=>0,
                 "msg"=>"ok",
-                "obj"=>$res
+                "obj"=>$res,
+                "url_format"=>$last_url,
             ]
         );
     }
@@ -162,11 +165,13 @@ class IndexController extends Controller
                     ->orWhere("location.city",'like', '%'.$keyword."%")
                     ->paginate(20, $projections);
         $res->appends(["keyword"=>$keyword]);
+        $last_url = $res->url(1);
         return response()->json(
             [
                 "ok"=>0,
                 "msg"=>"ok",
-                "obj"=>$res
+                "obj"=>$res,
+                "url_format"=>$last_url,
             ]
         );
     }

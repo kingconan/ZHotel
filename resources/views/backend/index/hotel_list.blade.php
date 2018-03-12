@@ -147,9 +147,11 @@
                     </tbody>
                 </table>
                 <div style="float: right;padding: 15px">
+                    <button type="button" class="btn btn-default btn-sm" v-on:click="next_page(url_page(1))">first</button>
                     <button :disabled="hotels.prev_page_url == null" type="button" class="btn btn-default btn-sm" v-on:click="next_page(hotels.prev_page_url)">prev</button>
                     <span style="font-size: 12px;"><% hotels.current_page + " / " + hotels.last_page %></span>
                     <button :disabled="hotels.next_page_url == null" type="button" class="btn btn-default btn-sm" v-on:click="next_page(hotels.next_page_url)">next</button>
+                    <button type="button" class="btn btn-default btn-sm" v-on:click="next_page(url_page(hotels.last_page))">last</button>
                 </div>
                 <div style="clear: both"></div>
             </div>
@@ -201,10 +203,12 @@
             hotels:{
                 data : [],
                 current_page : 1,
+                last_page : 0,
                 total : 1,
                 prev_page_url : null,
-                next_page_url : null
+                next_page_url : null,
             },
+            url_format : "",
             loading:true
         },
         created:function () {
@@ -227,6 +231,7 @@
                         .then(function(response){
                             console.log(response.data);
                             self.hotels = response.data.obj;
+                            self.url_format = response.data.url_format;
                             self.loading = false;
                         })
                         .catch(function(error){
@@ -243,6 +248,7 @@
                             console.log(response.data);
                             self.hotels = response.data.obj;
                             self.loading = false;
+                            self.url_format = response.data.url_format;
                         })
                         .catch(function(error){
                             console.log(error);
@@ -251,6 +257,11 @@
             edit_hotel : function(hotel_id){
                 console.log("edit hotel");
                 console.log(hotel_id);
+            },
+            url_page : function(page){
+                var len = this.url_format.length;
+                var f = this.url_format.substring(0,len-1);
+                return f+page;
             },
             search_hotel : function(keyword){
                 var input = $("#search_form").find("input[name='keyword']");
@@ -266,6 +277,7 @@
                             console.log(response.data);
                             self.hotels = response.data.obj;
                             self.loading = false;
+                            self.url_format = response.data.url_format;
 
                         })
                         .catch(function(error){
