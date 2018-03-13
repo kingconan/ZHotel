@@ -1813,8 +1813,12 @@
                             console.log("found one room "+this.checkRooms[i]);
                             console.log("copy room setting");
                             cnt = cnt + 1;
-                            if(this.helper_has_copy("prices"))
+                            if(this.helper_has_copy("prices")) {
                                 this.hotel.contracts[this.currentIndex].rooms[j].prices = clone(prices);
+                                for(var k= 0,kLen = this.hotel.contracts[this.currentIndex].rooms[j].prices.length;k < kLen;k++){
+                                    this.hotel.contracts[this.currentIndex].rooms[j].prices[k].price = "";
+                                }
+                            }
                             if(this.helper_has_copy("plans"))
                                 this.hotel.contracts[this.currentIndex].rooms[j].plans = clone(plans);
                             if(this.helper_has_copy("limit"))
