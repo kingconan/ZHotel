@@ -465,6 +465,173 @@ class IndexController extends Controller
     }
 
 
+    /**
+     * 运营医生
+     */
+
+    public function getIndexPage(Request $request){
+        $arr1 = [
+            [
+                "title" => "沙漠度假酒店巡礼",
+                "des" => "啊哈哈哈,我是一个描述",
+                "hotels" => [
+                    [
+                        "id" => "1",
+                        "cover" => "",
+                        "name" => "名字",
+                        "name_en" => "name",
+                        "address" => "address"
+                    ],
+                    [
+                        "id" => "2",
+                        "cover" => "",
+                        "name" => "名字",
+                        "name_en" => "name",
+                        "address" => "address"
+                    ],
+                    [
+                        "id" => "3",
+                        "cover" => "",
+                        "name" => "名字",
+                        "name_en" => "name",
+                        "address" => "address"
+                    ],
+                    [
+                        "id" => "4",
+                        "cover" => "",
+                        "name" => "名字",
+                        "name_en" => "name",
+                        "address" => "address"
+                    ],
+                ]
+            ],
+            [
+                "title" => "沙漠度假酒店巡礼2",
+                "des" => "啊哈哈哈,我是一个描述",
+                "hotels" => [
+                    [
+                        "id" => "1",
+                        "cover" => "",
+                        "name" => "名字",
+                        "name_en" => "name",
+                        "address" => "address"
+                    ],
+                    [
+                        "id" => "2",
+                        "cover" => "",
+                        "name" => "名字",
+                        "name_en" => "name",
+                        "address" => "address"
+                    ],
+                    [
+                        "id" => "3",
+                        "cover" => "",
+                        "name" => "名字",
+                        "name_en" => "name",
+                        "address" => "address"
+                    ],
+                    [
+                        "id" => "4",
+                        "cover" => "",
+                        "name" => "名字",
+                        "name_en" => "name",
+                        "address" => "address"
+                    ],
+                ]
+            ]
+        ];
+
+        $arr2 = [
+            [
+                "title" => "兴趣主题",
+                "des" => "",
+                "items" => [
+                    [
+                        "id" => "12",
+                        "name" => "海岛酒店",
+                        "des" => "巴厘岛,泰国,大溪地",
+                        "cover" => ""
+                    ],
+                    [
+                        "id" => "12",
+                        "name" => "海岛酒店2",
+                        "des" => "巴厘岛,泰国,大溪地",
+                        "cover" => ""
+                    ],
+                    [
+                        "id" => "12",
+                        "name" => "海岛酒店3",
+                        "des" => "巴厘岛,泰国,大溪地",
+                        "cover" => ""
+                    ],
+                    [
+                        "id" => "12",
+                        "name" => "海岛酒店4",
+                        "des" => "巴厘岛,泰国,大溪地",
+                        "cover" => ""
+                    ],
+                    [
+                        "id" => "12",
+                        "name" => "海岛酒店5",
+                        "des" => "巴厘岛,泰国,大溪地",
+                        "cover" => ""
+                    ]
+                ]
+            ]
+        ];
+
+        $arr3 = [
+            [
+                "name" => "安曼",
+                "cover" => "",
+                "key" => "aman"
+            ],
+            [
+                "name" => "四季",
+                "cover" => "",
+                "key" => "aman"
+            ],
+            [
+                "name" => "安曼2",
+                "cover" => "",
+                "key" => "aman"
+            ],
+            [
+                "name" => "安曼3",
+                "cover" => "",
+                "key" => "aman"
+            ],
+            [
+                "name" => "安曼4",
+                "cover" => "",
+                "key" => "aman"
+            ],
+            [
+                "name" => "安曼5",
+                "cover" => "",
+                "key" => "aman"
+            ],
+            [
+                "name" => "安曼6",
+                "cover" => "",
+                "key" => "aman"
+            ]
+        ];
+
+
+        return response()->json(
+            [
+                "ok"=>0,
+                "msg"=>"index",
+                "obj"=>[
+                    "arr1" => $arr1,
+                    "arr2" => $arr2,
+                    "arr3" => $arr3
+                 ]
+            ]
+        );
+    }
+
 
 
     /**

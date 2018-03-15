@@ -11,7 +11,6 @@
             <span class="loading-text-words">T</span>
             <span class="loading-text-words">E</span>
             <span class="loading-text-words">L</span>
-            <div style="font-size: 24px;color: dimgrey">敬 请 期 待</div>
         </div>
     </div>
 @endsection

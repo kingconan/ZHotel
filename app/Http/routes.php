@@ -15,7 +15,7 @@ Route::group(['middleware' => 'web'],function() {
     //frontend
     Route::get('/', function () {
 //        echo phpinfo();
-        return view('frontend.index.welcome');
+        return view('frontend.index.index');
     });
 
     Route::get('/test_payment', function () {
@@ -105,6 +105,9 @@ Route::group(['middleware'=>'api'],function(){
     Route::post('/api/parse/hotel', 'Backend\IndexController@parseHotel');
     Route::post('/api/price/hotel', 'Backend\IndexController@checkPrice');
     Route::get('/api/parse/get_rate', 'Backend\IndexController@getRate');
+
+
+    Route::get('/api/index/op', 'Backend\IndexController@getIndexPage');
 
 
     Route::post('/api/order/create', 'Backend\OrderController@createOrder');
