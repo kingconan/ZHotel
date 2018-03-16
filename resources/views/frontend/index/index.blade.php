@@ -126,6 +126,7 @@
             <div style="height: 400px;width: 100%;background-color: lightblue">
 
             </div>
+            <div style="height: 30px;width: 100%"></div>
             <div class="container">
                 <div class="section">
                     <div v-for="item in arr1" class="arr">

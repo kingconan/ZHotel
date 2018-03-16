@@ -14,8 +14,11 @@ use Jenssegers\Agent\Agent;
 Route::group(['middleware' => 'web'],function() {
     //frontend
     Route::get('/', function () {
-//        echo phpinfo();
         return view('frontend.index.index');
+    });
+
+    Route::get('/list/hotels/{id}', function () {
+        return view('frontend.index.hotel_list');
     });
 
     Route::get('/test_payment', function () {
@@ -108,6 +111,7 @@ Route::group(['middleware'=>'api'],function(){
 
 
     Route::get('/api/index/op', 'Backend\IndexController@getIndexPage');
+    Route::get('/api/list/hotels', 'Backend\IndexController@getHotelListByOp');
 
 
     Route::post('/api/order/create', 'Backend\OrderController@createOrder');

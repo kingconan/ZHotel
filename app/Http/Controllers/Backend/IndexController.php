@@ -466,8 +466,24 @@ class IndexController extends Controller
 
 
     /**
-     * 运营医生
+     * 运营
      */
+
+    public function getHotelListByOp(Request $request){
+        $projections = ['_id', 'images', 'name', 'name_en', 'description', 'location'];
+        $res = Hotel::paginate(20, $projections);
+
+        $last_url = $res->url(1);
+        ZEvent::log(self::getCurrentMaster(), "query", __METHOD__, "");
+        return response()->json(
+            [
+                "ok"=>0,
+                "msg"=>"ok",
+                "obj"=>$res,
+                "url_format"=>$last_url,
+            ]
+        );
+    }
 
     public function getIndexPage(Request $request){
         $arr1 = [
