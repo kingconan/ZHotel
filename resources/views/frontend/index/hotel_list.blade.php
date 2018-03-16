@@ -103,11 +103,11 @@
                                 <div style="height: 8px"></div>
                                 <div class="line2" style="font-size: 12px;color:grey"><%hotel.description%></div>
                             </div>
-                            <div style="float: left;width: 80px;margin-left: -80px;background-color: lightblue;text-align: right">
-                                543210/晚
+                            <div style="float: left;width: 80px;color:#c99c76;margin-left: -80px;text-align: right">
+                                ------/晚
                                 <div style="font-size: 9px;">含税最优价</div>
                             </div>
-                            <div style="position: absolute;bottom: 15px;right: 15px">酒店详情</div>
+                            <div style="position: absolute;bottom: 15px;right: 15px;background-color: #c99c76;padding: 3px 12px;font-size: 10px;color: white">酒店详情</div>
                         </div>
                     </div>
                     <div style="position: relative;float:left;width: 250px;background-color: lightblue;margin-left: -100%;height: 180px">
