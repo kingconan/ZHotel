@@ -484,6 +484,43 @@ class IndexController extends Controller
             ]
         );
     }
+    public function getHotelBrandByOp(Request $request){
+        $brand = $request->input("q");
+        if(!$brand){
+            return response()->json(
+                [
+                    "ok"=>1,
+                    "msg"=>"no brand parameter",
+                    "obj"=>[]
+                ]
+            );
+        }
+        $projections = ['_id', 'images', 'name', 'name_en', 'description', 'location'];
+        $res = Hotel::where("brand",$brand)->paginate(20, $projections);
+
+        $last_url = $res->url(1);
+        ZEvent::log(self::getCurrentMaster(), "query", __METHOD__, "");
+
+        $brand = [
+            "name" => "Rosewood 瑰丽",
+            "des" => "品牌的介绍介绍介绍介绍介绍",
+            "icon" => "",
+            "x" => [
+                "title" => "TraveliD与xxx是yyy合作伙伴",
+                "markdown" => "blabla"
+            ]
+        ];
+
+        return response()->json(
+            [
+                "ok"=>0,
+                "msg"=>"ok",
+                "obj"=>$res,
+                "url_format"=>$last_url,
+                "brand" => $brand
+            ]
+        );
+    }
 
     public function getIndexPage(Request $request){
         $arr1 = [

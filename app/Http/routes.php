@@ -20,6 +20,9 @@ Route::group(['middleware' => 'web'],function() {
     Route::get('/list/hotels/{id}', function () {
         return view('frontend.index.hotel_list');
     });
+    Route::get('/list/brand/{id}', function () {
+        return view('frontend.index.hotel_brand');
+    });
 
     Route::get('/test_payment', function () {
         return view('frontend.index.test_payment');
@@ -112,6 +115,7 @@ Route::group(['middleware'=>'api'],function(){
 
     Route::get('/api/index/op', 'Backend\IndexController@getIndexPage');
     Route::get('/api/list/hotels', 'Backend\IndexController@getHotelListByOp');
+    Route::get('/api/list/brand', 'Backend\IndexController@getHotelBrandByOp');
 
 
     Route::post('/api/order/create', 'Backend\OrderController@createOrder');

@@ -79,18 +79,27 @@
             <div style="height: 400px;width: 100%;background-color: lightblue">
 
             </div>
-            <div style="width: 100%;background-color: lightgrey;">
+            <div style="width: 100%;background-color: white;">
                 <div class="container">
-                    <div class="item_filter">日期</div>
-                    <div class="item_filter">目的地</div>
-                    <div class="item_filter">价格</div>
-                    <div class="item_filter">品牌</div>
-                    <div class="item_filter">评级</div>
-                    <div class="item_filter">地图</div>
+                    <div style="float: left;width: 40%">
+                        <img width="100%" height="200px" style="background-color: lightblue" />
+                    </div>
+                    <div style="float: left;width: 60%;padding: 15px">
+                        <div style="font-size: 22px;font-weight: bold"><%brand.name%></div>
+                        <div style="height: 15px"></div>
+                        <div style="font-size: 12px;color: #909090"><%brand.des%></div>
+                    </div>
+                    <div style="clear: both"></div>
                 </div>
             </div>
             <div class="container">
                 <div style="height: 20px;width: 30px"></div>
+                <div style="background-color: white;padding: 15px">
+                    <div style="text-align: center;font-size: 22px;font-weight: bold"><%brand.x.title%></div>
+                    <div><%brand.x.markdown%></div>
+                </div>
+                <div style="height: 20px;width: 30px"></div>
+                <div>精选酒店</div>
                 <div class="item" v-for="hotel in list.data">
                     <div style="float: left;position: relative;padding-left: 250px;width: 100%;background-color: white;min-height: 180px">
                         <div style="padding: 15px">
@@ -116,7 +125,7 @@
                     <div style="clear: both;height: 15px"></div>
                 </div>
                 <div style="height: 10px;width: 30px"></div>
-                <div style="text-align: center">
+                <div v-if="list.last_page > 1" style="text-align: center">
                     <div :style="'width: '+(list.last_page+2)*28+'px;margin-right: auto;margin-left: auto'">
                         <div class="page" style="float: left;" v-on:click="page_next(list.current_page-1)"> < </div>
                         <template v-for="index in list.last_page" >
@@ -174,7 +183,14 @@
 </script>
 
 <script>
+    var router = new VueRouter({
+        mode: 'history',
+        routes: [{
+            path: '/list/brand/:brand'
+        }]
+    });
     var hotelList = new Vue({
+        router,
         el: '#hotel_detail',
         delimiters: ["<%","%>"],
         components: {
@@ -190,10 +206,14 @@
                 prev_page_url : "",
                 next_page_url : ""
             },
-            url_format : ""
+            brand : {
+            },
+            url_format : "",
+            para_brand : null
         },
         created:function () {
             console.log("created");
+            this.para_brand = this.$route.params.brand;
             this.get_data();
         },
         mounted:function(){
@@ -210,13 +230,14 @@
         methods:{
             get_data : function(){
                 const self = this;
-                axios.get('/api/list/hotels',{
+                axios.get('/api/list/brand'+"?q="+self.para_brand,{
                         })
                         .then(function(response){
                             console.log(response.data);
 
                             self.list = response.data.obj;
                             self.url_format = response.data.url_format;
+                            self.brand = response.data.brand;
                             self.loading = false;
                         })
                         .catch(function(error){
@@ -231,6 +252,7 @@
                         .then(function(response){
                             console.log(response.data);
                             self.list = response.data.obj;
+                            self.brand = response.data.brand;
                             self.loading = false;
                         })
                         .catch(function(error){
