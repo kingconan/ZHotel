@@ -851,6 +851,7 @@
         "hideMethod": "fadeOut"
     }
     $(document).ready(function(){
+        console.log("document ready haha");
         $("#div_checkinout").dateRangePicker(
                 {
                     separator : ' to ',
@@ -878,6 +879,7 @@
                     language:"cn"
                 }
         );
+        console.log("document ready haha2");
         $("#div_checkinout2").dateRangePicker(
                 {
                     separator : ' to ',
