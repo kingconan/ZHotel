@@ -89,7 +89,11 @@
                             <option v-for="(item,i) in options.brand[0]" :value="options.brand[1][i]" ><%item%></option>
                         </select>
                     </div>
-                    <div class="item_filter">评级</div>
+                    <div class="item_filter">
+                        <select class="form-control" v-model="para.score">
+                            <option v-for="(item,i) in options.score[0]" :value="options.score[1][i]" ><%item%></option>
+                        </select>
+                    </div>
                     <div class="item_filter">地图</div>
                     <div class="item_filter" v-on:click="search()">搜索</div>
                 </div>
@@ -112,7 +116,7 @@
                                 ------/晚
                                 <div style="font-size: 9px;">含税最优价</div>
                             </div>
-                            <div style="position: absolute;bottom: 15px;right: 15px;background-color: #c99c76;padding: 3px 12px;font-size: 10px;color: white">酒店详情</div>
+                            <a :href="'/hotel/detail/'+hotel._id+'?ref=list'" style="position: absolute;bottom: 15px;right: 15px;background-color: #c99c76;padding: 3px 12px;font-size: 10px;color: white;text-decoration: none">酒店详情</a>
                         </div>
                     </div>
                     <div style="position: relative;float:left;width: 250px;background-color: lightblue;margin-left: -100%;height: 180px">
@@ -196,12 +200,17 @@
                 next_page_url : ""
             },
             para : {
-                brand : "品牌1"
+                brand : "",
+                score : ""
             },
             options : {
                 brand : [
                     ["选择品牌","品牌1","品牌2"],
                     ["","品牌1","品牌2"]
+                ],
+                score : [
+                        ["选择评级","5","4","3"],
+                        ["","5","4","3"]
                 ]
             },
             url_format : ""

@@ -139,10 +139,10 @@
                                 <div class="swiper-wrapper">
                                     <div class="swiper-slide" v-for="hotel in item.hotels">
                                         <div class="hotel_cover"></div>
-                                        <div class="hotel_name">HOTEL NAME3333</div>
-                                        <div class="hotel_name_en">NAME-EN</div>
-                                        <div class="hotel_address">ADDRESS</div>
-                                        <div class="hotel_description">DESCRIPTION<br/>ahhh</div>
+                                        <div class="hotel_name"><%hotel.name%></div>
+                                        <div class="hotel_name_en"><%hotel.name_en%></div>
+                                        <div class="hotel_address"><%hotel.address%></div>
+                                        <div class="hotel_description"></div>
                                     </div>
                                 </div>
                             </div>
@@ -277,6 +277,7 @@
                 var slider = new Swiper('.s' + index, {
                     slidesPerView: 3,
                     spaceBetween: 8,
+                    autoHeight : true,
                     navigation: {
                         nextEl: '.r' + index,
                         prevEl: '.l' + index

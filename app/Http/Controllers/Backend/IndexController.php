@@ -556,7 +556,7 @@ class IndexController extends Controller
                     [
                         "id" => "1",
                         "cover" => "",
-                        "name" => "名字",
+                        "name" => "名字我是一个",
                         "name_en" => "name",
                         "address" => "address"
                     ],
