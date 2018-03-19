@@ -511,18 +511,13 @@
         var flag_picker = 0;
         var hotel_lat,hotel_lng;
         function init_picker(){
-            if($("#div_checkinout") == undefined || $("#div_checkinout")  == null || !$("#div_checkinout").is(":visible")){
-                console.log("init picker failed")
-                return;
-            }
-            console.log("init picker ok")
-
-            if(flag_picker == 1){
-                return;
-            }
-            flag_picker = 1;
-            console.log($("#div_checkinout"));
-            $("#div_checkinout").dateRangePicker(
+            try{
+                if($("#div_checkinout").data("dateRangePicker") != null){
+                    console.log("already datepicker");
+                    return;
+                }
+                console.log("Init datepicker");
+              $("#div_checkinout").dateRangePicker(
                     {
                         separator : ' to ',
                         autoClose: true,
@@ -550,8 +545,10 @@
                         singleMonth: true
                     }
             );
-
-            console.log($("#div_checkinout"));
+            }
+            catch(e){
+                console.log(e)
+            }
         }
         $(document).click(function(e) {
             console.log("global click");
