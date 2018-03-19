@@ -960,7 +960,9 @@
             room_style:0, //0 def, 1 with price
             hack_width : "100px",
             style_gallery_image : "width:1028px;height:580px",
-            content_width : "width:1028px"
+            content_width : "width:1028px",
+            flag1 : 0,
+            flag2 : 0
         },
         created:function () {
             var _id = this.$route.params.id;
@@ -1049,33 +1051,39 @@
                     }
             );
             try{
-                $("#div_checkinout").dateRangePicker(
-                        {
-                            separator : ' to ',
-                            autoClose: true,
-                            getValue: function()
+                if($("#div_checkinout").data("dateRangePicker") == null){
+                    console.log("datepicker1 first time");
+                    $("#div_checkinout").dateRangePicker(
                             {
-                                if ($('#input_checkin').val() && $('#input_checkout').val() )
-                                    return $('#input_checkin').val() + ' to ' + $('#input_checkout').val();
-                                else
-                                    return '';
-                            },
-                            setValue: function(s,s1,s2)
-                            {
-                                $('#input_checkin').val(s1);
-                                $('#input_checkout').val(s2);
-                                //hack for event
-                                var evt = document.createEvent('HTMLEvents');
-                                evt.initEvent('input', false, true);
-                                $('#input_checkin')[0].dispatchEvent(evt);
-                                $('#input_checkout')[0].dispatchEvent(evt);
-                            },
-                            hoveringTooltip: function (days, startTime, hoveringTime) {
-                                return days > 1 ? days + "天" + (days - 1) + '晚' : '';
-                            },
-                            language:"cn"
-                        }
-                );
+                                separator : ' to ',
+                                autoClose: true,
+                                getValue: function()
+                                {
+                                    if ($('#input_checkin').val() && $('#input_checkout').val() )
+                                        return $('#input_checkin').val() + ' to ' + $('#input_checkout').val();
+                                    else
+                                        return '';
+                                },
+                                setValue: function(s,s1,s2)
+                                {
+                                    $('#input_checkin').val(s1);
+                                    $('#input_checkout').val(s2);
+                                    //hack for event
+                                    var evt = document.createEvent('HTMLEvents');
+                                    evt.initEvent('input', false, true);
+                                    $('#input_checkin')[0].dispatchEvent(evt);
+                                    $('#input_checkout')[0].dispatchEvent(evt);
+                                },
+                                hoveringTooltip: function (days, startTime, hoveringTime) {
+                                    return days > 1 ? days + "天" + (days - 1) + '晚' : '';
+                                },
+                                language:"cn"
+                            }
+                    );
+                }
+                else{
+                    console.log("datepicker1 is already");
+                }
             }
             catch(e){
                 console.log(e);
@@ -1083,33 +1091,37 @@
 
             console.log("document ready haha2");
             try{
-                $("#div_checkinout2").dateRangePicker(
-                        {
-                            separator : ' to ',
-                            autoClose: true,
-                            getValue: function()
+                if($("#div_checkinout2").data("dateRangePicker") == null) {
+                    console.log("datepicker2 first time");
+                    $("#div_checkinout2").dateRangePicker(
                             {
-                                if ($('#input_checkin2').val() && $('#input_checkout2').val() )
-                                    return $('#input_checkin2').val() + ' to ' + $('#input_checkout2').val();
-                                else
-                                    return '';
-                            },
-                            setValue: function(s,s1,s2)
-                            {
-                                $('#input_checkin2').val(s1);
-                                $('#input_checkout2').val(s2);
-                                //hack for event
-                                var evt = document.createEvent('HTMLEvents');
-                                evt.initEvent('input', false, true);
-                                $('#input_checkin2')[0].dispatchEvent(evt);
-                                $('#input_checkout2')[0].dispatchEvent(evt);
-                            },
-                            hoveringTooltip: function (days, startTime, hoveringTime) {
-                                return days > 1 ? days + "天" + (days - 1) + '晚' : '';
-                            },
-                            language:"cn"
-                        }
-                );
+                                separator: ' to ',
+                                autoClose: true,
+                                getValue: function () {
+                                    if ($('#input_checkin2').val() && $('#input_checkout2').val())
+                                        return $('#input_checkin2').val() + ' to ' + $('#input_checkout2').val();
+                                    else
+                                        return '';
+                                },
+                                setValue: function (s, s1, s2) {
+                                    $('#input_checkin2').val(s1);
+                                    $('#input_checkout2').val(s2);
+                                    //hack for event
+                                    var evt = document.createEvent('HTMLEvents');
+                                    evt.initEvent('input', false, true);
+                                    $('#input_checkin2')[0].dispatchEvent(evt);
+                                    $('#input_checkout2')[0].dispatchEvent(evt);
+                                },
+                                hoveringTooltip: function (days, startTime, hoveringTime) {
+                                    return days > 1 ? days + "天" + (days - 1) + '晚' : '';
+                                },
+                                language: "cn"
+                            }
+                    );
+                }
+                else{
+                    console.log("datepicker2 is already");
+                }
             }
             catch(e){
                 console.log(e);
