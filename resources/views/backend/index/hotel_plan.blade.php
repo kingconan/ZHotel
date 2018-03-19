@@ -1581,6 +1581,9 @@
                     night_min : "",
                     night_max : "",
                     type : "住X付Y",
+                    include : this.hotel.contracts[this.currentIndex].rooms[this.currentRoom].include,
+                    cancellation : this.hotel.contracts[this.currentIndex].rooms[this.currentRoom].cancellation,
+                    memo : this.hotel.contracts[this.currentIndex].rooms[this.currentRoom].memo,
                     obj : {
                         x : "",
                         y : "",
