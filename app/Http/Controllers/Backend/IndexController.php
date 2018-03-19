@@ -975,6 +975,24 @@ class IndexController extends Controller
                 }
                 $all_price = ceil($basic_price * (int)$item["obj"]["z"] / 100);
             }
+            else if($item["type"] == "住X延住K晚Z折扣"){
+                $x = (int)$item["obj"]["x"];
+                $y = (int)$item["obj"]["y"];
+                $z = (int)$item["obj"]["z"];
+                if($total_cnt < $x){
+                    array_push($ans_plans,[
+                        "name"=>$item["name"],
+                        "price"=>-1,
+                        "ok"=> false,
+                        "reason"=>"<  ".$item["obj"]["x"],
+                        "cancellation"=>isset($item["cancellation"]) ? $item["cancellation"] : "",
+                        "include"=>isset($item["include"]) ? $item["include"] : "",
+                        "memo"=>isset($item["memo"]) ? $item["memo"] : "",
+                    ]);
+                    continue;
+                }
+                $all_price = ceil($basic_price * (int)$item["obj"]["z"] / 100);
+            }
 
 
             $detais = self::copyArray($price_details);
