@@ -84,9 +84,14 @@
                     <div class="item_filter">日期</div>
                     <div class="item_filter">目的地</div>
                     <div class="item_filter">价格</div>
-                    <div class="item_filter">品牌</div>
+                    <div class="item_filter">
+                        <select class="form-control" v-model="para.brand">
+                            <option v-for="(item,i) in options.brand[0]" :value="options.brand[1][i]" ><%item%></option>
+                        </select>
+                    </div>
                     <div class="item_filter">评级</div>
                     <div class="item_filter">地图</div>
+                    <div class="item_filter" v-on:click="search()">搜索</div>
                 </div>
             </div>
             <div class="container">
@@ -190,6 +195,15 @@
                 prev_page_url : "",
                 next_page_url : ""
             },
+            para : {
+                brand : "品牌1"
+            },
+            options : {
+                brand : [
+                    ["选择品牌","品牌1","品牌2"],
+                    ["","品牌1","品牌2"]
+                ]
+            },
             url_format : ""
         },
         created:function () {
@@ -228,6 +242,21 @@
                 self.loading = true;
                 console.log(url);
                 axios.get(url,{})
+                        .then(function(response){
+                            console.log(response.data);
+                            self.list = response.data.obj;
+                            self.loading = false;
+                        })
+                        .catch(function(error){
+                            console.log(error);
+                        });
+            },
+            search : function(){
+                const self = this;
+                var paras = JSON.parse(JSON.stringify(this.$data));
+                var filter = paras.para;
+                console.log(filter);
+                axios.post("/api/list/search",filter)
                         .then(function(response){
                             console.log(response.data);
                             self.list = response.data.obj;

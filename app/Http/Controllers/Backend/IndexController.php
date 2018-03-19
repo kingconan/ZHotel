@@ -484,6 +484,31 @@ class IndexController extends Controller
             ]
         );
     }
+    public function searchHotelByOp(Request $request){
+        $json = $request->json()->all();
+        $brand = $json["brand"];
+
+        $projections = ['_id', 'images', 'name', 'name_en', 'description', 'location'];
+
+        if($brand){
+            $res = Hotel::where("brand",$brand)
+                ->paginate(20, $projections);
+            $res->appends(["brand"=>$brand]);
+        }
+        else{
+            $res = Hotel::paginate(20, $projections);
+        }
+
+        $last_url = $res->url(1);
+        return response()->json(
+            [
+                "ok"=>0,
+                "msg"=>"ok",
+                "obj"=>$res,
+                "url_format"=>$last_url,
+            ]
+        );
+    }
     public function getHotelBrandByOp(Request $request){
         $brand = $request->input("q");
         if(!$brand){

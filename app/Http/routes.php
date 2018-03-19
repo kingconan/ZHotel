@@ -116,6 +116,7 @@ Route::group(['middleware'=>'api'],function(){
     Route::get('/api/index/op', 'Backend\IndexController@getIndexPage');
     Route::get('/api/list/hotels', 'Backend\IndexController@getHotelListByOp');
     Route::get('/api/list/brand', 'Backend\IndexController@getHotelBrandByOp');
+    Route::post('/api/list/search', 'Backend\IndexController@searchHotelByOp');
 
 
     Route::post('/api/order/create', 'Backend\OrderController@createOrder');
