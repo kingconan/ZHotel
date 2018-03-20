@@ -572,8 +572,8 @@
                                                             v-on:click="room_plan_select(roomIndex,index)"
                                                         >
                                                             <td style="padding: 12px" width="200px"><%plan.name%></td>
-                                                            <td style="padding: 12px" v-if="plan.ok"><%plan.price%> </td>
-                                                            <td style="padding: 12px;color:red" v-else><%plan.reason%> </td>
+                                                            <td style="padding: 12px" v-if="plan.ok">¥ <%plan.price%> </td>
+                                                            <td style="padding: 12px;color:grey" v-else><%plan.reason%> </td>
                                                         </tr>
                                                     </table>
                                                     <div v-else>暂无价格</div>
@@ -1303,12 +1303,7 @@
                 console.log("resize(wxh) = "+width+","+height);
                 this.hack_width = (width - 1028 )/2 + "px";
             },
-            room_plan_select : function(roomIndex,index){
-                console.log("room plan select")
-                console.log(roomIndex)
-                console.log(index)
-                this.hotel.rooms[roomIndex].price.price_index = index;
-
+            room_plan_order : function(roomIndex,index){
                 var paras = JSON.parse(JSON.stringify(this.$data));
                 var plan = paras.hotel.rooms[roomIndex].price.plans[index];
                 var room = paras.hotel.rooms[roomIndex];
@@ -1344,7 +1339,12 @@
                         .catch(function(error){
                             console.log(error);
                         });
-
+            }
+            room_plan_select : function(roomIndex,index){
+                console.log("room plan select")
+                console.log(roomIndex)
+                console.log(index)
+                this.hotel.rooms[roomIndex].price.price_index = index;
             }
         },
         computed : {
