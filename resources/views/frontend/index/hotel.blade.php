@@ -577,19 +577,7 @@
                                                         </tr>
                                                     </table>
                                                     <div v-else>暂无价格</div>
-                                                    <div style="height: 30px;width: 30px"></div>
-                                                    <template v-if="room.price.price_index == 0">
-                                                        <div style="font-size: 16px;">费用包含</div>
-                                                        <ul class="plan_check">
-                                                           <li v-for="item in str_2_arr(room.price.include)"><%item%></li>
-                                                        </ul>
-                                                        <div style="height: 30px;width: 30px"></div>
-                                                        <div style="font-size: 16px;">退改规则</div>
-                                                        <ul class="plan_check">
-                                                            <li v-for="item in str_2_arr(room.price.cancellation)"><%item%></li>
-                                                        </ul>
-                                                    </template>
-                                                    <template v-else-if="room.price.price_index > 0">
+                                                    <template>
                                                         <div style="font-size: 16px;">费用包含</div>
                                                         <ul class="plan_check">
                                                             <li v-for="item in str_2_arr(room.price.plans[room.price.price_index].include)"><%item%></li>
