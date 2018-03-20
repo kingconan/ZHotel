@@ -1339,7 +1339,7 @@
                         .catch(function(error){
                             console.log(error);
                         });
-            }
+            },
             room_plan_select : function(roomIndex,index){
                 console.log("room plan select")
                 console.log(roomIndex)
