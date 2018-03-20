@@ -192,6 +192,7 @@
                     <div style="height: 15px;width: 100%"></div>
                     <button type="button" class="btn btn-info" v-on:click="save">保存</button>
                     <button type="button" class="btn btn-info" v-on:click="mode">MODE</button>
+                    <button type="button" class="btn btn-info" style="margin-left: 60px" v-on:click="hack_copy">拷贝退改到优惠计划中</button>
                 </div>
             </div>
             <div v-if="currentIndex >= 0" style="padding:15px 8px;margin-bottom: 15px;background-color: white;margin-top: 30px;border: 1px solid lightgrey;">
@@ -1776,6 +1777,20 @@
                 if(confirm("确定要删除入住限制  "+(index+1)+"?")){
                     this.hotel.contracts[this.currentIndex].rooms[this.currentRoom].limit.splice(index,1);
                     this.$forceUpdate();
+                }
+            },
+            hack_copy : function(){
+                for(var i= 0,iLen = this.hotel.contracts.length;i<iLen;i++){
+                    for(var j= 0,jLen = this.hotel.contracts[i].rooms.length;j<jLen;j++){
+                        var include = this.hotel.contracts[i].rooms[j].include;
+                        var cancellation = this.hotel.contracts[i].rooms[j].cancellation;
+                        var memo = this.hotel.contracts[i].rooms[j].memo;
+                        for(var k= 0,kLen = this.hotel.contracts[i].rooms[j].plans.length;k<kLen;k++){
+                            this.hotel.contracts[i].rooms[j].plans[k].include = include;
+                            this.hotel.contracts[i].rooms[j].plans[k].cancellation = cancellation;
+                            this.hotel.contracts[i].rooms[j].plans[k].memo = memo;
+                        }
+                    }
                 }
             },
             helper_has_copy : function(item){
