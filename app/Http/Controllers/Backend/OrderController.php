@@ -40,6 +40,28 @@ class OrderController extends Controller
     }
 
 
+    public function getUserOrderList(Request $request){
+        if(Auth::guard(self::guard)->user()){
+            $user = Auth::guard(self::guard)->user();
+            $userId = $user->_id;
+            $orders = Order::where("user_id",$userId)->orderBy("created_at","DESC")->get();
+            return response()->json(
+                [
+                    "ok"=>0,
+                    "msg"=>"ok",
+                    "obj"=>$orders
+                ]
+            );
+        }
+        return response()->json(
+            [
+                "ok"=>4,
+                "msg"=>"请先登录",
+                "obj"=>[]
+            ]
+        );
+    }
+
     //order ops
     public function createOrder(Request $request){
         if(Auth::guard(self::guard)->user()){

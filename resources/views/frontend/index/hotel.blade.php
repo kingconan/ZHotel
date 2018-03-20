@@ -367,7 +367,7 @@
             padding: 0 20px;
             line-height: 24px;
             color: #666666;
-            font-size: 14px;
+            font-size: 12px;
         }
         strong{
             font-size: 30px;
@@ -385,7 +385,7 @@
     </div>
 @else
     <div style="background-color: #0a0a0a;color: lightgrey;padding: 3px;text-align: center">
-    <span>{{Auth::guard('customer')->user()->name}}</span>
+    <a href="/user/profile">{{Auth::guard('customer')->user()->name}}</a>
         <a href="/logout">logout</a>
     </div>
 @endif
@@ -572,20 +572,26 @@
                                                             v-on:click="room_plan_select(roomIndex,index)"
                                                         >
                                                             <td style="padding: 12px" width="200px"><%plan.name%></td>
-                                                            <td style="padding: 12px" v-if="plan.ok">¥ <%plan.price%> </td>
+                                                            <td style="padding: 12px" v-if="plan.ok"
+                                                                v-on:mouseover="room_plan_hover(roomIndex,index)"
+                                                                v-on:click="room_plan_order(roomIndex,index)"
+                                                            >¥ <%plan.price%> </td>
                                                             <td style="padding: 12px;color:grey" v-else><%plan.reason%> </td>
                                                         </tr>
                                                     </table>
                                                     <div v-else>暂无价格</div>
                                                     <template>
-                                                        <div style="font-size: 16px;">费用包含</div>
+                                                        <div style="font-size: 14px;margin-bottom: 6px;margin-top: 30px">费用包含</div>
                                                         <ul class="plan_check">
                                                             <li v-for="item in str_2_arr(room.price.plans[room.price.price_index].include)"><%item%></li>
                                                         </ul>
-                                                        <div style="height: 30px;width: 30px"></div>
-                                                        <div style="font-size: 16px;">退改规则</div>
+                                                        <div style="font-size: 14px;margin-bottom: 6px;margin-top: 30px">退改规则</div>
                                                         <ul class="plan_check">
                                                             <li v-for="item in str_2_arr(room.price.plans[room.price.price_index].cancellation)"><%item%></li>
+                                                        </ul>
+                                                        <div style="font-size: 14px;margin-bottom: 6px;margin-top: 30px">备注</div>
+                                                        <ul class="plan_check">
+                                                            <li v-for="item in str_2_arr(room.price.plans[room.price.price_index].memo)"><%item%></li>
                                                         </ul>
                                                     </template>
                                                 </div>
@@ -1345,6 +1351,10 @@
                 console.log(roomIndex)
                 console.log(index)
                 this.hotel.rooms[roomIndex].price.price_index = index;
+            },
+            room_plan_hover : function(roomIndex, index){
+//                var details = this.hotel.rooms[roomIndex].price.plans[index].details;
+//                console.log(details);
             }
         },
         computed : {

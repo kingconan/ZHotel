@@ -24,6 +24,10 @@ Route::group(['middleware' => 'web'],function() {
         return view('frontend.index.hotel_brand');
     });
 
+    Route::get('/user/profile', function () {
+        return view('frontend.index.order_list');
+    });
+
     Route::get('/test_payment', function () {
         return view('frontend.index.test_payment');
     });
@@ -120,6 +124,7 @@ Route::group(['middleware'=>'api'],function(){
 
 
     Route::post('/api/order/create', 'Backend\OrderController@createOrder');
+    Route::post('/api/order/get_user_orders', 'Backend\OrderController@getUserOrderList');
 
     Route::post('/uploader/image', 'Backend\IndexController@uploadImage');
     Route::post('/fetcher/image', 'Backend\IndexController@fetchImage');
