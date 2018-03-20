@@ -758,10 +758,13 @@ class IndexController extends Controller
         $total_cnt = self::diffDateString($checkin,$checkout);
         $basic_price = 0;
 
+        //根据price_unit去换算price_rate
+
         //将基础班期的每天价格放到$ans里
         $price_details = [];//type name price
         foreach($room_prices as $price){
             //先找checkin 范围
+            $price_rmb = $price["price"]*$price_rate ;//covert to RMB
             if($find == 0){
                 if($checkin <= $price["date_to"] && $checkin >= $price["date_from"]){
                     $find++;
@@ -769,11 +772,11 @@ class IndexController extends Controller
                         $find++;
                         $count = self::diffDateString($checkin,$checkout);
                         for($i=0;$i<$count;$i++){
-                            $basic_price = $basic_price + $price["price"];
-                            array_push($ans,$price["price"]);
+                            $basic_price = $basic_price + $price_rmb;
+                            array_push($ans,$price_rmb);
                             //$chekcin + $i =>
                             $date_string = self::getDateString($checkin, $i);
-                            array_push($price_details,["BASIC", $date_string, $price["price"]]);
+                            array_push($price_details,["BASIC", $date_string, $price_rmb]);
                         }
                         break;//一次找到全部班期
                     }
@@ -781,11 +784,11 @@ class IndexController extends Controller
                         //算一部分钱
                         $count = self::diffDateString($checkin,$price["date_to"]) + 1;
                         for($i=0;$i<$count;$i++){
-                            $basic_price = $basic_price + $price["price"];
-                            array_push($ans,$price["price"]);
+                            $basic_price = $basic_price + $price_rmb;
+                            array_push($ans,$price_rmb);
                             //$chekcin + $i =>
                             $date_string = self::getDateString($checkin, $i);
-                            array_push($price_details,["BASIC", $date_string, $price["price"]]);
+                            array_push($price_details,["BASIC", $date_string, $price_rmb]);
                         }
                     }
                 }
@@ -795,12 +798,12 @@ class IndexController extends Controller
                     $find++;
                     $count = self::diffDateString($price["date_from"],$checkout);
                     for($i=0;$i<$count;$i++){
-                        $basic_price = $basic_price + $price["price"];
-                        array_push($ans,$price["price"]);
+                        $basic_price = $basic_price + $price_rmb;
+                        array_push($ans,$price_rmb);
 
                         // + $i =>
                         $date_string = self::getDateString($price["date_from"], $i);
-                        array_push($price_details,["BASIC", $date_string, $price["price"]]);
+                        array_push($price_details,["BASIC", $date_string, $price_rmb]);
                     }
                     //找到第二部分
                     break;
@@ -809,12 +812,12 @@ class IndexController extends Controller
                     //说明checkin checkout跨多个时间段了,本时间段全部加进去
                     $count = self::diffDateString($price["date_from"],$price["date_to"]) + 1;
                     for($i=0;$i<$count;$i++){
-                        $basic_price = $basic_price + $price["price"];
-                        array_push($ans,$price["price"]);
+                        $basic_price = $basic_price + $price_rmb;
+                        array_push($ans,$price_rmb);
 
                         // + $i =>
                         $date_string = self::getDateString($price["date_from"], $i);
-                        array_push($price_details,["BASIC", $date_string, $price["price"]]);
+                        array_push($price_details,["BASIC", $date_string, $price_rmb]);
                     }
                 }
             }
