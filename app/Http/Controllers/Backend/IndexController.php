@@ -764,7 +764,7 @@ class IndexController extends Controller
         $price_details = [];//type name price
         foreach($room_prices as $price){
             //先找checkin 范围
-            $price_rmb = $price["price"]*$price_rate ;//covert to RMB
+            $price_rmb = self::toNumber($price["price"]*$price_rate) ;//covert to RMB
             if($find == 0){
                 if($checkin <= $price["date_to"] && $checkin >= $price["date_from"]){
                     $find++;
@@ -831,6 +831,8 @@ class IndexController extends Controller
             ];
         }
 
+
+        $basic_price = self::toNumber($basic_price);
 
         //基本价格
         array_push($ans_plans,[
@@ -958,7 +960,7 @@ class IndexController extends Controller
                     ]);
                     continue;
                 }
-                $all_price = ceil($basic_price * (int)$item["obj"]["z"] / 100);
+                $all_price = ($basic_price * (float)$item["obj"]["z"] / 10);
             }
             else if($item["type"] == "提起X天Z折扣"){
                 $now = Carbon::now();
@@ -976,7 +978,7 @@ class IndexController extends Controller
                     ]);
                     continue;
                 }
-                $all_price = ceil($basic_price * (int)$item["obj"]["z"] / 100);
+                $all_price = ($basic_price * (float)$item["obj"]["z"] / 10);
             }
             else if($item["type"] == "住X延住K晚Z折扣"){
                 $x = (int)$item["obj"]["x"];
@@ -994,8 +996,10 @@ class IndexController extends Controller
                     ]);
                     continue;
                 }
-                $all_price = ceil($basic_price * (int)$item["obj"]["z"] / 100);
+                $all_price = self::toNumber($basic_price * (float)$item["obj"]["z"] / 10);
             }
+
+            $all_price = self::toNumber($all_price);
 
 
             $detais = self::copyArray($price_details);
@@ -1051,6 +1055,9 @@ class IndexController extends Controller
             "plans" => $ans_plans,
             "options" => $options
         ];
+    }
+    private function toNumber($number){
+        return round((float)$number, 2, PHP_ROUND_HALF_UP);
     }
     //for log
     private function getCurrentUser(){
