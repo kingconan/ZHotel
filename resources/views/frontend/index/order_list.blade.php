@@ -3,6 +3,7 @@
     <link rel="stylesheet" href="{{asset('css/libs/toastr.min.css')}}"/>
     <link rel="stylesheet" href="{{asset('css/libs/swiper.min.css')}}"/>
     <link rel="stylesheet" href="{{asset('css/libs/zhotel_lib.css')}}"/>
+    <link rel="stylesheet" href="{{asset('css/libs/iview.css')}}"/>
 
     <style>
         body{
@@ -17,6 +18,13 @@
         .status_0{
             background-color:red;padding: 3px 6px;color: white;font-size: 9px;
             border-radius: 3px;
+        }
+        .time{
+            font-size: 14px;
+            font-weight: bold;
+        }
+        .content{
+            padding-left: 5px;
         }
     </style>
 
@@ -50,6 +58,7 @@
         </div>
         <div v-else >
             <h3 style="text-align: center">我的订单</h3>
+
             <table class="table"
                    style="width: 800px;margin-left: auto;margin-right: auto;background-color: white;font-size: 12px">
                 <thead>
@@ -68,7 +77,7 @@
                     <td><%order.hotel_info.name%><br/><%order.hotel_info.name_en%></td>
                     <td><%order.room_info.name%><br/><%order.room_info.name_en%></td>
                     <td>¥ <%order.plan_info.price%></td>
-                    <td>详情</td>
+                    <td><a :href="'/user/order/'+order._id">详情</a></td>
                 </tr>
             </table>
         </div>
@@ -81,6 +90,7 @@
 <script src="{{asset('js/libs/toastr.min.js')}}"></script>
 <script src="{{asset('js/libs/zhotel_lib.js')}}"></script>
 <script src="{{asset('js/libs/swiper.min.js')}}"></script>
+<script src="{{asset('js/libs/iview.min.js')}}"></script>
 
 <script>
     toastr.options = {
@@ -158,6 +168,9 @@
                 }
 
                 return "未知状态"
+            },
+            view_order : function(id){
+                console.log(id);
             }
         },
         computed : {

@@ -151,6 +151,7 @@ class OrderController extends Controller
         $json = $request->json()->all();
         $_id = $json["_id"];
         $order = Order::find($_id);
+        //TODO:填写表单的结构略有不同
         if($order){
             $order->user_info = $json["user_info"];
             $order->book_info = $json["book_info"];

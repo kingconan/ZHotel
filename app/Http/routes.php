@@ -27,6 +27,9 @@ Route::group(['middleware' => 'web'],function() {
     Route::get('/user/profile', function () {
         return view('frontend.index.order_list');
     });
+    Route::get('/user/order/{id}', function () {
+        return view('frontend.index.order_detail');
+    });
 
     Route::get('/test_payment', function () {
         return view('frontend.index.test_payment');
