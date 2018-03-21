@@ -595,7 +595,7 @@
                                                         </ul>
                                                     </template>
                                                 </div>
-                                                <div v-if="room.price && room.price.ok == 1">
+                                                <div v-if="room.price && room.price.ok == 1" style="padding: 30px">
                                                     <%room.price.reason%>
                                                 </div>
                                             </div>
