@@ -565,7 +565,7 @@
                                             </div>
                                             <div style="display: table-cell;width: 528px;border-top: 1px solid lightgrey;min-height: 600px">
                                                 {{--<div style="height: 1px;width: 100%;background-color: lightgrey"></div>--}}
-                                                <div v-if="room.price" style="padding:30px">
+                                                <div v-if="room.price.ok == 0" style="padding:30px">
                                                     <table v-if="room.price.plans">
                                                         <tr v-for="(plan, index) in room.price.plans"
                                                             :class="room.price.price_index == index ? 'plan_active' : 'plan_normal'"
@@ -594,6 +594,9 @@
                                                             <li v-for="item in str_2_arr(room.price.plans[room.price.price_index].memo)"><%item%></li>
                                                         </ul>
                                                     </template>
+                                                </div>
+                                                <div v-if="room.price.ok == 1">
+                                                    <%room.price.reason%>
                                                 </div>
                                             </div>
                                             <div style="clear: both;"></div>

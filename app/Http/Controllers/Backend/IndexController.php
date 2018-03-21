@@ -887,7 +887,8 @@ class IndexController extends Controller
                 else{
                     return [
                         "ok" => 1,
-                        "msg" => $item
+                        "msg" => $item,
+                        "reason" => "".$item["date_from"]." - ".$item["date_to"]."期间最少入住".$item["night_min"]."晚"
                     ];
                 }
             }
