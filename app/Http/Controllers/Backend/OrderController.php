@@ -146,6 +146,34 @@ class OrderController extends Controller
         );
 
     }
+    public function updateOrderByUser(Request $request){
+        $json = $request->json()->all();
+        $_id = $json["_id"];
+        $order = Order::find($_id);
+        if($order){
+            //_id, created_at, updated_at, room_id, user_id, hotel_id, hotel_name, hotel_name_en
+            $order->user = $json["user"];
+            $order->user2 = $json["user2"];
+
+            $order->save();
+            return response()->json(
+                [
+                    "ok"=>0,
+                    "msg"=>"ok",
+                    "obj"=>$order
+                ]
+            );
+        }
+        else{
+            return response()->json(
+                [
+                    "ok"=>4,
+                    "msg"=>"木有找到",
+                    "obj"=>$json
+                ]
+            );
+        }
+    }
 
     public function updateOrder(Request $request){
         $json = $request->json()->all();
@@ -153,17 +181,24 @@ class OrderController extends Controller
         $order = Order::find($_id);
         //TODO:填写表单的结构略有不同
         if($order){
-            $order->user_info = $json["user_info"];
-            $order->book_info = $json["book_info"];
+            //_id, created_at, updated_at, room_id, user_id, hotel_id, hotel_name, hotel_name_en
             $order->checkin = $json["book_info"]["checkin"];
             $order->checkout = $json["book_info"]["checkout"];
-
+            $order->status = $json["status"];
             $order->user_phone = $json["user_info"]["phone"];
 
 
+//            $order->user_info = $json["user_info"];
+            $order->book_info = $json["book_info"];
+            $order->user = $json["user"];
+            $order->user2 = $json["user2"];
+
+            //set payment by master
             $order->payment_id = $json["payment_id"];
             $order->payment_price = $json["payment_price"];
             $order->payment_memo = $json["payment_memo"];
+
+
             if(isset($json["payment_log"]))
                 $order->payment_log = $json["payment_log"];
 

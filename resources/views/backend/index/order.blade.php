@@ -3,7 +3,7 @@
     <link rel="stylesheet" href="{{asset('css/libs/float-label.css')}}"/>
     <link rel="stylesheet" href="{{asset('css/libs/toastr.min.css')}}"/>
     <link rel="stylesheet" href="{{asset('css/libs/jquery-confirm.min.css')}}"/>
-    <link rel="stylesheet" href="{{asset('css/libs/daterangepicker_ihotel.min.css')}}"/>
+    <link rel="stylesheet" href="{{asset('css/libs/iview.css')}}"/>
     <style>
         [v-cloak] {
             display: none;
@@ -129,44 +129,13 @@
             <div v-else class="box" style="padding: 30px">
                 <div class="card">
                     <label>订单状态</label>
-                    <div>
-                        <div class="status">
-                            <div :class="order.status == 0 ? 'status_focus' : ''">
-                                未付定金
-                            </div>
-                        <span v-if="order.status == 0">
-                            <%status_arr[order.status][0]%>
-                        </span>
-                        </div>
-                        <div class="status_line"></div>
-                        <div  class="status">
-                            <div :class="order.status > 9 && order.status < 20 ? 'status_focus' : ''">
-                                付款中
-                            </div>
-                        <span v-if="order.status > 9 && order.status < 20">
-                            <%status_arr[order.status][0]%>
-                        </span>
-                        </div>
-                        <div class="status_line"></div>
-                        <div  class="status">
-                            <div :class="order.status == 20 ? 'status_focus' : ''">
-                                预订成功
-                            </div>
-                        <span v-if="order.status == 20">
-                            <%status_arr[order.status][0]%>
-                        </span>
-                        </div>
-                        <div class="status_line"></div>
-                        <div  class="status">
-                            <div :class="order.status > 99 && order.status < 200 ? 'status_focus' : ''">
-                                已使用
-                            </div>
-                        <span v-if="order.status > 99 && order.status < 200">
-                            <%status_arr[order.status][0]%>
-                        </span>
-                        </div>
-
-                        <div style="clear: both"></div>
+                    <div style="width: 600px">
+                        <steps :current="show_step_current(order.status)" status="wait">
+                            <step :title="show_step_title(0,order.status)" :content="show_des(0,order.status)"></step>
+                            <step :title="show_step_title(1,order.status)" :content="show_des(1,order.status)"></step>
+                            <step :title="show_step_title(2,order.status)" :content="show_des(2,order.status)"></step>
+                            <step :title="show_step_title(3,order.status)" :content="show_des(3,order.status)"></step>
+                        </steps>
                     </div>
                     <div style="margin-top: 10px">
                         <select class="form-control" v-model="order.status" style="width: 200px" >
@@ -234,6 +203,12 @@
                                     <input id="input_checkout" class="table_input" v-model="order.book_info.checkout"/>
                                 </td>
                             </tr>
+                            <tr>
+                                <td>备注</td>
+                                <td>
+                                    <textarea id="tat" class="table_input" style="width: 100%" rows="6" v-model="order.user.memo"></textarea>
+                                </td>
+                            </tr>
                             </tbody>
                         </table>
                     </div>
@@ -243,25 +218,56 @@
                     <table class="table">
                         <tbody>
                         <tr>
-                            <td width="120px">名称</td>
+                            <td width="60px">姓</td>
                             <td>
-                                <input class="table_input" v-model="order.user_info.name"/>
+                                <input class="table_input" v-model="order.user.last_name"/>
                             </td>
                         </tr>
                         <tr>
-                            <td width="120px">email</td>
+                            <td width="">名</td>
                             <td>
-                                <input class="table_input" type="email" v-model="order.user_info.email"/>
+                                <input class="table_input" v-model="order.user.first_name"/>
                             </td>
                         </tr>
                         <tr>
-                            <td width="120px">手机</td>
+                            <td width="">居住国</td>
                             <td>
-                                <input class="table_input" v-model="order.user_info.phone"/>
+                                <input class="table_input" v-model="order.user.country"/>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td width="">email</td>
+                            <td>
+                                <input class="table_input" type="email" v-model="order.user.email"/>
                             </td>
                         </tr>
                         </tbody>
                     </table>
+                    </div>
+                    <div class="card">
+                        <label>为他人预订</label>
+                        <table class="table">
+                            <tbody>
+                            <tr>
+                                <td width="60px">姓</td>
+                                <td>
+                                    <input class="table_input" v-model="order.user2.last_name"/>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td width="">名</td>
+                                <td>
+                                    <input class="table_input" v-model="order.user2.first_name"/>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td width="">居住国</td>
+                                <td>
+                                    <input class="table_input" v-model="order.user2.country"/>
+                                </td>
+                            </tr>
+                            </tbody>
+                        </table>
                     </div>
 
                     <div class="card">
@@ -316,11 +322,12 @@
 @section('script')
 <script src="{{asset('js/libs/vue.min.js')}}"></script>
 <script src="{{asset('js/libs/vue-router.min.js')}}"></script>
+<script src="{{asset('js/libs/iview.min.js')}}"></script>
 <script src="{{asset('js/libs/jquery.ajaxupload.js')}}"></script>
 <script src="{{asset('js/libs/toastr.min.js')}}"></script>
 <script src="{{asset('js/libs/jquery-confirm.min.js')}}"></script>
 <script src="{{asset('js/libs/moment.min.js')}}"></script>
-<script src="{{asset('js/libs/jquery.daterangepicker.min.js')}}"></script>
+
 <script>
     toastr.options = {
         "closeButton": false,
@@ -357,6 +364,18 @@
                 payment_id : 0,
                 payment_price : 0,
                 payment_memo : "",
+                user : {
+                    last_name : "",
+                    first_name : "",
+                    country : "",
+                    email : "",
+                },
+                user2 : {
+                    last_name : "",
+                    first_name : "",
+                    country : "",
+                    email : "",
+                }
             },
             loading:true,
             status_arr : {
@@ -396,6 +415,22 @@
                             console.log(response.data);
                             if(response.data.ok == 0){
                                 self.order = response.data.obj;
+                                if(!self.order.user){
+                                    self.order.user = {
+                                        last_name : "",
+                                        first_name : "",
+                                        country : "",
+                                        email : "",
+                                    }
+                                }
+                                if(!self.order.user2){
+                                    self.order.user2 = {
+                                        last_name : "",
+                                        first_name : "",
+                                        country : "",
+                                        email : "",
+                                    }
+                                }
                                 self.loading = false;
                             }
 
@@ -420,6 +455,7 @@
                             console.log(response.data);
                             if(response.data.ok == 0){
                                 self.order = response.data.obj;
+
                                 toastr["success"](response.data.msg);
                             }
                             else{
@@ -498,6 +534,68 @@
             },
             sec2date : function(sec){
                 return moment(sec).local().format('YYYY-MM-DD HH:mm:ss')
+            },
+            show_step_current : function(status){
+                if(status == 0) return 0;
+                if(status == 20) return 2;
+                if(status >= 10 && status <20) return 1;
+                if(status >= 30 && status <40) return 2;
+                if(status >= 100 && status <200) return 3;
+            },
+            show_step_title : function(index, status){
+                if(index == 0){
+                    return "未付定金";
+                }
+                if(index == 1){
+                    if(status >= 10 && status < 20){
+                        return "付款中";
+                    }
+                    return "付款中";
+                }
+                if(index == 2){
+                    if(status == 20){
+                        return "预订成功";
+                    }
+                    else if(status > 20 && status < 40){
+                        return "申请退款";
+                    }
+                    return "预订成功";
+                }
+                if(index == 3){
+                    if(status >= 100 && status < 200){
+                        return this.status_arr[status][0];
+                    }
+                    return "已使用";
+                }
+            },
+            show_des : function(index, status){
+                if(index == 0){
+                    if(status == 0){
+                        return this.status_arr[status][1];
+                    }
+                    return "";
+                }
+                if(index == 1){
+                    if(status >= 10 && status < 20){
+                        return this.status_arr[status][1];
+                    }
+                    return "";
+                }
+                if(index == 2){
+                    if(status == 20){
+                        return this.status_arr[status][1];
+                    }
+                    else if(status > 20 && status < 40){
+                        return this.status_arr[status][1];
+                    }
+                    return "";
+                }
+                if(index == 3){
+                    if(status >= 100 && status < 200){
+                        return this.status_arr[status][1];
+                    }
+                    return "";
+                }
             }
         },
         computed:{
@@ -508,33 +606,6 @@
     })
 
     $(document).ready(function(){
-        $("#input_checkin").dateRangePicker(
-                {
-                    separator : ' to ',
-                    autoClose: true,
-                    getValue: function()
-                    {
-                        if ($('#input_checkin').val() && $('#input_checkout').val() )
-                            return $('#input_checkin').val() + ' to ' + $('#input_checkout').val();
-                        else
-                            return '';
-                    },
-                    setValue: function(s,s1,s2)
-                    {
-                        $('#input_checkin').val(s1);
-                        $('#input_checkout').val(s2);
-                        //hack for event
-                        var evt = document.createEvent('HTMLEvents');
-                        evt.initEvent('input', false, true);
-                        $('#input_checkin')[0].dispatchEvent(evt);
-                        $('#input_checkout')[0].dispatchEvent(evt);
-                    },
-                    hoveringTooltip: function (days, startTime, hoveringTime) {
-                        return days > 1 ? days + "天" + (days - 1) + '晚' : '';
-                    },
-                    language:"cn"
-                }
-        );
     });
 </script>
 @endsection

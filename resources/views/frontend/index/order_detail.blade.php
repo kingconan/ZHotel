@@ -96,23 +96,13 @@
         </div>
         <div v-else style="max-width: 1024px;min-width:630px ;margin-left: auto;margin-right: auto;padding-top: 30px;">
             <div style="background-color: white;padding: 30px;">
-                <steps :current="1">
-                    <step title="下单" content="选择入住日期,晚数及入住人信息"></step>
-                    <step title="支付定金" content="支付99元定金"></step>
-                    <step title="支付尾款" content="如有库存,则支付尾款"></step>
-                    <step title="预订完成" content="旅行顾问预订"></step>
-                    <step title="已出行" content="已出行"></step>
+                <steps :current="steps.current">
+                    <step v-for="(item,index) in steps.steps" :title="item" content=""></step>
                 </steps>
             </div>
             <div style="height: 15px;width: 100%"></div>
             <div style="float: left;width: 100%;padding-left:320px;">
                 <div style="background-color: white">
-                    <div class="div_block">
-                        <div style="font-size: 22px;font-weight: bold"><%book.info.hotel_info.name%></div>
-                        <div style="font-size: 16px;"><%book.info.hotel_info.name_en%></div>
-                        {{--<div style="color: grey;font-size: 14px"><%book.info.hotel_info.location.address%></div>--}}
-                        <img :src="book.info.hotel_info.image.url" style="width: 100%;object-fit: cover" />
-                    </div>
                     <div>
                         <div class="div_block">
                             <div>输入个人信息</div>
@@ -148,35 +138,43 @@
                                 <z-input placeholder="居住国" type="text"  v-model="book.user2.country"></z-input>
                             </div>
                         </div>
-
                         <div class="div_block">
                             <div>备注特殊需求</div>
                             <div style="height: 15px;width: 15px"></div>
                             <z-textarea placeholder="备注" v-model="book.user.memo"></z-textarea>
                             <div>*特殊需求能否满足要求,取决于各酒店住宿的实际情况,如产生额外费用于酒店前台支付</div>
                         </div>
-
-                        <div class="div_block">
-                            <div>支付定金并提交订单</div>
-
-                            <div>总价格 : <%book.info.plan_info.price%></div>
-                            <div>预付 : 99</div>
-
+                        <div style="text-align: right;padding:15px">
+                            <i-button style="width:100px" @click="save" >保存</i-button>
                         </div>
-
-                        <div style="margin-top: 15px">
-                            <label style="color:#3c3c3c">
-                                <input type="checkbox" value="ok" v-model="book.user.is_read"> 我已阅读并同意<a href="">xxx</a>.
-                            </label>
-                        </div>
-                        <i-button @click="save">保存</i-button>
-                        <i-button @click="pay" type="success" style="margin-left:20px">确认支付</i-button>
                     </div>
+                </div>
+                <div style="background-color: white;margin-top: 15px;padding: 15px">
+                    <div class="div_block">
+                        <div>支付定金并提交订单</div>
 
-                    <div style="clear: both;height: 60px"></div>
+                        <div>总价格 : <%book.info.plan_info.price%></div>
+                        <div>预付 : 99</div>
+
+                    </div>
+                    <div style="margin-top: 15px">
+                        <label style="color:#3c3c3c">
+                            <input type="checkbox" value="ok" v-model="book.user.is_read"> 我已阅读并同意<a href="">xxx</a>.
+                        </label>
+                    </div>
+                    <i-button @click="pay" type="success" style="margin-left:20px">确认支付</i-button>
                 </div>
             </div>
             <div style="float: left;width: 300px;margin-left: -100%;padding: 12px;background: white">
+                <div>
+                    <div class="div_title">酒店信息</div>
+                    <div class="div_block">
+                        <div style="font-size: 22px;font-weight: bold"><%book.info.hotel_info.name%></div>
+                        <div style="font-size: 16px;"><%book.info.hotel_info.name_en%></div>
+                        {{--<div style="color: grey;font-size: 14px"><%book.info.hotel_info.location.address%></div>--}}
+                        <img :src="book.info.hotel_info.image.url" style="width: 100%;object-fit: cover" />
+                    </div>
+                </div>
                 <div>
                     <div class="div_title">预订信息</div>
                     <div>
@@ -234,6 +232,7 @@
             </div>
         </div>
     </div>
+    <div style="height: 120px;width: 100%;clear: both"></div>
 </div>
 @endsection
 @section('script')
@@ -353,6 +352,8 @@
                             console.log(response.data);
                             if(response.data.ok == 0){
                                 thiz.book.info = response.data.obj;
+                                thiz.book.user = response.data.obj.user;
+                                thiz.book.user2 = response.data.obj.user2;
                                 thiz.loading = false;
                             }
                         })
@@ -375,20 +376,84 @@
                 var thiz = this;
                 var paras = JSON.parse(JSON.stringify(this.$data));
                 console.log(paras.book);
-                axios.post('/api/update/order',paras.book)
+                axios.post('/api/update/order2',paras.book)
                         .then(function(response){
                             console.log(response.data);
                             if(response.data.ok == 0){
                                 thiz.book.info = response.data.obj;
+                                thiz.book.user = response.data.obj.user;
+                                thiz.book.user2 = response.data.obj.user2;
                                 thiz.loading = false;
                             }
                         })
                         .catch(function(error){
                             console.log(error);
                         });
-            }
+            },
         },
         computed : {
+            steps : function(){
+                var status = parseInt(this.book.info.status);
+                console.log(status);
+                var steps = [
+                    ["支付定金","支付尾款","预订完成","待出行"],
+                    ["支付定金","支付尾款","预订中","待出行"],
+                    ["支付定金","支付尾款","预订中","已出行"],
+                    ["支付定金","支付尾款","申请退款","已退款"],
+                    ["无效","无效","无效","无效"],
+                ]
+                switch(status){
+                    case 0:
+                        return {
+                            current : 0,
+                            steps : steps[0]
+                        };
+                    case 10:
+                    case 11:
+                        return {
+                            current : 1,
+                            steps : steps[0]
+                        };
+                    case 12:
+                        return {
+                            current : 2,
+                            steps : steps[1]
+                        };
+                    case 20:
+                        return {
+                            current : 3,
+                            steps : steps[0]
+                        };
+                    case 35:
+                    case 36:
+                    case 37:
+                    case 38:
+                        return {
+                            current : 2,
+                            steps : steps[3]
+                        };
+                    case 100:
+                        return {
+                            current : 4,
+                            steps : steps[2]
+                        };
+                    case 101:
+                        return {
+                            current : 4,
+                            steps : steps[3]
+                        };
+                    case 102:
+                        return {
+                            current : 4,
+                            steps : steps[4]
+                        };
+                    default:
+                        return {
+                            current : 0,
+                            steps : steps[0]
+                        };
+                }
+            }
         }
     })
 </script>

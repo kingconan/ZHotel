@@ -89,16 +89,18 @@ Route::group(['middleware' => 'b_auth'],function() {
     });
 
 
-    Route::get('zashboard/hotels', function () {
-        return view('backend.index.hotel_list');
-    });
-    Route::get('zashboard/orders', function () {
-        return view('backend.index.order_list');
+    Route::group(['prefix' => 'zashboard'], function(){
+        Route::get('hotels', function () {
+            return view('backend.index.hotel_list');
+        });
+        Route::get('orders', function () {
+            return view('backend.index.order_list');
+        });
+        Route::get('order', function () {
+            return view('backend.index.order');
+        });
     });
 
-    Route::get('zashboard/order', function () {
-        return view('backend.index.order');
-    });
 });
 
 Route::get('/zhotel/ss/register', function () {
@@ -137,6 +139,7 @@ Route::group(['middleware'=>'api'],function(){
     Route::post('/api/order/detail/{id}', 'Backend\OrderController@getOrder');
     Route::post('/api/order_list', 'Backend\IndexController@getOrderList');
     Route::post('/api/update/order', 'Backend\OrderController@updateOrder');
+    Route::post('/api/update/order2', 'Backend\OrderController@updateOrderByUser');
     Route::post('/api/search/order', 'Backend\IndexController@searchOrder');
     Route::post('/api/test/order', 'Backend\OrderController@test');
 });
