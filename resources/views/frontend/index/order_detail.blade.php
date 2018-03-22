@@ -150,19 +150,31 @@
                     </div>
                 </div>
                 <div style="background-color: white;margin-top: 15px;padding: 15px">
-                    <div class="div_block">
-                        <div>支付定金并提交订单</div>
-
-                        <div>总价格 : <%book.info.plan_info.price%></div>
-                        <div>预付 : 99</div>
-
+                    <div>
+                        <div>
+                            <div style="float: left;width: 120px;padding: 15px;color: grey">付款条目</div>
+                            <div style="float: right;width: 200px;padding: 15px;color: #3c3c3c;font-size: 16px;font-weight: bolder">
+                                <%book.info.payment_memo%></div>
+                            <div style="clear: both"></div>
+                        </div>
+                        <div style="height: 1px;width: 100%;background-color: lightgrey"></div>
+                        <div>
+                            <div style="float: left;width: 120px;padding: 15px;color: grey">金额</div>
+                            <div style="float: right;width: 200px;padding: 15px;color: indianred;font-size: 16px;font-weight: bolder">
+                                ¥ <%book.info.payment_price%></div>
+                            <div style="clear: both"></div>
+                        </div>
+                        <div style="text-align: right;margin-right: 100px;margin-left:20px">
+                            <i-button @click="pay" type="success">确认支付</i-button>
+                        </div>
+                        {{--<div>总价格 : <%book.info.plan_info.price%></div>--}}
                     </div>
-                    <div style="margin-top: 15px">
-                        <label style="color:#3c3c3c">
-                            <input type="checkbox" value="ok" v-model="book.user.is_read"> 我已阅读并同意<a href="">xxx</a>.
-                        </label>
-                    </div>
-                    <i-button @click="pay" type="success" style="margin-left:20px">确认支付</i-button>
+                    {{--<div style="margin-top: 15px">--}}
+                        {{--<label style="color:#3c3c3c">--}}
+                            {{--<input type="checkbox" value="ok" v-model="book.user.is_read"> 我已阅读并同意<a href="">xxx</a>.--}}
+                        {{--</label>--}}
+                    {{--</div>--}}
+
                 </div>
             </div>
             <div style="float: left;width: 300px;margin-left: -100%;padding: 12px;background: white">
