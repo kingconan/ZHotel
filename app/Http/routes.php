@@ -154,3 +154,17 @@ Route::get('/wechat/payment/wap', 'Backend\PaymentController@getWechatWapPay');
 Route::get('/wechat/payment/js', 'Backend\PaymentController@getWechatJsPay');
 Route::any('/wechat/payment/notify', 'Backend\PaymentController@weChatNotify');
 Route::any('/wechat/payment/redirect', 'Backend\PaymentController@parseOpenIdRedirect');
+
+
+
+Route::get('/dong_hotel/area/{id}', function () {
+    return view('mobile.index.dong_area_hotels');
+});
+Route::get('/dong_hotel/hotel/{id}', function () {
+    return view('mobile.index.dong_area_hotel');
+});
+
+Route::get('/dong/test', 'Backend\DongController@test');
+Route::get('/dong/getAreaHotels', 'Backend\DongController@getAreaHotels');
+Route::get('/dong/getRatePlanList', 'Backend\DongController@getRatePlanList');
+Route::get('/dong/getRatePlanDetail', 'Backend\DongController@getRatePanDetail');
