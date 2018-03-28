@@ -163,8 +163,14 @@ Route::get('/dong_hotel/area/{id}', function () {
 Route::get('/dong_hotel/hotel/{id}', function () {
     return view('mobile.index.dong_area_hotel');
 });
+Route::get('/dong_hotel/contract', function () {
+    return view('mobile.index.dong_contract');
+});
 
 Route::get('/dong/test', 'Backend\DongController@test');
 Route::get('/dong/getAreaHotels', 'Backend\DongController@getAreaHotels');
 Route::get('/dong/getRatePlanList', 'Backend\DongController@getRatePlanList');
 Route::get('/dong/getRatePlanDetail', 'Backend\DongController@getRatePanDetail');
+Route::get('/dong/getHotelDetail', 'Backend\DongController@getHotelDetail');
+Route::get('/dong/contract/{id}', 'Backend\DongController@getContractInfo');
+Route::get('/dong/contract/price/get', 'Backend\DongController@getPricesOfRoom');

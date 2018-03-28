@@ -19,6 +19,10 @@
             color: #3c3c3c;
             margin-bottom: 8px;
         }
+        .des{
+            font-size: 14px;
+            color: lightgrey;
+        }
     </style>
 
 @endsection
@@ -31,7 +35,27 @@
             </div>
             <div v-else style="position: relative">
                 <template v-if="paras.state == 0">
-                    <div style="height: 30px;width: 100px"></div>
+                    <div style="padding: 15px">
+                        <img :src="hotel.info.mainImage" width="100%" height="160px" style="object-fit: cover"/>
+                        <div style="font-size: 16px;font-weight: bolder"><%hotel.info.nameCn%></div>
+                        <div style="font-size: 12px;"><%hotel.info.name%></div>
+                        <div style="font-size: 12px;color: grey"><icon type="location"></icon> <%hotel.info.address%></div>
+                        <div style="height: 10px"></div>
+                        <collapse  accordion>
+                            <panel name="1">
+                                酒店
+                                <p slot="content"><%hotel.info.desc%></p>
+                            </panel>
+                            <panel name="2">
+                                设施
+                                <p slot="content"><%hotel.info.faci%></p>
+                            </panel>
+                            <panel name="3">
+                                家庭政策
+                                <p slot="content"><%hotel.info.fami%></p>
+                            </panel>
+                        </collapse>
+                    </div>
                     <div v-for="(k,index) in hotel.group" style="border: 1px solid whitesmoke;margin: 8px">
                         <div style="font-weight: bolder;font-size: 12px;padding: 8px 15px;background-color: whitesmoke"
                             v-on:click="change(index)"
@@ -108,6 +132,7 @@
             data: {
                 loading : true,
                 hotel : {
+                    info : {},
                     plans : [],
                     group : [
                         ["room_name",[],true]
@@ -144,6 +169,17 @@
                 get_data : function(_id){
                     const self = this;
                     console.log("created");
+                    ///dong/getHotelDetail
+                    axios.get('/dong/getHotelDetail?id='+_id,{
+                            })
+                            .then(function(response){
+                                console.log("hotel detail");
+                                console.log(response.data);
+                                self.hotel.info = response.data.res;
+                            })
+                            .catch(function(error){
+                                console.log(error);
+                            });
                     axios.get('/dong/getRatePlanList?id='+_id+"&checkin=2018-06-01&checkout=2018-06-06",{
                             })
                             .then(function(response){

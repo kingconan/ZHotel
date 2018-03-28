@@ -13,7 +13,9 @@
         "guzzlehttp/guzzle": "^6.3",
         "jenssegers/agent": "^2.6",
         "predis/predis": "^1.1",
-        "simplesoftwareio/simple-qrcode": "~2"
+        "simplesoftwareio/simple-qrcode": "~2",
+        "sunra/php-simple-html-dom-parser": "1.5.2",
+        "jaybizzle/crawler-detect": "1.2.55"
     },
     "require-dev": {
         "fzaninotto/faker": "~1.4",
