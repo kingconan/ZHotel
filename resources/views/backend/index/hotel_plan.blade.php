@@ -2011,9 +2011,12 @@
                             res.push(price);
                         }
                     }
-
+                    this.help_dates = "";
                     this.hotel.contracts[this.currentIndex].rooms[this.currentRoom].prices = res;
                     this.$forceUpdate();
+                }
+                else{
+
                 }
             }
         },
