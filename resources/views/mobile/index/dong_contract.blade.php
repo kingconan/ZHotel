@@ -66,8 +66,8 @@
                                     <td>
                                         <div v-for="(d, j) in item.date">
                                             <div class="cell"><%d.startDate%></div>
-                                            <div class="cell"><%d.endDate%></div>
-                                            <div class="cell"><%d.price%></div>
+                                            <div class="cell"> <%d.endDate%></div>
+                                            <div class="cell"> <%d.price%></div>
                                             <div style="clear: both"></div>
                                         </div>
                                     </td>
@@ -190,6 +190,13 @@
                         else{
                             end = c.date;
                         }
+                    }
+                    if(start){
+                        prices.push({
+                            "startDate" : start,
+                            "endDate" : end,
+                            "price" : p
+                        })
                     }
 
 
