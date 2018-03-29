@@ -232,7 +232,11 @@
                                     </div>
                                     <div style="height: 15px"></div>
                                     <div class="box">
-                                        <h6 style="color: grey;font-weight: bolder">基础班期</h6>
+                                        <h6 style="color: grey;font-weight: bolder" v-on:click="show_help_dates">基础班期</h6>
+                                        <div v-if="is_help_date">
+                                            <button type="button" class="btn btn-flat" v-on:click="reset_date(help_dates)">替换</button>
+                                            <textarea class="form-control" rows="6" v-model="help_dates"></textarea>
+                                        </div>
                                         <table class="table">
                                             <tbody>
                                             <tr v-for="(price,priceIndex) in room_info.prices">
@@ -1179,7 +1183,9 @@
             },
             priceColor : {
 
-            }
+            },
+            help_dates : "",
+            is_help_date : false
         },
         created:function () {
             var _id = this.$route.query.id;
@@ -1985,6 +1991,30 @@
             },
             helper_json :function(){
                 return JSON.stringify(this.$data.hotel);
+            },
+            show_help_dates : function(){
+                this.is_help_date  = !this.is_help_date;
+            },
+            reset_date : function(text){
+                console.log(text);
+                var arr = text.split(/\r?\n/);
+                var res = [];
+                if(arr){
+                    for(var i= 0, iLen = arr.length;i<iLen;i++){
+                        var a = arr[i].trim().split(" ")
+                        if(a && a.length == 3){
+                            var price = {
+                                date_from : a[0],
+                                date_to : a[1],
+                                price : a[2]
+                            }
+                            res.push(price);
+                        }
+                    }
+
+                    this.hotel.contracts[this.currentIndex].rooms[this.currentRoom].prices = res;
+                    this.$forceUpdate();
+                }
             }
         },
         computed : {
