@@ -21,7 +21,6 @@ class DongController extends Controller
             "content-type" => "application/json;charset=UTF-8",
             "x-requested-with"=>"XMLHttpRequest",
             "referer"=>"https://36dong.com/supplierAdmin",
-            "cookie" => "loginAuth=197%3A1522852947%3A424c1bfd038a97c614ac456e53a7c9db; PHPSESSID=9aplfcj9qrjc3eufppavhunkv1; Hm_lvt_34bd17080e7fe077493dccb85ee0c1e6=1521796797; Hm_lpvt_34bd17080e7fe077493dccb85ee0c1e6=1521796797",
             "user-agent" => "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_11_6) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/49.0.2623.87 Safari/537.36"
         ];
         $client = new Client();
@@ -41,7 +40,6 @@ class DongController extends Controller
             "content-type" => "application/x-www-form-urlencoded",
             "x-requested-with"=>"XMLHttpRequest",
             "referer"=>"https://36dong.com/supplierAdmin",
-            "cookie" => "loginAuth=197%3A1522852947%3A424c1bfd038a97c614ac456e53a7c9db; PHPSESSID=9aplfcj9qrjc3eufppavhunkv1; Hm_lvt_34bd17080e7fe077493dccb85ee0c1e6=1521796797; Hm_lpvt_34bd17080e7fe077493dccb85ee0c1e6=1521796797",
             "user-agent" => "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_11_6) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/49.0.2623.87 Safari/537.36"
         ];
         $client = new Client();
