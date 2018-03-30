@@ -364,8 +364,10 @@
                             console.log(response.data);
                             if(response.data.ok == 0){
                                 thiz.book.info = response.data.obj;
-                                thiz.book.user = response.data.obj.user;
-                                thiz.book.user2 = response.data.obj.user2;
+                                if(response.data.obj.user)
+                                    thiz.book.user = response.data.obj.user;
+                                if(response.data.obj.user2)
+                                    thiz.book.user2 = response.data.obj.user2;
                                 thiz.loading = false;
                             }
                         })
