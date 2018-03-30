@@ -89,11 +89,11 @@ function zhotel_markdown(str, mobile) {//simple markdown parser
                 var url = item.substring(start + 1, end);
                 if(gallery == 1){
                     gallery_str = gallery_str + '<div class="swiper-slide">';
-                    gallery_str = gallery_str + '<img class="markdown-image" src="' + url + imageHack + '"/>';
+                    gallery_str = gallery_str + '<img class="markdown-image" src="' + merge_url(url ,imageHack) + '"/>';
                     gallery_str = gallery_str + '</div>';
                 }
                 else{
-                    html = html + '<img class="markdown-image" src="' + url + imageHack + '"/>'
+                    html = html + '<img class="markdown-image" src="' + merge_url(url ,imageHack) + '"/>'
                     html = html + '<br />'
                 }
 
@@ -146,11 +146,11 @@ function zhotel_markdown(str, mobile) {//simple markdown parser
                     || ext == "png") {
                     if(gallery == 1){
                         gallery_str = gallery_str + '<div class="swiper-slide">';
-                        gallery_str = gallery_str + '<img class="markdown-image" src="' + item + imageHack + '"/>';
+                        gallery_str = gallery_str + '<img class="markdown-image" src="' + merge_url(item ,imageHack) + '"/>';
                         gallery_str = gallery_str + '</div>';
                     }
                     else{
-                        html = html + '<img class="markdown-image" src="' + item + imageHack + '"/>'
+                        html = html + '<img class="markdown-image" src="' + merge_url(item ,imageHack) + '"/>'
                         html = html + '<br />'
                     }
                 }
@@ -166,6 +166,12 @@ function zhotel_markdown(str, mobile) {//simple markdown parser
         }
     }
     return html;
+}
+function merge_url(url, hack){
+    if(url.indexOf("?")  == 0){
+        return url + hack;
+    }
+    return url;
 }
 function zhotel_clear_url_parameters(url){
     var urlparts= url.split('?');

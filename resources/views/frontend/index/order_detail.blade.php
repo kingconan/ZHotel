@@ -149,7 +149,7 @@
                         </div>
                     </div>
                 </div>
-                <div style="background-color: white;margin-top: 15px;padding: 15px">
+                <div v-if="book.info.payment_price > 0" style="background-color: white;margin-top: 15px;padding: 15px">
                     <div>
                         <div>
                             <div style="float: left;width: 120px;padding: 15px;color: grey">付款条目</div>
@@ -164,9 +164,18 @@
                                 ¥ <%book.info.payment_price%></div>
                             <div style="clear: both"></div>
                         </div>
-                        <div style="text-align: right;margin-right: 100px;margin-left:20px">
-                            <i-button @click="pay" type="success">确认支付</i-button>
-                        </div>
+                        <form style="text-align: right;margin-right: 100px;margin-left:20px" target="_blank"  id="myform" method="post" action="/payment/test">
+                            <input type="hidden" name="_token" value="{{ csrf_token() }}" />
+                            <div style="display: block">
+                                <input class="form-control" type="text" name="title" placeholder="title"  :value="book.info.hotel_name"/>
+                                <input class="form-control" type="number" name="price" placeholder="price"  :value="book.info.payment_price"/>
+                                <input class="form-control" type="text" name="order_id" placeholder="order id"  :value="book._id"/>
+                                <input class="form-control" type="text" name="payment_id" placeholder="payment id"  :value="book.info.payment_id"/>
+                                <input class="form-control" type="text" name="description" placeholder="description"  :value="book.info.payment_memo"/>
+                            </div>
+                            <input type="submit" class="btn btn-default payment_ali" name="action" value="支付宝" />
+                            <input type="submit" style="margin-left: 15px" class="btn btn-default payment_wechat" name="action" value="微信" />
+                        </form>
                         {{--<div>总价格 : <%book.info.plan_info.price%></div>--}}
                     </div>
                     {{--<div style="margin-top: 15px">--}}
@@ -274,6 +283,10 @@
         "hideMethod": "fadeOut"
     }
     $(document).ready(function(){
+        $('#myform').submit(function() {
+            hotelList.show_form_dialog();
+            return true; // return false to cancel form action
+        });
     });
 
 
@@ -404,6 +417,24 @@
                             console.log(error);
                         });
             },
+            refresh_payment : function(){
+                console.log("refresh payment");
+            },
+            show_form_dialog : function(){
+                console.log("show_form_dialog");
+                const self = this;
+                this.$Modal.confirm({
+                            title: '支付',
+                            content: '<p>已完成支付请确认</p><p>如果遇到支付问题,请联系致游旅行</p>',
+                            okText: '已完成支付',
+                            cancelText: '遇到问题',
+                            onOk: () => {
+                                self.refresh_payment();
+                            },
+                            onCancel: () => {
+                            }
+                    });
+            }
         },
         computed : {
             steps : function(){

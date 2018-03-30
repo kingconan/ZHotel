@@ -149,13 +149,16 @@ Route::post('/chrome/test', 'Backend\IndexController@chromeTest');
 Route::get('/uuu', 'Backend\IndexController@createMaster');
 Route::get('/ali/payment/test/{id}', 'Backend\PaymentController@getAliWebPay');
 Route::post('/payment/test', 'Backend\PaymentController@testPayment');
+Route::get('/payment/user/{oid}', 'Backend\PaymentController@userPayment');
 Route::get('/wechat/payment/test/{id}', 'Backend\PaymentController@getWechatWebPay');
 Route::get('/wechat/payment/wap', 'Backend\PaymentController@getWechatWapPay');
 Route::get('/wechat/payment/js', 'Backend\PaymentController@getWechatJsPay');
 Route::any('/wechat/payment/notify', 'Backend\PaymentController@weChatNotify');
 Route::any('/wechat/payment/redirect', 'Backend\PaymentController@parseOpenIdRedirect');
 
-
+Route::get('/test/show/1', function () {
+    return view('frontend.index.payment_wechat',array("url"=>"test"));
+});
 
 Route::get('/dong_hotel/area/{id}', function () {
     return view('mobile.index.dong_area_hotels');

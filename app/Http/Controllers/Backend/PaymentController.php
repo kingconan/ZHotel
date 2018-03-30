@@ -31,19 +31,39 @@ class PaymentController extends Controller
 
     public function testPayment(Request $request){
         $action = $request->input("action");
+        $title = $request->input("title");
+        $order_id = $request->input("order_id");
+        $payment_id = $request->input("payment_id");
+        $description = $request->input("description");
+        $price = $request->input("price");
+//        $payment = [
+//            'title' => "test",
+//            'price' => 0.01,
+//            'order_id' => "oid",
+//            'payment_id' => "pid",
+//            'description' => 'test'
+//        ];
         $payment = [
-            'title' => "test",
-            'price' => 0.01,
-            'order_id' => "oid",
-            'payment_id' => "pid",
-            'description' => 'test'
+            'title' => $title,
+            'price' => $price,
+            'order_id' => $order_id,
+            'payment_id' => $payment_id,
+            'description' => $description
         ];
         if($action == "微信"){
             $config = self::weChatWebConfig($payment);
             if($config["return_code"] == "SUCCESS"){
-                echo $config["code_url"];
-                echo "<br />";
-                echo QrCode::size(100)->generate($config["code_url"]);
+//                echo $config["code_url"];
+//                echo "<br />";
+//                echo QrCode::size(100)->generate($config["code_url"]);
+                return View::make('frontend.index.payment_wechat',
+                    array(
+                        'url' => $config["code_url"],
+                        'des' => $description,
+                        'title' => $title,
+                        'price' => $price
+                     )
+                );
             }
             else{
                 echo $config["return_msg"];

@@ -533,7 +533,7 @@
                                         <z-float-textarea placeholder="点击图库选择" v-model="hotel.rooms[current_room].images_str" name="name"></z-float-textarea>
                                     </div>
                                     <div>
-                                        <img v-for="item in str_2_arr(hotel.rooms[current_room].images_str)" :src="item+'?imageView2/2/w/200'"
+                                        <img v-for="item in str_2_arr(hotel.rooms[current_room].images_str)" :src="show_thumbnail(item,'?imageView2/2/w/200')"
                                              style="width: 100px;margin-left: 3px;margin-bottom: 3px" />
                                     </div>
                                 </div>
@@ -1597,6 +1597,12 @@
             },
             markdown : function(str){
                 return zhotel_markdown(str);
+            },
+            show_thumbnail : function(url, hack){
+                  if(url.indexOf("?") == 0 ) {
+                      return url + hack;
+                  }
+                return url;
             },
             helper_append_hotel_images : function (link){
                 var image = {
