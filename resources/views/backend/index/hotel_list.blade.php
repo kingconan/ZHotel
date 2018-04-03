@@ -135,13 +135,20 @@
                             <span style="color: grey;font-size: 12px"><%hotel.last_editor?hotel.last_editor:"Zer" %></span>
                         </td>
                         <td>
-                            <a :href="'/edit_hotel?id='+hotel._id" target="_blank" class="btn btn-default btn-sm">编辑</a>
-                            <a :href="'/plan?id='+hotel._id" target="_blank" class="btn btn-default btn-sm">合同</a>
-                            <a :href="'/hotel/detail/'+hotel._id" target="_blank" class="btn btn-default btn-sm">预览</a>
-                            <button v-on:click="online(hotel._id)" class="btn btn-default btn-sm" style="margin-left: 15px;">
-                                <%hotel.status == 1 ? "下线" : "上线"%>
-                            </button>
-                            <button v-on:click="confirm_delete(hotel._id,hotel.name)" class="btn btn-default btn-sm" style="margin-left: 15px;color: palevioletred">删除</button>
+                            <div style="float: left">
+                                <a :href="'/edit_hotel?id='+hotel._id" target="_blank" class="btn btn-default btn-sm">编辑</a>
+                                <a :href="'/plan?id='+hotel._id" target="_blank" class="btn btn-default btn-sm">合同</a>
+                                <a :href="'/hotel/detail/'+hotel._id" target="_blank" class="btn btn-default btn-sm">预览</a>
+                                <button v-on:click="online(hotel._id)" class="btn btn-default btn-sm" style="margin-left: 15px;">
+                                    <%hotel.status == 1 ? "下线" : "上线"%>
+                                </button>
+                                <button v-on:click="confirm_delete(hotel._id,hotel.name)" class="btn btn-default btn-sm" style="margin-left: 15px;color: palevioletred">删除</button>
+                            </div>
+
+                            <div style="padding: 3px 6px;float: left;background-color: #dfdfdf;margin-left: 6px">
+                                <input placeholder="备注" style="width: 80px;padding: 3px 6px;font-size: 12px" v-model="hotel.memo"/>
+                                <button v-on:click="save_memo(hotel._id, hotel.memo)" class="btn btn-default btn-sm">保存</button>
+                            </div>
                         </td>
                     </tr>
                     </tbody>
@@ -361,6 +368,26 @@
                     return location.country+ " " +location.city;
                 }
                 return "NO";
+            },
+            save_memo : function(id, memo){
+                const self = this;
+                axios.post('/api/memo/hotel',{
+                            hotel_id: id,
+                            memo: memo,
+                        })
+                        .then(function(response){
+                            console.log("memo hotel");
+                            console.log(response.data);
+                            if(response.data.ok == 0){
+                                toastr["success"](response.data.msg);
+                            }
+                            else{
+                                toastr["error"](response.data.msg);
+                            }
+                        })
+                        .catch(function(error){
+                            console.log(error);
+                        });
             }
         }
     })

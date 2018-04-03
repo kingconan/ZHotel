@@ -113,6 +113,7 @@ Route::group(['middleware'=>'api'],function(){
     Route::post('/api/update/hotel', 'Backend\IndexController@updateHotel');
     Route::post('/api/delete/hotel', 'Backend\IndexController@deleteHotel');
     Route::post('/api/online/hotel', 'Backend\IndexController@onlineHotel');
+    Route::post('/api/memo/hotel', 'Backend\IndexController@memoHotel');
     Route::post('/api/create/hotel', 'Backend\IndexController@createHotel');
     Route::post('/api/search/hotel', 'Backend\IndexController@searchHotel');
     Route::post('/api/magic/link', 'Backend\IndexController@magicLink');

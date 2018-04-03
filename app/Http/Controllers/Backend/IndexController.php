@@ -141,7 +141,7 @@ class IndexController extends Controller
 
     //hotel list should projection first
     public function getHotelList(Request $request){
-        $projections = ['_id', 'status', 'name', 'name_en', 'tag', 'brand', 'author', 'last_editor', 'location'];
+        $projections = ['_id', 'status', 'name', 'name_en', 'tag', 'brand', 'author', 'last_editor', 'location', 'memo'];
         $res = Hotel::paginate(20, $projections);
 
         $last_url = $res->url(1);
@@ -201,6 +201,32 @@ class IndexController extends Controller
             );
         }
 
+    }
+    public function memoHotel(Request $request){
+        $hotel_id = $request->input("hotel_id");
+        $memo = $request->input("memo");
+        ZEvent::log(self::getCurrentMaster(), "cmd", __METHOD__, $hotel_id);
+        $hotel = Hotel::find($hotel_id);
+        if($hotel){
+            $hotel->memo = $memo;
+            $hotel->save();
+            return response()->json(
+                [
+                    "ok"=>0,
+                    "msg"=>"ok",
+                    "obj"=>$hotel
+                ]
+            );
+        }
+        else{
+            return response()->json(
+                [
+                    "ok"=>1,
+                    "msg"=>"hotel not found",
+                    "obj"=>$hotel
+                ]
+            );
+        }
     }
     public function onlineHotel(Request $request){
         $hotel_id = $request->input("hotel_id");
