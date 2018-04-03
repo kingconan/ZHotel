@@ -158,7 +158,7 @@ class IndexController extends Controller
     public function searchHotel(Request $request){
         $keyword = $request->input("keyword");
         ZEvent::log(self::getCurrentMaster(), "query", __METHOD__, $keyword);
-        $projections = ['_id', 'status', 'name', 'name_en', 'tag', 'brand', 'author', 'last_editor', 'location'];
+        $projections = ['_id', 'status', 'name', 'name_en', 'tag', 'brand', 'author', 'last_editor', 'location', 'memo'];
         $res = Hotel::where("name",'like', '%'.$keyword."%")
                     ->orWhere("name_en",'like', '%'.$keyword."%")
                     ->orWhere("location.country",'like', '%'.$keyword."%")
