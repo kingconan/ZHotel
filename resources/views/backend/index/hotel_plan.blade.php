@@ -400,7 +400,7 @@
                                                         <input class="form-control checkout" placeholder="结束日期" v-model="adult.date_to"/>
                                                     </div>
                                                 </td>
-                                                <td width="100px"><input class="form-control" type="number" placeholder="价格"  v-model="adult.price" /></td>
+                                                <td width="200px"><input class="form-control" type="number" placeholder="价格"  v-model="adult.price" /></td>
                                                 <td><button v-on:click="delete_extra_adult_for_room(adultIndex)" type="button" class="btn btn-sm btn-default" style="color: indianred">
                                                         <i class="fa fa-times" aria-hidden="true"></i>
                                                     </button></td>
@@ -419,12 +419,12 @@
                                                         <input class="form-control checkout" placeholder="结束日期" v-model="child.date_to"/>
                                                     </div>
                                                 </td>
-                                                <td width="320px">
+                                                <td width="360px">
                                                     <button v-on:click="add_extra_children_age_for_room(childIndex)" type="button" class="btn btn-default btn-sm">+年龄</button>
                                                     <div v-for="(age,ageIndex) in child.ages">
                                                         <input class="form-control table_input_s" type="number" min="0" max="18" placeholder="年龄起" v-model="age.age_from"/>
                                                         <input class="form-control table_input_s" style="margin-left: 8px" type="number" min="0" max="18" placeholder="年龄止" v-model="age.age_to"/>
-                                                        <input class="form-control table_input_s" style="margin-left: 8px" type="number" placeholder="价格"  v-model="age.price" />
+                                                        <input class="form-control table_input_s" style="margin-left: 8px;width: 130px" type="number" placeholder="价格"  v-model="age.price" />
                                                         <button v-on:click="delete_extra_children_age_for_room(childIndex,ageIndex)" type="button" class="btn btn-default btn-sm"><i class="fa fa-times" aria-hidden="true"></i></button>
                                                         <div style="clear: both"></div>
                                                     </div>
@@ -468,7 +468,7 @@
                                                             <input class="form-control checkout" placeholder="结束日期" v-model="adult.date_to"/>
                                                         </div>
                                                     </td>
-                                                    <td width="100px"><input class="form-control" type="number" placeholder="价格"  v-model="adult.price" /></td>
+                                                    <td width="130px"><input class="form-control" type="number" placeholder="价格"  v-model="adult.price" /></td>
                                                     <td><button v-on:click="delete_plus_adult_for_room(adultIndex,plusIndex)" type="button" class="btn btn-sm btn-default" style="color: indianred"><i class="fa fa-times" aria-hidden="true"></i></button></td>
                                                 </tr>
                                                 </tbody>
@@ -485,12 +485,12 @@
                                                             <input class="form-control checkout" placeholder="结束日期" v-model="child.date_to"/>
                                                         </div>
                                                     </td>
-                                                    <td width="310px">
+                                                    <td width="360px">
                                                         <button  v-on:click="add_plus_children_age_for_room(plusIndex,childIndex)" type="button" class="btn btn-default btn-sm">+年龄</button>
                                                         <div v-for="(age,ageIndex) in child.ages">
                                                             <input class="form-control table_input_s" type="number" min="0" max="18" placeholder="年龄起" v-model="age.age_from"/>
                                                             <input class="form-control table_input_s" style="margin-left: 8px" type="number" min="0" max="18" placeholder="年龄止" v-model="age.age_to"/>
-                                                            <input class="form-control table_input_s" style="margin-left: 8px"  type="number" placeholder="价格"  v-model="age.price" />
+                                                            <input class="form-control table_input_s" style="margin-left: 8px;width: 130px"  type="number" placeholder="价格"  v-model="age.price" />
                                                             <button  v-on:click="delete_plus_children_age_for_room(plusIndex,childIndex,ageIndex)" type="button" class="btn btn-default btn-sm"><i class="fa fa-times" aria-hidden="true"></i></button>
                                                             <div style="clear: both"></div>
                                                         </div>
