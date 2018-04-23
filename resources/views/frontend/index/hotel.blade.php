@@ -519,7 +519,7 @@
                                 <div v-for="room in hotel.rooms">
                                     <div style="background-color: #FAFAFA">
                                         <div style="float: left;width: 240px;">
-                                            <img v-if="room.images_str" :src="room.images_str.split('\n')[0]" width="240px"  v-on:click="view_room_images(room.images_str)">
+                                            <img v-if="room.images_str" :src="room.images_str.split('\n')[0]+'?imageView2/2/w/400'" width="240px"  v-on:click="view_room_images(room.images_str)">
                                             <div v-else style="width: 100%;padding:60px 0;background-color: whitesmoke;text-align: center;color: lightgrey">暂无图片</div>
                                         </div>
                                         <div style="float: left;width: 528px;padding:0 ;background-color: white">
