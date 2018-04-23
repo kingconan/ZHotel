@@ -169,10 +169,10 @@ function zhotel_markdown(str, mobile) {//simple markdown parser
     return html;
 }
 function merge_url(url, hack){
-    if(url.indexOf("?")  == 0){
-        return url + hack;
+    if(url.indexOf("?")  > 0){
+        return url;
     }
-    return url;
+    return url + hack;
 }
 function zhotel_clear_url_parameters(url){
     var urlparts= url.split('?');
