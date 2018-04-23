@@ -122,7 +122,7 @@ function zhotel_markdown(str, mobile) {//simple markdown parser
                 var url = item.substring(start + 1, end);
                 if(gallery == 1){
                     gallery_str = gallery_str + '<div class="swiper-slide">';
-                    gallery_str = gallery_str + '<img class="markdown-image-none" src="' + merge_url(url ,imageHack) +  + '"/>';
+                    gallery_str = gallery_str + '<img class="markdown-image-none" src="' + merge_url(url ,imageHack) + '"/>';
                     gallery_str = gallery_str + '</div>';
                 }
                 else{
