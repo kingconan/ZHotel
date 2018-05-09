@@ -171,6 +171,10 @@ Route::get('/dong_hotel/contract', function () {
     return view('mobile.index.dong_contract');
 });
 
+Route::get('/travelid/package/{id}', function () {
+    return view('mobile.index.mirror_travelid_package');
+});
+
 Route::get('/dong/test', 'Backend\DongController@test');
 Route::get('/dong/getAreaHotels', 'Backend\DongController@getAreaHotels');
 Route::get('/dong/getRatePlanList', 'Backend\DongController@getRatePlanList');
