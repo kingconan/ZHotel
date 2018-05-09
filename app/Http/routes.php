@@ -178,3 +178,6 @@ Route::get('/dong/getRatePlanDetail', 'Backend\DongController@getRatePanDetail')
 Route::get('/dong/getHotelDetail', 'Backend\DongController@getHotelDetail');
 Route::get('/dong/contract/{id}', 'Backend\DongController@getContractInfo');
 Route::get('/dong/contract/price/get', 'Backend\DongController@getPricesOfRoom');
+
+
+Route::get('/travelid/hotel/{id}', 'Backend\HackController@redirectToTravelid');
