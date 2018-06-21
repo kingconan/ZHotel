@@ -182,6 +182,11 @@
             </div>
         </div>
         <div v-else>
+            <div style="font-size:12px;color:#3c3c3c;padding:6px">
+                <div><%hotel.name%></div>
+                <div><%hotel.name_en%></div>
+            </div>
+
             <div style="min-height: 115px">
                 <div id="affix" style="background-color: white;border: 1px solid lightgrey;padding: 15px;"  >
                     <div v-on:click="ui_select_contract(index)" v-for="(c,index) in hotel.contracts" :class="index == currentIndex ? 'contract_name bg_highlight' : 'contract_name'">
