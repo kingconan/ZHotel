@@ -178,9 +178,6 @@
                         var c = arr[i];
                         if(c.price != p){
                             if(start){
-                                if(!end){
-                                    end = c.date;
-                                }
                                 prices.push({
                                     "startDate" : start,
                                     "endDate" : end,
@@ -189,7 +186,7 @@
                             }
                             p = c.price;
                             start = c.date;
-                            end = "";
+                            end = c.date;
                         }
                         else{
                             end = c.date;
