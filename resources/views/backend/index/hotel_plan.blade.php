@@ -1168,6 +1168,10 @@
                     code : "THB",
                     des : "泰铢"
                 },
+                {
+                    code : "AED",
+                    des : "迪拉姆"
+                },
 
             ],
             priceView : {
