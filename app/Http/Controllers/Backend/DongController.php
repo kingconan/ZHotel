@@ -168,37 +168,40 @@ class DongController extends Controller
             $rate = trim($rateD[0]->text());
         }
         if($tab){
-
-            $li = $tab[0]->find("li");
-
-            foreach($li as $e){
-                $id = $e->data;
-                $name = $e->text();
-                array_push($arr_room,[
-                    "id"  => $id,
-                    "name" => trim($name),
-                    "date" => []
-                ]);
+            foreach($tab as $t){
+                $li = $t->find("li");
+                $tmpArr = [];
+                foreach($li as $e){
+                    $id = $e->data;
+                    $name = $e->text();
+                    array_push($tmpArr,[
+                        "id"  => $id,
+                        "name" => trim($name),
+                        "date" => []
+                    ]);
+                }
+                array_push($arr_room, $tmpArr);
             }
-
         }
 
         $contracts_root = $dom->find("div[class=list-tab]");
         if($contracts_root){
             $li = $contracts_root[0]->find("li");
             if($li && !empty($li)){
+                $index = 0;
                 foreach($li as $e){
                     $id = $e->data;
                     $name = $e->text();
                     array_push($arr_contract,[
                         "id"  => $id,
                         "name" => $name,
-                        "rooms" => $arr_room
+                        "rooms" => $arr_room[$index++]
                     ]);
                 }
             }
             else{
                 $scripts = $dom->find('script');
+                $index = 0;
                 foreach($scripts as $s) {
                     if(strpos($s->innertext, 'currentContractId') !== false) {
                         $script = $s->innertext;
@@ -209,7 +212,7 @@ class DongController extends Controller
                         array_push($arr_contract,[
                             "id"  => trim($str),
                             "name" => "默认合同",
-                            "rooms" => $arr_room
+                            "rooms" => $arr_room[$index++]
                         ]);
                     }
                 }
