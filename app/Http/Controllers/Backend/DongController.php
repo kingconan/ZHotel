@@ -185,6 +185,7 @@ class DongController extends Controller
         }
 
         $contracts_root = $dom->find("div[class=list-tab]");
+
         if($contracts_root){
             $li = $contracts_root[0]->find("li");
             if($li && !empty($li)){
@@ -192,11 +193,20 @@ class DongController extends Controller
                 foreach($li as $e){
                     $id = $e->data;
                     $name = $e->text();
-                    array_push($arr_contract,[
-                        "id"  => $id,
-                        "name" => $name,
-                        "rooms" => $arr_room[$index++]
-                    ]);
+                    if($index >= count($arr_room)){
+                        array_push($arr_contract,[
+                            "id"  => $id,
+                            "name" => $name,
+                            "rooms" => $arr_room[0]
+                        ]);
+                    }
+                    else{
+                        array_push($arr_contract,[
+                            "id"  => $id,
+                            "name" => $name,
+                            "rooms" => $arr_room[$index++]
+                        ]);
+                    }
                 }
             }
             else{
