@@ -1,3 +1,11 @@
+function helper_url(url){
+    var target = "oytstg973.bkt.clouddn.com"
+    var dest = "qimage.travelid.cn"
+    if(url.indexOf(target) >= 0){
+        return url.replace(target, dest)
+    }
+    return url
+}
 function zhotel_markdown(str, mobile) {//simple markdown parser
     mobile = mobile || false;
 
@@ -170,9 +178,9 @@ function zhotel_markdown(str, mobile) {//simple markdown parser
 }
 function merge_url(url, hack){
     if(url.indexOf("?")  > 0){
-        return url;
+        return helper_url(url);
     }
-    return url + hack;
+    return helper_url(url) + hack;
 }
 function zhotel_clear_url_parameters(url){
     var urlparts= url.split('?');
