@@ -1363,7 +1363,7 @@
                 var target = "oytstg973.bkt.clouddn.com"
                 var dest = "qimage.travelid.cn"
                 if(url.indexOf(target) >= 0){
-                    return url.replace(target, desst)
+                    return url.replace(target, dest)
                 }
                 return url
             }
