@@ -408,7 +408,7 @@
                 <div v-if="sorted_covers" class="swiper-container banner-gallery">
                     <div class="swiper-wrapper">
                         <div v-for="(image, index) in sorted_covers" class="swiper-slide" :style="style_gallery_image">
-                            <img :style="style_gallery_image+';object-fit: cover'" :src="image.url + '?imageView2/2/w/1000'" />
+                            <img :style="style_gallery_image+';object-fit: cover'" :src="helper_url(image.url) + '?imageView2/2/w/1000'" />
                         </div>
                     </div>
 
@@ -519,7 +519,7 @@
                                 <div v-for="room in hotel.rooms">
                                     <div style="background-color: #FAFAFA">
                                         <div style="float: left;width: 240px;">
-                                            <img v-if="room.images_str" :src="room.images_str.split('\n')[0]+'?imageView2/2/w/400'" width="240px"  v-on:click="view_room_images(room.images_str)">
+                                            <img v-if="room.images_str" :src="helper_url(room.images_str.split('\n')[0])+'?imageView2/2/w/400'" width="240px"  v-on:click="view_room_images(room.images_str)">
                                             <div v-else style="width: 100%;padding:60px 0;background-color: whitesmoke;text-align: center;color: lightgrey">暂无图片</div>
                                         </div>
                                         <div style="float: left;width: 528px;padding:0 ;background-color: white">
@@ -548,7 +548,7 @@
                                     <div v-for="(room,roomIndex) in hotel.rooms">
                                         <div style="display: table;">
                                             <div style="display: table-cell;width: 240px;background-color: #FAFAFA">
-                                                <img v-if="room.images_str" :src="room.images_str.split('\n')[0]" width="100%">
+                                                <img v-if="room.images_str" :src="helper_url(room.images_str.split('\n')[0])" width="100%">
                                                 <div v-else style="width: 100%;padding:60px 0;background-color: whitesmoke;text-align: center;color: lightgrey">暂无图片</div>
                                                 <div style="padding:12px 8px">
                                                     <div style="font-size: 16px;"><% room.name %></div>
@@ -682,7 +682,7 @@
                         <div class="hotel_content_title">品牌和荣誉</div>
                         <div>
                             <img v-for="img in str_2_arr(hotel.honor_img)"
-                                 :src="img" width="100px" height="50px" style="margin-right: 10px"
+                                 :src="helper_url(img)" width="100px" height="50px" style="margin-right: 10px"
                             />
                             <p class="font_normal"><%hotel.honor_word%></p>
                         </div>
@@ -1358,6 +1358,14 @@
             room_plan_hover : function(roomIndex, index){
 //                var details = this.hotel.rooms[roomIndex].price.plans[index].details;
 //                console.log(details);
+            },
+            helper_url: function(url){
+                var target = "oytstg973.bkt.clouddn.com"
+                var dest = "qimage.travelid.cn"
+                if(url.indexOf(target) >= 0){
+                    return url.replace(target, desst)
+                }
+                return url
             }
         },
         computed : {
