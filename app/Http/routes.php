@@ -108,7 +108,7 @@ Route::get('/zhotel/ss/register', function () {
 });
 
 Route::group(['middleware'=>'api'],function(){
-    Route::post('/api/hotels', 'Backend\IndexController@getHotelList');
+    Route::any('/api/hotels', 'Backend\IndexController@getHotelList');
     Route::post('/api/hotel/{id}', 'Backend\IndexController@getHotel');
     Route::post('/api/update/hotel', 'Backend\IndexController@updateHotel');
     Route::post('/api/delete/hotel', 'Backend\IndexController@deleteHotel');
